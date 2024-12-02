@@ -12,16 +12,16 @@
         {% csrf_token %}
             <label for="dates">Select Dates for Activity Report</label> 
             <select id="dates" name="activity_dates" class="form-control mt-2" multiple required>
-                <option value="" selected disabled>Select Dates</option>
-                {% for date in activity_dates %}
-                <option value="{{ date }}">{{ date }}</option> 
+                <option value="" selected disabled>Select Site Name</option>
+                {% for name in site_name_a %}
+                <option value="{{ name }}">{{ name }}</option> 
                 {% endfor %} 
             </select>
             <label for="dates">Select Dates for Issue Report</label> 
             <select id="dates" name="issue_dates" class="form-control mt-2" multiple required>
-                <option value="" selected disabled>Select Dates</option>
-                {% for date in issue_dates %}
-                <option value="{{ date }}">{{ date }}</option> 
+                <option value="" selected disabled>Select Site Name</option>
+                {% for name in site_name_i %}
+                <option value="{{ name }}">{{ name }}</option> 
                 {% endfor %} 
             </select>
             <button type="submit" class="btn btn-success mt-2">Generate Report</button>
