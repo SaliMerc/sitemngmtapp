@@ -1,0 +1,45 @@
+{% extends 'basedash.html' %}
+{% block content %}
+    <h2 class="text-center">Activity Log</h2>
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            <th class="text-center">Site Name</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Site Open Time</th>
+            <th class="text-center">Site Close Time</th>
+            <th class="text-center">Work Completed</th>
+            <th class="text-center">Equipment Used</th>
+            <th class="text-center">Materials Used</th>
+            <th class="text-center">Images</th>
+            <th class="text-center">Documents</th>
+{#            <th class="text-center">Update</th>#}
+{#            <th class="text-center">Delete</th>#}
+            
+        </tr>
+        {% for activity in activities %}
+        <tr>
+            <td class="text-center">{{ activity.site_name }}</td>
+            <td class="text-center">{{ activity.date }}</td>
+            <td class="text-center">{{ activity.site_open_time }}</td>
+            <td class="text-center">{{ activity.site_close_time }}</td>
+            <td class="text-center">{{ activity.work_completed }}</td>
+            <td class="text-center">{{ activity.equipment_used }}</td>
+            <td class="text-center">{{ activity.materials_used }}</td>
+            <td class="text-center">
+                {% for photo in activity.progress_photos.all %}
+                    <img src="{{ photo.image.url }}" alt="Progress Photo" width="50" height="50">
+                {% endfor %}
+            </td>
+            <td class="text-center">
+                {% for document in activity.relevant_documents.all %}
+                    <a href="{{ document.document.url }}" style="color: black">Document Used</a><br>
+                {% endfor %}
+            </td>
+{#            <td><a href="{%url 'activityupdate' activity.id %}" type="button" class="btn btn-outline-warning">Update</a></td>#}
+{#            <td><a href="/" type="button" class="btn btn-outline-danger">Delete</a></td>#}
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

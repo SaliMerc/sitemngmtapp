@@ -1,0 +1,13 @@
+/*body {*/
+/*     display: flex; flex-direction: column; min-height: 100vh; */
+/*    } */
+/*.content { */
+/*    flex: 1; */
+/*}*/
+
+#site_name_new{
+    display: none;
+}
+#site_name_exist{
+    display: none;
+}

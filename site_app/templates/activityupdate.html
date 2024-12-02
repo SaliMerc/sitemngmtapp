@@ -1,0 +1,53 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 container-fluid">
+        <h2>Update Activity</h2><br>
+        <form action="{% url 'activityupdate' activity.id %}" method="post" enctype="multipart/form-data" target="_self">
+            {% csrf_token %}
+            <label for="site_type">Site Type</label>
+            <select name="site_type" id="site_type" class="form-control mt-2" required>
+                 <option selected disabled>Select Site Type</option>
+                 <option value="new_site">New Site</option>
+                 <option value="existing_site">Existing Site</option>
+            </select>
+            <div class="site_name_new" id="site_name_new">
+                <label for="site_name1">Site Name</label>
+                <input type="text" id="site_name1" placeholder="Enter Site Name" name="site_name" class="form-control mt-2" required>
+            </div>   
+            <div class="site_name_exist" id="site_name_exist">
+                <label for="site_name1">Site Name</label>
+                <select name="site_name" id="site_name1" class="form-control mt-2" required>
+                     <option selected disabled>Select the Site</option>
+                    {% for site in existing_sites %}
+                     <option value="{{ site }}">{{ site }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <label for="date">Date</label>
+            <input type="date" id="date" class="form-control mt-2" placeholder="Enter the Date" name="date" required>
+            <label for="otime">Site Opened Time</label>
+            <input type="time" id="otime" class="form-control mt-2" placeholder="Site Opened At" name="open-time" required>
+            <label for="ctime">Site Close Time</label>
+            <input type="time" id="ctime" class="form-control mt-2" placeholder="Site Closed At" name="close-time" required>
+{#            <div id="wcompleted"> #}
+            <label for="wcomplete">Work Completed</label> 
+            <textarea name="work-completed" rows="2" cols="40" class="form-control" placeholder="Work Completed" id="wcomplete"></textarea>
+{#                <button type="button" onclick="addTextarea()" class="form-control mt-2 btn btn-success"  id="addwork">Add More Activities</button>#}
+{#            </div>#}
+            <label for="equipused">Equipment Used</label> 
+            <textarea name="equipment-used" rows="2" cols="40" class="form-control" placeholder="Equipment Used" id="equipused"></textarea>
+                <!-- <button type="button" onclick="addEquipment()" class="form-control mt-2 btn btn-success"  id="addequipment">Add More Equipment</button> -->
+            <label for="matused">Materials Used</label> 
+            <textarea name="material-used" rows="2" cols="40" class="form-control" placeholder="Material Used" id="matused"></textarea>
+            <label for="images">Progress Images (Select All)</label> 
+            <input type="file" id="images" name="images" class="form-control mt-2" multiple>
+            <label for="docs">Documents (Select All)</label> 
+            <input type="file" id="docs" name="docs" class="form-control mt-2" multiple>
+            <button class="btn btn-success mt-2" type="submit">Update Activity</button>
+        </form>
+</div>
+</div>
+{% endblock %}

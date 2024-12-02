@@ -1,0 +1,32 @@
+{% extends 'basedash.html' %}
+{% block content %}
+    <h2 class="text-center text-capitalize">Issue Log</h2>
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <tr>
+            <th class="text-center">Site Name</th>
+            <th class="text-center">Issue Date</th>
+            <th class="text-center">Issue Time</th>
+            <th class="text-center">Issue Description</th>
+            <th class="text-center">Issue Resolution Steps</th>
+            <th class="text-center">Issue Status</th>
+            <th class="text-center">Issue Images</th>
+        </tr>
+        {% for issue in issues %}
+        <tr>
+            <td class="text-center">{{ issue.site_name }}</td>
+            <td class="text-center">{{ issue.issue_date }}</td>
+            <td class="text-center">{{ issue.issue_time}}</td>
+            <td class="text-center">{{ issue.issue_description }}</td>
+            <td class="text-center">{{ issue.resolution_steps }}</td>
+            <td class="text-center">{{ issue.issue_status }}</td>
+            <td class="text-center">
+                {% for photo in issue.issue_photos.all %}
+                    <img src="{{ photo.image.url }}" alt="Issue Image" width="50" height="50">
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

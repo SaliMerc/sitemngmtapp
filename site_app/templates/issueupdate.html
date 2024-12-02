@@ -1,0 +1,48 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 container-fluid">
+        <h2>Add Issue</h2><br>
+        <form action="{% url 'issuelog' %}" method="post" enctype="multipart/form-data" target="_self">
+            {% csrf_token %}
+            <label for="site_type">Site Type</label>
+            <select name="site_type" id="site_type" class="form-control mt-2" required>
+                 <option selected disabled>Select Site Type</option>
+                 <option value="new_site">New Site</option>
+                 <option value="existing_site">Existing Site</option>
+            </select>
+            <div class="site_name_new" id="site_name_new">
+                <label for="site_name1">Site Name</label>
+                <input type="text" id="site_name1" placeholder="Enter Site Name" name="site_name" class="form-control mt-2" required>
+            </div>   
+            <div class="site_name_exist" id="site_name_exist">
+                <label for="site_name1">Site Name</label>
+                <select name="site_type" id="site_name1" class="form-control mt-2" required>
+                     <option selected disabled>Select the Site</option>
+                     {% for site in existing_sites %}
+                     <option value="{{ site }}">{{ site }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <label for="date">Issue Date</label>
+            <input type="date" id="date" class="form-control mt-2" placeholder="Enter the Date of Issue Occurrence" name="issue_date" required>
+            <label for="time">Issue Time</label>
+            <input type="time" id="time" class="form-control mt-2" placeholder="Enter the Time of Issue Occurrence" name="issue_time" required>
+            <label for="description">Issue Description</label> 
+            <textarea name="issue_description" rows="2" cols="40" class="form-control" placeholder="Describe the Issue" id="description"></textarea>
+            <label for="issue_images">Issue Images (Select All)</label> 
+            <input type="file" id="issue_images" name="images" class="form-control mt-2" multiple>
+            <label for="res-steps">Issue Resolution Steps</label> 
+            <textarea name="resolution_steps" rows="2" cols="40" class="form-control" placeholder="Describe the Resolution Steps Taken" id="res-steps"></textarea>
+            <label for="status">Issue Status</label>
+            <select name="issue_status" id="status" class="form-control mt-2" type="text">
+                <option selected disabled>Resolution Status</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+            </select>
+            <button class="btn btn-success mt-2" type="submit"> Issue</button>
+        </form>
+</div>
+</div>
+{% endblock %}

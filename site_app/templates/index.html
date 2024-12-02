@@ -1,0 +1,109 @@
+{% extends 'basepublic.html' %}
+{% load static %}
+{% block hero %}
+<div class="main">
+     <h2>Revolutionize Your Construction
+          Site Management</h2>
+     <p>Streamline your construction site management with
+          SiteLogger. Save time, reduce errors, and improve
+          communication. Start logging your site's activities today</p>
+     <button class="btn btn-success"><a class="nav-link" href="{% url 'signup' %}">Get Started</a></button>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+     <h2>Features</h2>
+<div class="row">
+<div class="col-md-3">
+     <h3>Daily Activity
+          Logging</h3>
+     <p>Log work completed, labor
+          hours, equipment used,
+          and materials consumed.
+          </p>
+</div>
+<div class="col-md-3">
+     <h3>Issue Tracking</h3>
+     <p>Record and resolve issues
+          encountered on-site.
+          Including delays, accidents,
+          equipment failure etc
+          </p>
+</div>
+<div class="col-md-3">
+     <h3>Photo and
+          Document Upload</h3>
+     <p>Attach photos and
+          documents to your reports.
+          Including completed work
+          photos, incidents etc.
+          </p>
+</div>
+<div class="col-md-3">
+     <h3>Report
+          Generation</h3>
+     <p>Automatically compile daily
+          logs into structured
+          reports.
+          </p>
+</div>
+</div>
+<h2>Why Choose Us</h2>
+<div class="row">
+     <div class="col-md-4">
+          <h3>Daily Activity
+               Logging</h3>
+          <p>Log work completed, labor
+               hours, equipment used,
+               and materials consumed.
+               </p>
+     </div>
+     <div class="col-md-4">
+          <h3>Issue Tracking</h3>
+          <p>Record and resolve issues
+               encountered on-site.
+               Including delays, accidents,
+               equipment failure etc
+               </p>
+     </div>
+     <div class="col-md-4">
+          <h3>Photo and
+               Document Upload</h3>
+          <p>Attach photos and
+               documents to your reports.
+               Including completed work
+               photos, incidents etc.
+               </p>
+     </div>
+     </div>
+     <h2>Contact Us</h2>
+     <div class="major">
+          <div class="email">
+               <a href=""><i class="fa-solid fa-envelope"></i></a>
+               <a href="">infor@sitelogger.com</a>
+          </div>
+          <div class="phone">
+               <a href=""><i class="fa-solid fa-phone"></i></a>
+               <a href="">+254 712345678</a>
+          </div>
+     </div>
+     <div class="row">
+          <h3>Social Handles</h3>
+          <div class="col-md-3">
+               <a href="">
+                    <i class="fa-brands fa-instagram"></i>
+               </a>
+          </div>
+          <div class="col-md-3">
+               <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+          </div>
+          <div class="col-md-3">
+               <a href=""><i class="fa-brands fa-linkedin"></i></a>
+          </div>
+          <div class="col-md-3">
+               <a href=""><i class="fa-brands fa-linkedin"></i></a>
+          </div>
+          </div>
+</div>
+
+{% endblock %}

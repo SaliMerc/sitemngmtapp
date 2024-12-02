@@ -1,0 +1,62 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="{% static 'images/LOGO.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
+    <title>SiteLogger</title>
+</head>
+<body>
+<nav class="navbar">
+    <div class="col-ms-6">
+        <h2><a href="{% url 'index' %}" class="nav-link">Dashboard</a></h2>
+    </div>
+    <div class="col-ms-6">
+    <ul class="nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Log</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'activitylog' %}">Activities</a></li>
+              <li><a class="dropdown-item" href="{% url 'issuelog' %}">Issues</a></li>
+{#              <li><a class="dropdown-item" href="#">Activities and Issues</a></li>#}
+            </ul>
+          </li>
+{#        <!-- <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Log Daily Activities</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Log Daily Issues</a></li>#}
+{#        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">View</a></li> -->#}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">View</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'activityview' %}">Activities</a></li>
+              <li><a class="dropdown-item" href="{% url 'issueview' %}">Issues</a></li>
+{#              <li><a class="dropdown-item" href="#">Activities and Issues</a></li>#}
+            </ul>
+          </li>
+        <li class="nav-item"><a href="{% url 'reportview' %}" class="nav-link">Generate Report</a></li>
+        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Logout</a></li>
+    </ul>
+    </div>
+</nav>
+{% block content %}
+{#This is where the page content will go #}
+{% endblock %}
+<footer class=" footer bg-light text-center">  
+    <!-- Copyright -->
+    <div class="text-center p-3">
+      Copyright &copy; <script>document.write(new Date().getFullYear())</script>
+      <a class="text-dark" href="https://github.com/">SiteLogger</a>
+    </div>
+    <!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

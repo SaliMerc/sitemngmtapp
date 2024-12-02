@@ -1,0 +1,27 @@
+{% extends 'basepublic.html' %}
+{% load static %}
+{% block content %}
+ <div class="col-md-4 container-fluid">
+     <h2>Register Here</h2><br>
+     <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data" target="_self">
+         {% csrf_token %}
+                    <input type="text" class="form-control" placeholder="First Name" name="first_name" required>
+                    <input type="text" class="form-control mt-2" placeholder="Last Name" name="last_name" required>
+                    <input type="email" class="form-control  mt-2" placeholder="Email Address" name="email" required>
+                    <input type="password" class="form-control  mt-2" placeholder="Password" name="password" required>
+                    <!-- Display messages -->
+                {% if error_message %}
+{#                        {% for message in error_message %}#}
+                            <p style="color: red">{{ error_message }}</p>
+{#                            <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">#}
+{#                                {{ message }}#}
+{#                            </p>#}
+{#                        {% endfor %}#}
+                {% endif %}
+                    <input type="password" class="form-control  mt-2" placeholder="Confirm Password" name="confirm_password" required>
+                    <button class="btn btn-success mt-2" type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

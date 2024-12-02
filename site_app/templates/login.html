@@ -1,0 +1,19 @@
+{% extends 'basepublic.html' %}
+{% load static %}
+{% block content %}
+    <div class="col-md-4 container-fluid">
+            <h2>Login Here</h2><br>
+            <form action="{% url 'login' %}" method="post" enctype="multipart/form-data" target="_self">
+                {% csrf_token %}
+                {% if error_message %}
+{#                        {% for message in error_message %}#}
+                            <p style="color: red">{{ error_message }}</p>
+                            <h2 style="font-size: 0.5em; color: #0a3622">Login Here</h2>
+{#                        {% endfor %}#}
+                {% endif %}
+                <input type="email" class="form-control mt-2" placeholder="Email Address" name="email" required>
+                <input type="password" class="form-control  mt-2" placeholder="Enter Your Password" name="password" required>
+                <button class="btn btn-success mt-2" type="submit">Login</button>
+            </form>
+        </div>
+{% endblock %}
