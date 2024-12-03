@@ -14,18 +14,18 @@
 </head>
 <body>
 <div class="wrapper">
-<div class="container-fluid nav-hero">
+<div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat">
 <nav class="navbar">
-    <div class="col-ms-6">
-        <h2><a href="{% url 'index' %}" class="nav-link">SiteLogger</a></h2>
+    <div class="col-ms-7">
+        <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" height="100px"></a>
     </div>
-    <div class="col-ms-6">
+    <div class="col-ms-5">
     <ul class="nav">
-        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Features</a></li>
-        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Contact Us</a></li>
-        <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">Register</a></li>
-        <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Log In</a></li>
+        <li class="nav-item"><a href="{% url 'index' %}" class=" nav-link nav-link-n">Home</a></li>
+        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Features</a></li>
+        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Contact Us</a></li>
+        <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link nav-link-n">Register</a></li>
+        <li class="nav-item"><a href="{% url 'login' %}" class="nav-link nav-link-n">Log In</a></li>
     </ul>
     </div>
 </nav>
@@ -36,7 +36,7 @@
 {% block content %}
 {#This is where the page content will go #}
 {% endblock %}
-<footer class=" footer bg-light text-center fixed-bottom">  
+<footer class=" footer bg-light text-center">  
     <!-- Copyright -->
     <div class="text-center p-3">
       Copyright &copy; <script>document.write(new Date().getFullYear())</script>

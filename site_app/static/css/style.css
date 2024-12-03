@@ -4,10 +4,36 @@
 /*.content { */
 /*    flex: 1; */
 /*}*/
-
 #site_name_new{
     display: none;
 }
 #site_name_exist{
     display: none;
+}
+body{
+    background-color: lightgray;
+}
+.nav-link-n{
+    color: #D3D3D3;
+}
+.nav-link-n:hover{
+    text-decoration: underline;
+    color: #B0B0B0;
+}
+.nav-hero{
+    background-color: #435a42;
+}
+#main{
+    /*text-align: right;*/
+    /*justify-content: right;*/
+}
+.btn-success{
+    background-color: #4b5a4e;
+    border: none;
+    color: #D3D3D3;
+}
+.btn-success:hover{
+    background-color: #444945;
+    border: none;
+    color: #B0B0B0;
 }

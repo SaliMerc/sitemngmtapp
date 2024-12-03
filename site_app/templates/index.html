@@ -1,13 +1,16 @@
 {% extends 'basepublic.html' %}
 {% load static %}
 {% block hero %}
-<div class="main">
-     <h2>Revolutionize Your Construction
-          Site Management</h2>
-     <p>Streamline your construction site management with
-          SiteLogger. Save time, reduce errors, and improve
-          communication. Start logging your site's activities today</p>
-     <button class="btn btn-success"><a class="nav-link" href="{% url 'signup' %}">Get Started</a></button>
+<div class="d-flex-column justify-content-center row">
+<div class="col-md-7"></div>
+    <div class="col-md-5" id="main">
+     <h2 class="mt-5">Revolutionize Your Construction
+         <br>Site Management</h2>
+     <p class="mt-4">Streamline your construction site management with
+          SiteLogger. <br>Save time, reduce errors, and improve
+          communication. <br>Start logging your site's activities today</p>
+     <button class="btn btn-success mt-4"><a class="nav-link" href="{% url 'signup' %}">Get Started</a></button>
+    </div>
 </div>
 {% endblock %}
 {% block content %}

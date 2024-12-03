@@ -1,15 +1,24 @@
 from datetime import datetime
 import logging
+
+from django.contrib.sites import requests
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 # from .models import ....
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, IssueDateReport, ActivityDateReport
+from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport
 from django.utils.timezone import now
+from datetime import date
 from xhtml2pdf import pisa
 from django.template.loader import get_template
+from requests.auth import HTTPBasicAuth
+import json
+from . credentials import MpesaAccessToken, LipanaMpesaPassword
+import requests
+# from django.template.loader import render_to_string
+# from weasyprint import HTML
 # Create your views here.
 logger = logging.getLogger(__name__)
 
@@ -93,7 +102,8 @@ def activitylog(request):
             activity.relevant_documents.add(doc)
         activity.save()
         return redirect("activityview")
-    existing_sites=DailyActivity.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
+    # existing_sites=DailyActivity.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
+    existing_sites = DailyActivity.objects.filter(user=request.user).values_list("site_name", flat=True).distinct().order_by("site_name")
     return render(request, 'activitylog.html', {"existing_sites":existing_sites})
 @login_required
 def activityview(request):
@@ -122,7 +132,8 @@ def issuelog(request):
             all_issues.issue_photos.add(img)
         all_issues.save()
         return redirect("issueview")
-    existing_sites = Issue.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
+    # existing_sites = Issue.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
+    existing_sites = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
     return render(request, 'issuelog.html', {"existing_sites":existing_sites})
 @login_required
 def issueview(request,id):
@@ -171,38 +182,109 @@ def issuelist(request):
 #     return render(request, 'activityupdate.html', {"existing_sites": existing_sites, "activity":activity})
 # def issueupdate(request, id):
 #     return render(request, 'issueupdate.html')
-# @login_required
-# def report_view(request):
-#     dates = request.GET.getlist('dates')
-#     activities = []
-#     issues = []
-#     if dates:
-#         activities = DailyActivity.objects.filter(user=request.user, date__in=dates)
-#         issues = Issue.objects.filter(user=request.user, issue_date__in=dates)
-#     return render(request, 'reportform.html', {'activities': activities, 'issues': issues, 'dates': dates})
-
-def report_view(request):
-    issue_dates = Issue.objects.filter(user=request.user).values_list("issue_date", flat=True).distinct().order_by("issue_date")
-    activity_dates=DailyActivity.objects.filter(user=request.user).values_list("date", flat=True).distinct().order_by("date")
+@login_required
+def activity_report(request):
     if request.method=="POST":
-        issue_dates=request.POST.getlist("issue_dates")
-        activity_dates=request.POST.getlist("activity_dates")
-        for date_str in issue_dates:
-            try:
-                issue_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                IssueDateReport.objects.create(issue_date=issue_date, user=request.user)
-            except ValueError:
-                continue
-        # for issue_date in issue_dates:
-        #     IssueDateReport.objects.create(issue_dates=issue_date, user=request.user)
-        for date_str in activity_dates:
-            try:
-                activity_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-                ActivityDateReport.objects.create(activity_date=activity_date, user=request.user)
-            except ValueError:
-                continue
-        # for activity_date in activity_dates:
-        #     IssueDateReport.objects.create(activity_dates=activity_date, user=request.user)
-        return redirect("dash")
-    return render(request, 'reportform.html', {"issue_dates":issue_dates, "activity_dates":activity_dates})
+        site_name2=request.POST.get("site_activity_name")
+        user = request.user
+        query=ActivityReport(site_name=site_name2,user=user)
+        query.save()
+        return redirect("activityreportdisplay", id=query.id)
+    site_names = DailyActivity.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
+    return render(request, 'activityreport.html', {'site_names':site_names})
+@login_required
+def activity_report_display(request, id):
+    user = request.user
+    from_report=ActivityReport.objects.get(id=id)
+    site_name = from_report.site_name
+    activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
+    return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name})
+@login_required
+def issue_report(request):
+    if request.method=="POST":
+        site_name1=request.POST.get("site_issue_name")
+        user = request.user
+        query=IssueReport(site_name=site_name1,user=user)
+        query.save()
+        return redirect("issuereportdisplay", id=query.id)
+    site_names = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
+    return render(request, 'issue_report.html', {'site_names': site_names})
+# @login_required
+# def issue_report_display(request, id):
+#     user = request.user
+#     issue_new_report=IssueReport.objects.get(id=id)
+#     site_name = issue_new_report.site_name
+#     issues_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+#     return render(request, 'activity_report_display.html',{"issues":issues_new, "user": user, "site_name":site_name})
+@login_required
+def issue_display(request,id):
+    user=request.user
+    site_in_report=IssueReport.objects.get(id=id)
+    site_name=site_in_report.site_name
+    issue_new=Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+    return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new})
 
+# api intergration starts here
+def token(request):
+    consumer_key = 'U7MzaVlmhJYNt5GfHAJmwWkiw4MdaB4UDiI8eRvNGBWNbXcy'
+    consumer_secret = 'gFA82oxUstdmHTLyXvC9Uwna5POUrYcN7BMBSXTRidTvyiB9kWla9fUQ282LrPHj'
+    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+
+    r = requests.get(api_URL, auth=HTTPBasicAuth(
+        consumer_key, consumer_secret))
+    mpesa_access_token = json.loads(r.text)
+    validated_mpesa_access_token = mpesa_access_token["access_token"]
+
+    return render(request, 'token.html', {"token":validated_mpesa_access_token})
+
+
+def pay(request):
+    if request.method == "POST":
+        phone = request.POST['phone']
+        amount = request.POST['amount']
+        access_token = MpesaAccessToken.validated_mpesa_access_token
+        api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+        headers = {"Authorization": "Bearer %s" % access_token}
+        request = {
+            "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
+            "Password": LipanaMpesaPassword.decode_password,
+            "Timestamp": LipanaMpesaPassword.lipa_time,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": LipanaMpesaPassword.Business_short_code,
+            "PhoneNumber": phone,
+            # where to get this below
+            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+            "AccountReference": "Mercy Saline",
+            "TransactionDesc": "Site Report Charges"
+        }
+        response = requests.post(api_url, json=request, headers=headers)
+    return HttpResponse("Payment Successfull")
+def stk(request):
+    return render(request, 'pay.html')
+# @login_required
+# def issue_report_download(request, id):
+#     user = request.user
+#     site_in_report = IssueReport.objects.get(id=id)
+#     site_name = site_in_report.site_name
+#     issue_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+#     html_string = render_to_string('issue_report_download.html',{'user': user, 'site_name': site_name, 'issues_new': issue_new})
+#     html = HTML(string=html_string)
+#     pdf = html.write_pdf()
+#     response = HttpResponse(pdf, content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="IssuesReport.pdf"'
+#     return response
+#
+# @login_required
+# def activities_report_download(request, id):
+#     user = request.user
+#     activity_in_report = ActivityReport.objects.get(id=id)
+#     site_name = activity_in_report.site_name
+#     activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
+#     html_string = render_to_string('activity_report_download.html', { 'user': user, 'site_name': site_name, 'activities': activities })
+#     html = HTML(string=html_string)
+#     pdf = html.write_pdf()
+#     response = HttpResponse(pdf, content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="ActivitiesReport.pdf"'
+#     return response

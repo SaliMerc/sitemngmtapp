@@ -1,0 +1,16 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+    
+    <div class="col-md-8 container-fluid">
+        <h2>Pay To Download File</h2><br>
+        <form action="{% url 'pay' %}" method="post" enctype="multipart/form-data" target="_self">
+            {% csrf_token %}
+            <label for="number">Phone Number</label>
+            <input type="number" id="number" class="form-control mt-2" placeholder="Enter Your Phone Number" name="phone" value="254" required>
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" class="form-control mt-2" placeholder="Amount" name="amount" value="100" required readonly>
+            <button class="btn btn-success mt-2" type="submit" value="Pay">Pay</button>
+            </form>
+    </div>
+{% endblock %}

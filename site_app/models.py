@@ -46,14 +46,13 @@ class Issue(models.Model):
     issue_status=models.CharField(max_length=200)
     def __str__(self):
         return self.issue_description
-
-class IssueDateReport(models.Model):
+class ActivityReport(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    issue_date=models.DateField()
-class ActivityDateReport(models.Model):
+    site_name=models.CharField(max_length=100)
+    def __str__(self):
+        return self.site_name
+class IssueReport(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    issue_date=models.DateField()
-
-class ReportForm(models.Model):
-    issue_dates=models.ManyToManyField(IssueDateReport, related_name='report_issue_dates', blank=True)
-    activity_dates=models.ManyToManyField(ActivityDateReport, related_name='report_activity_dates', blank=True)
+    site_name=models.CharField(max_length=100)
+    def __str__(self):
+        return self.site_name

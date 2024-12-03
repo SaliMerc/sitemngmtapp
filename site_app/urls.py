@@ -13,7 +13,16 @@ urlpatterns= [
     path('issuelog/', views.issuelog, name='issuelog'),
     path('issueview/', views.issuelist, name='issueview'),
     path('issueview/<int:id>/', views.issueview, name='issueview'),
-    path('reportview/', views.report_view, name='reportview')
+    path('activityreport/', views.activity_report, name='activityrep'),
+    path('issuereport/', views.issue_report, name='issuerep'),
+    path('activityreportdisplay/<int:id>/', views.activity_report_display, name='activityreportdisplay'),
+    path('issuereportdisplay/<int:id>/', views.issue_display, name='issuereportdisplay'),
+    path('token/', views.token, name='token'),
+    path('pay/', views.pay, name='pay'),
+    path('stk/', views.stk, name='stk'),
+    # path('issuereportdownload/<int:id>/', views.issue_report_download, name='issuereportdownload'),
+    # path('activityreportdownload/<int:id>/', views.activities_report_download, name='activityreportdownload'),
+    # path('reportpdf/', views.report_display, name='reportpdf')
     # path('activityupdate/<int:id>', views.activityupdate, name='activityupdate'),
     # path('issueupdate/<int:id>/', views.issueupdate, name='issueupdate'),
 ]
