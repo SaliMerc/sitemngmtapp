@@ -37,3 +37,11 @@ body{
     border: none;
     color: #B0B0B0;
 }
+.form-control{
+    border-radius: 20px 0 20px 0;
+    height: 40px !important;
+}
+.btn{
+     border-radius: 0 15px 0 15px;
+
+}

@@ -1,8 +1,10 @@
 {% extends 'basepublic.html' %}
 {% load static %}
-{% block content %}
-    <div class="col-md-4 container-fluid">
-            <h2>Login Here</h2><br>
+{% block hero %}
+    <div class="row">
+    <div class="col-md-7"></div>
+    <div class="col-md-5">
+            <h2 class="text-center">Login Here</h2><br>
             <form action="{% url 'login' %}" method="post" enctype="multipart/form-data" target="_self">
                 {% csrf_token %}
                 {% if error_message %}
@@ -13,7 +15,11 @@
                 {% endif %}
                 <input type="email" class="form-control mt-2" placeholder="Email Address" name="email" required>
                 <input type="password" class="form-control  mt-2" placeholder="Enter Your Password" name="password" required>
+                <div class="d-flex flex-column align-items-center">
+                <li class="nav-item nav"><a href="{% url 'login' %}" class="nav-link nav-link-n">Forgot Password?</a></li>
                 <button class="btn btn-success mt-2" type="submit">Login</button>
+                </div>
             </form>
         </div>
+     </div>
 {% endblock %}
