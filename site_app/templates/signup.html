@@ -4,7 +4,7 @@
     <div class="row">
     <div class="col-md-7"></div>
     <div class="col-md-5">
-     <h2 class="text-center">Register Here</h2><br>
+     <h2 class="text-center sub-heading">Register Here</h2><br>
      <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data" target="_self">
          {% csrf_token %}
                     <input type="text" class="form-control" placeholder="First Name" name="first_name" required>

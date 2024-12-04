@@ -15,3 +15,18 @@ site_type.addEventListener('change', function (){
         existing_site.style.display='none'
     }
 })
+const burger=document.getElementsByClassName("burger")
+const close=document.getElementsByClassName("close")
+const nav_list=document.getElementsByClassName("nav-lists")
+burger.addEventListener('click',function (){
+    burger.style.display='none';
+    close.style.display='block';
+    nav_list.style.display="block";
+    nav_list.style.display="flex";
+    nav_list.style.flexDirection="column";
+})
+close.addEventListener('click',function (){
+    burger.style.display='block';
+    close.style.display='none';
+    nav_list.style.display='none';
+})

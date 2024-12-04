@@ -4,9 +4,9 @@
 <div class="d-flex-column justify-content-center row">
 <div class="col-md-7"></div>
     <div class="col-md-5" id="main">
-     <h2 class="mt-5">Revolutionize Your Construction
-         <br>Site Management</h2>
-     <p class="mt-4">Streamline your construction site management with
+     <h2 class=" main-heading mt-4">Revolutionize Your Construction
+         Site Management</h2>
+     <p class="mt-4" id="main-para">Streamline your construction site management with
           SiteLogger. <br>Save time, reduce errors, and improve
           communication. <br>Start logging your site's activities today</p>
      <button class="btn btn-success mt-4"><a class="nav-link" href="{% url 'signup' %}">Get Started</a></button>
@@ -14,71 +14,69 @@
 </div>
 {% endblock %}
 {% block content %}
-<div class="container-fluid">
-     <h2>Features</h2>
-<div class="row">
-<div class="col-md-3">
-     <h3>Daily Activity
+{#    beginning of features section#}
+<div class="features-section mt-5 align-items-center" id="features">
+     <h2 class="text-center">Features</h2>
+<div class="row justify-content-center align-items-center">
+<div class="col-md-2 element feat">
+     <h3 class="mt-4 feat-head">Daily Activity
           Logging</h3>
-     <p>Log work completed, labor
+     <p class="feat-para">Log work completed, labor
           hours, equipment used,
           and materials consumed.
           </p>
 </div>
-<div class="col-md-3">
-     <h3>Issue Tracking</h3>
-     <p>Record and resolve issues
+<div class="col-md-3 element1 feat">
+     <h3 class="mt-4 feat-head">Issue Tracking</h3>
+     <p class="feat-para">Record and resolve issues
           encountered on-site.
           Including delays, accidents,
           equipment failure etc
           </p>
 </div>
-<div class="col-md-3">
-     <h3>Photo and
+<div class="col-md-2 element feat">
+     <h3 class="mt-4 feat-head">Photo and
           Document Upload</h3>
-     <p>Attach photos and
+     <p class="feat-para">Attach photos and
           documents to your reports.
           Including completed work
           photos, incidents etc.
           </p>
 </div>
-<div class="col-md-3">
-     <h3>Report
+<div class="col-md-3 element1 feat">
+     <h3 class="mt-4 feat-head">Report
           Generation</h3>
-     <p>Automatically compile daily
-          logs into structured
+     <p class="feat-para mt-4">Automatically compile daily activity <br>and issue
+         logs into structured
           reports.
           </p>
 </div>
 </div>
-<h2>Why Choose Us</h2>
-<div class="row">
-     <div class="col-md-4">
-          <h3>Daily Activity
-               Logging</h3>
-          <p>Log work completed, labor
-               hours, equipment used,
-               and materials consumed.
-               </p>
+{#    end of features section#}
+{#    start of about us section#}
+    <div class="about-us mt-5 align-items-center" id="why-us">
+<h2 class="text-center">Why Choose Us</h2>
+<div class="row justify-content-center align-items-center">
+     <div class="col-md-3 abt">
+          <h3>Efficiency</h3>
+          <p>Automate data entry and
+report generation</p>
      </div>
-     <div class="col-md-4">
-          <h3>Issue Tracking</h3>
-          <p>Record and resolve issues
-               encountered on-site.
-               Including delays, accidents,
-               equipment failure etc
-               </p>
+     <div class="col-md-3 abt">
+          <h3>Accuracy</h3>
+          <p>Reduce errors and improve
+data reliability.</p>
      </div>
-     <div class="col-md-4">
-          <h3>Photo and
-               Document Upload</h3>
-          <p>Attach photos and
-               documents to your reports.
-               Including completed work
-               photos, incidents etc.
-               </p>
+     <div class="col-md-3 abt">
+          <h3>Accountability</h3>
+          <p>Track issues and their
+resolutions.<p>
      </div>
      </div>
+    </div>
+{#    end of about us section#}
+{#    beginning of contact us section#}
+    <div class="contact-us">
      <h2>Contact Us</h2>
      <div class="major">
           <div class="email">
@@ -108,5 +106,6 @@
           </div>
           </div>
 </div>
-
+</div>
+{#    end of contact section#}
 {% endblock %}

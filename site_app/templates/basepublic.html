@@ -13,40 +13,45 @@
     <title>SiteLogger</title>
 </head>
 <body>
+{#<div class="spinner-grow" role="status" >#}
+{#  <span class="visually-hidden">Loading...</span>#}
+{#</div>#}
 <div class="wrapper">
 <div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat">
 <nav class="navbar">
     <div class="col-ms-7">
-        <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" height="100px"></a>
+        <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a>
     </div>
     <div class="col-ms-5">
-    <ul class="nav">
+    <ul class="nav nav-lists">
         <li class="nav-item"><a href="{% url 'index' %}" class=" nav-link nav-link-n">Home</a></li>
         <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Features</a></li>
+        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Why Us</a></li>
         <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Contact Us</a></li>
         <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link nav-link-n">Register</a></li>
         <li class="nav-item"><a href="{% url 'login' %}" class="nav-link nav-link-n">Log In</a></li>
     </ul>
+        
+        <img src="{% static 'images/burger.png' %}" alt="more" class="burger">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close">
     </div>
 </nav>
 {% block hero %}
 {#This is where the hero page content will go #}
 {% endblock %}
 </div>
+<div>
 {% block content %}
 {#This is where the page content will go #}
 {% endblock %}
-<footer class=" footer bg-light text-center">  
-    <!-- Copyright -->
+</div>
+<footer class=" footer text-center">
     <div class="text-center p-3">
       Copyright &copy; <script>document.write(new Date().getFullYear())</script>
       <a class="text-dark" href="https://github.com/">SiteLogger</a>
-    </div>
-    <!-- Copyright -->
-  
+    </div>  
   </footer>
   <!-- Footer -->
-   
 </div>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
