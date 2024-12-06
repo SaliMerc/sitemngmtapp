@@ -30,6 +30,7 @@ body{
 /*}*/
 .nav-hero{
     background-color: #435a42;
+    background-attachment: fixed;
 }
 .main-heading{
     font-size: 2.5rem;
@@ -65,6 +66,35 @@ body{
     background-color: #435a42;
     height: 24rem !important;
 }
+.feat:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.element:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.element1:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.anim {
+  animation: scaleXAnimation 2s ease-in-out infinite;
+}
+
+/* Define the animation */
+@keyframes scaleXAnimation {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.1) translateX(-5%) translateX(5%) translateY(5%);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
 .feat-head{
     color: #9ed39e;
     font-size: 1.8rem;
@@ -112,11 +142,11 @@ table{
 }
 tbody{
     background-color: #D3D3D3;
-    border-radius: 0.8em;
+    border-radius: 0.5em 0 0.5em 0;
 }
 td{
     background-color: #D3D3D3;
-    border-radius: 0.5em;
+    border-radius: 0.5em 0 0.5em 0;
 }
 .table-hover tbody tr:hover td{
     background-color: #D3D3D3;
