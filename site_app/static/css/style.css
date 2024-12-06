@@ -11,23 +11,23 @@ body{
     background-color: #c7dbd2;
     height: 100%;
 }
-.nav-lists{
-    display: flex;
-    flex-direction: row;
-}
+/*.nav-lists{*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*}*/
 .nav-link-n{
     color: #D3D3D3;
 }
-.nav-li-n:hover{
+.nav-link-n:hover{
     text-decoration: underline;
     color: #B0B0B0;
 }
-.burger{
-    display: none;
-}
-.close{
-    display: none;
-}
+/*.burger{*/
+/*    display: none;*/
+/*}*/
+/*.close{*/
+/*    display: none;*/
+/*}*/
 .nav-hero{
     background-color: #435a42;
 }
@@ -36,14 +36,14 @@ body{
     color: #98FB98;
 }
 #main-para{
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #D3D3D3;
 }
 .sub-heading{
     color: #98FB98;
 }
 .btn-success{
-    background-color: #98FB98;
+    background-color: #568956;
     border: none;
     color: #000000;
 }
@@ -53,51 +53,103 @@ body{
     color: #B0B0B0;
 }
 .form-control{
-    border-radius: 20px 0 20px 0;
+    border-radius: 1.2em 0 1.2em 0;
     height: 40px !important;
 }
 .btn{
-     border-radius: 0 15px 0 15px;
+     border-radius: 0 1em 0 1em;
 
 }
 .feat{
     margin-top: 2rem;
     background-color: #435a42;
-    margin-right: 20px;
     height: 24rem !important;
 }
 .feat-head{
     color: #9ed39e;
+    font-size: 1.8rem;
+    text-align: center;
+    padding-top: 1rem;
 }
 .feat-head:hover{
     color: #B0B0B0;
 }
 .feat-para{
-    color: #B0B0B0;
+    color: #D3D3D3;
+    font-size: 1.1rem;
+    text-align: center;
+    padding-top: 2rem;
 }
 .element{
-    border-radius: 35px 35px 0 0;
+    border-radius: 3em 3em 0 0;
+    margin-right: 2em;
 }
 .element1{
-    border-radius: 0 0 35px 35px;
+    border-radius: 0 0 3em 3em;
 }
 .about-us{
+}
+.abt{
+    background-color: #435a42;
+    height: 24rem !important;
+    margin-top: 2rem;
+}
+.abt-1{
+    margin-right: 2em;
+}
+footer{
+    background-color: #435a42;
+}
+.dash-footer{
+    background-color: #435a42;
+    position: sticky;
+    /*bottom: 0;*/
+    width: 100%;
+}
+table{
+    background-color: #D3D3D3;
+    border-radius: 0.8em;
+}
+tbody{
+    background-color: #D3D3D3;
+    border-radius: 0.8em;
+}
+td{
+    background-color: #D3D3D3;
+    border-radius: 0.5em;
+}
+.table-hover tbody tr:hover td{
+    background-color: #D3D3D3;
+    color: #435a42;
+}
+.b-dash-nav{
+    background-color: #5b7659;
+}
+#wcomplete, #equipused, #matused, #res-steps, #description{
+    min-height: 6rem;
+}
+.major{
+    align-items: center;
+    justify-content: center;
+}
 
-}
-/*.wrapper{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*}*/
 @media (max-width: 992px){
-    .burger{
-        display: block;
-        height: 2.5em;
-}
-    .close{
-        display: none;
-        height: 2.5em;
-}
-    .nav-lists{
-        display: none;
+    .nav-hero{
+        background-image:url('/static/images/hero-s.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
     }
+/*    .burger{*/
+/*        display: block;*/
+/*        height: 2.5em;*/
+/*}*/
+/*    .close{*/
+/*        display: none;*/
+/*        height: 2.5em;*/
+/*}*/
+/*    .nav-lists{*/
+/*        display: none;*/
+/*    }*/
 }

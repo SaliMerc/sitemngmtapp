@@ -1,11 +1,11 @@
 {% extends 'basedash.html' %}
 {% load static %}
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" style="min-height: 100vh" >
     <div class="col-md-8 container d-flex-column justify-content-center align-items-center centered-container">
         <div class="text-center mb-4">
-            <h2>Activity and Issue Report</h2>
-            <p><strong>User:</strong> {{ user.get_full_name }}</p>
+            <p class="mt-4"><strong>Hello</strong> {{ user.get_full_name.upper }}</p>
+            <h2> Generate Issue Report For Your Site Here</h2>
             <p><img src="{% static 'images/LOGO.png' %}" alt="Company Logo" class="img-fluid" style="max-height: 100px;"></p>
         </div>
         <form action="{% url 'issuerep' %}" method="post" enctype="multipart/form-data">

@@ -1,5 +1,6 @@
 from datetime import datetime
 import logging
+# from wsgiref.validate import re
 
 from django.contrib.sites import requests
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
@@ -8,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 # from .models import ....
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from SiteLogger import settings
 from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport
 from django.utils.timezone import now
 from datetime import date
@@ -17,6 +20,17 @@ from requests.auth import HTTPBasicAuth
 import json
 from . credentials import MpesaAccessToken, LipanaMpesaPassword
 import requests
+# for emails
+from django.contrib.auth.tokens import default_token_generator as token_generator
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth.models import User
+from django.urls import reverse
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.conf import settings
 # from django.template.loader import render_to_string
 # from weasyprint import HTML
 # Create your views here.
@@ -58,6 +72,48 @@ def log_in(request):
             messages.error(request, "Invalid username or password")
             return redirect('login')
     return render(request, 'login.html')
+
+# reset password starts here
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email=email)
+            token = token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            reset_link = request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
+            message = render_to_string('password_reset_email.html', {'reset_link': reset_link})
+            send_mail(
+                'Password Reset Request',
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [email],
+                fail_silently=False, )
+            messages.success(request, 'A password reset link has been sent to your email.')
+        else:
+            messages.error(request, 'Email address not found.')
+        return redirect('forgot_password')
+    return render(request, 'forgot_password.html')
+
+# confirm password reset
+def password_reset_confirm(request, uidb64, token):
+    if request.method == "POST":
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+        if token_generator.check_token(user, token):
+            password = request.POST.get("password")
+            conf_pass = request.POST.get("confirm_password")
+            if password == conf_pass:
+                user.set_password(password)
+                user.save()
+                messages.success(request, 'Your password has been reset successfully.')
+                return redirect('login')
+            else:
+                messages.error(request, 'Passwords do not match.')
+    return render(request, 'password_reset_confirm.html')
+
+
 def deleteData(request, id):
     actdel = DailyActivity.objects.get(id=id)
     issuedel= Issue.objects.get(id=id)
@@ -73,8 +129,10 @@ def index(request):
 def dash(request):
     if request.user.is_authenticated:
         last_name=request.user.last_name
+        issues = Issue.objects.filter(user=request.user)
+        activities = DailyActivity.objects.filter(user=request.user)
         print(f"Last Name: {last_name}")
-        return render(request, 'dash.html', {'last_name':last_name})
+        return render(request, 'dash.html', {'last_name':last_name, "issues":issues, "activities":activities})
     else:
         return redirect('login')
 @login_required
@@ -224,7 +282,8 @@ def issue_display(request,id):
     issue_new=Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
     return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new})
 
-# api intergration starts here
+# api integration starts here
+@login_required
 def token(request):
     consumer_key = 'U7MzaVlmhJYNt5GfHAJmwWkiw4MdaB4UDiI8eRvNGBWNbXcy'
     consumer_secret = 'gFA82oxUstdmHTLyXvC9Uwna5POUrYcN7BMBSXTRidTvyiB9kWla9fUQ282LrPHj'
@@ -237,7 +296,7 @@ def token(request):
 
     return render(request, 'token.html', {"token":validated_mpesa_access_token})
 
-
+@login_required
 def pay(request):
     if request.method == "POST":
         phone = request.POST['phone']
@@ -261,6 +320,7 @@ def pay(request):
         }
         response = requests.post(api_url, json=request, headers=headers)
     return HttpResponse("Payment Successfull")
+@login_required
 def stk(request):
     return render(request, 'pay.html')
 # @login_required

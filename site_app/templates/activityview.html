@@ -1,8 +1,9 @@
 {% extends 'basedash.html' %}
 {% block content %}
-    <h2 class="text-center">Logged Activities</h2>
+    <div class="min-vh-100">
+    <h2 class="text-center mt-4">Logged Activities</h2>
     <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-bordered table-hover">
         <tr>
             <th class="text-center">Site Name</th>
             <th class="text-center">Date</th>
@@ -23,9 +24,9 @@
             <td class="text-center">{{ activity.date }}</td>
             <td class="text-center">{{ activity.site_open_time }}</td>
             <td class="text-center">{{ activity.site_close_time }}</td>
-            <td class="text-center">{{ activity.work_completed }}</td>
-            <td class="text-center">{{ activity.equipment_used }}</td>
-            <td class="text-center">{{ activity.materials_used }}</td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.work_completed }}</pre></td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.equipment_used }}</pre></td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.materials_used }}</pre></td>
             <td class="text-center">
                 {% for photo in activity.progress_photos.all %}
                     <img src="{{ photo.image.url }}" alt="Progress Photo" width="50" height="50">
@@ -41,5 +42,6 @@
         </tr>
         {% endfor %}
     </table>
+    </div>
     </div>
 {% endblock %}

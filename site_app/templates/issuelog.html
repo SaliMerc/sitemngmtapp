@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="col-md-8 container-fluid">
-        <h2>Add Issue</h2><br>
+        <h2 class="text-center mt-4"><i class="fa-solid fa-check-double"></i>Add Issue</h2><br>
         <form action="{% url 'issuelog' %}" method="post" enctype="multipart/form-data" target="_self">
             {% csrf_token %}
             <label for="site_type">Site Type</label>
@@ -25,23 +25,25 @@
                     {% endfor %}
                 </select>
             </div>
-            <label for="date">Issue Date</label>
+            <label for="date">Issue Occurrence Date</label>
             <input type="date" id="date" class="form-control mt-2" placeholder="Enter the Date of Issue Occurrence" name="issue_date" required>
-            <label for="time">Issue Time</label>
+            <label for="time">Issue Occurrence Time</label>
             <input type="time" id="time" class="form-control mt-2" placeholder="Enter the Time of Issue Occurrence" name="issue_time" required>
             <label for="description">Issue Description</label> 
-            <textarea name="issue_description" rows="2" cols="40" class="form-control" placeholder="Describe the Issue" id="description"></textarea>
+            <textarea name="issue_description" rows="2" cols="40" class="form-control main-t-area" placeholder="Describe the Issue" id="description"></textarea>
             <label for="issue_images">Issue Images (Select All)</label> 
             <input type="file" id="issue_images" name="images" class="form-control mt-2" multiple>
             <label for="res-steps">Issue Resolution Steps</label> 
-            <textarea name="resolution_steps" rows="2" cols="40" class="form-control" placeholder="Describe the Resolution Steps Taken" id="res-steps"></textarea>
+            <textarea name="resolution_steps" rows="2" cols="40" class="form-control main-t-area" placeholder="Describe the Resolution Steps Taken" id="res-steps"></textarea>
             <label for="status">Issue Status</label>
             <select name="issue_status" id="status" class="form-control mt-2" type="text">
                 <option selected disabled>Resolution Status</option>
                 <option value="In Progress">In Progress</option>
                 <option value="Resolved">Resolved</option>
-            </select>
-            <button class="btn btn-success mt-2" type="submit">Log Issue</button>
+            </select><br>
+        <div class="d-flex align-items-center justify-content-center">
+            <button class="btn btn-success mt-2 " type="submit">Log Issue</button>
+       </div>
         </form>
 </div>
 </div>

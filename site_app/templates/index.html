@@ -8,14 +8,14 @@
          Site Management</h2>
      <p class="mt-4" id="main-para">Streamline your construction site management with
           SiteLogger. <br>Save time, reduce errors, and improve
-          communication. <br>Start logging your site's activities today</p>
+          communication. <br>Start logging your site's activities today!</p>
      <button class="btn btn-success mt-4"><a class="nav-link" href="{% url 'signup' %}">Get Started</a></button>
     </div>
 </div>
 {% endblock %}
 {% block content %}
 {#    beginning of features section#}
-<div class="features-section mt-5 align-items-center" id="features">
+<div class="features-section mt-5 align-items-center" id="features" data-aos="fade-up">
      <h2 class="text-center">Features</h2>
 <div class="row justify-content-center align-items-center">
 <div class="col-md-2 element feat">
@@ -26,83 +26,80 @@
           and materials consumed.
           </p>
 </div>
-<div class="col-md-3 element1 feat">
+<div class="col-md-3 element1 feat" style="margin-right: 2em;">
      <h3 class="mt-4 feat-head">Issue Tracking</h3>
      <p class="feat-para">Record and resolve issues
           encountered on-site.
           Including delays, accidents,
-          equipment failure etc
+          equipment failure etc.
           </p>
 </div>
 <div class="col-md-2 element feat">
-     <h3 class="mt-4 feat-head">Photo and
-          Document Upload</h3>
-     <p class="feat-para">Attach photos and
-          documents to your reports.
-          Including completed work
-          photos, incidents etc.
-          </p>
-</div>
-<div class="col-md-3 element1 feat">
      <h3 class="mt-4 feat-head">Report
           Generation</h3>
-     <p class="feat-para mt-4">Automatically compile daily activity <br>and issue
+     <p class="feat-para">Automatically compile daily activity <br>and issue
          logs into structured
           reports.
           </p>
 </div>
+<div class="col-md-3 element1 feat">
+     <h3 class="mt-4 feat-head"> Upload Photos and
+          Documents</h3>
+     <p class="feat-para mt-4">Attach photos and
+          documents to your reports.
+          Including completed work
+          photos, incidents etc.</p>
+</div>
 </div>
 {#    end of features section#}
 {#    start of about us section#}
-    <div class="about-us mt-5 align-items-center" id="why-us">
+    <div class="about-us mt-5 align-items-center animate__animated animate__fadeIn" id="why-us">
 <h2 class="text-center">Why Choose Us</h2>
+        <p class="text-center">Our System makes your work easier</p>
 <div class="row justify-content-center align-items-center">
-     <div class="col-md-3 abt">
-          <h3>Efficiency</h3>
-          <p>Automate data entry and
+     <div class="col-md-2 abt abt-1 element">
+          <h3 class="mt-4 feat-head">Efficiency</h3>
+          <p class="feat-para">Automate data entry and
 report generation</p>
      </div>
-     <div class="col-md-3 abt">
-          <h3>Accuracy</h3>
-          <p>Reduce errors and improve
+     <div class="col-md-2 abt abt-1 element1">
+          <h3 class="mt-4 feat-head">Accuracy</h3>
+          <p class="feat-para">Reduce errors and improve
 data reliability.</p>
      </div>
-     <div class="col-md-3 abt">
-          <h3>Accountability</h3>
-          <p>Track issues and their
+     <div class="col-md-2 abt element">
+          <h3 class="mt-4 feat-head">Accountability</h3>
+          <p class="feat-para">Track issues and their
 resolutions.<p>
      </div>
      </div>
     </div>
 {#    end of about us section#}
 {#    beginning of contact us section#}
-    <div class="contact-us">
-     <h2>Contact Us</h2>
-     <div class="major">
-          <div class="email">
-               <a href=""><i class="fa-solid fa-envelope"></i></a>
-               <a href="">infor@sitelogger.com</a>
+    <div class="contact-us mt-5" id="contact">
+     <h2 class="text-center">Contact Us</h2>
+     <div class="d-flex major mt-4">
+          <div class="email" style="margin-right: 2em">
+               <a href="mailto:info@sitelogger.com" style="text-decoration: none; color: inherit; margin-left: 4em"><i class="fa-solid fa-envelope" style="color: inherit"></i></a>
+               <a href="mailto:info@sitelogger.com" class="nav-link" style="text-decoration: underline;">info@sitelogger.com</a>
           </div>
           <div class="phone">
-               <a href=""><i class="fa-solid fa-phone"></i></a>
-               <a href="">+254 712345678</a>
+               <a href="tel:+254712345678" class="nav-link" style="text-decoration: none; color: inherit; margin-left: 3em"><i class="fa-solid fa-phone" aria-hidden="true"></i></a>
+               <a href="tel:+254712345678" class="nav-link" style="text-decoration: underline;">+254 712345678</a>
           </div>
      </div>
-     <div class="row">
-          <h3>Social Handles</h3>
-          <div class="col-md-3">
-               <a href="">
+          <h6 class="text-center mt-4">Social Media</h6>
+        <div class="row d-flex justify-content-center align-items-center mt-4 mb-4" style="margin-left: 3em">
+          <div class="col-md-1">
+               <a href="" class="nav-link">
                     <i class="fa-brands fa-instagram"></i>
                </a>
           </div>
-          <div class="col-md-3">
-               <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+          <div class="col-md-1">
+               <a href="" class="nav-link"><i class="fa-brands fa-x-twitter"></i></a>
           </div>
-          <div class="col-md-3">
-               <a href=""><i class="fa-brands fa-linkedin"></i></a>
-          </div>
-          <div class="col-md-3">
-               <a href=""><i class="fa-brands fa-linkedin"></i></a>
+          <div class="col-md-1">
+               <a href="" class="nav-link"><i class="fa-brands fa-linkedin"></i></a>
           </div>
           </div>
 </div>
