@@ -1,3 +1,29 @@
+/*// <uniquifier>: Use a unique and descriptive class name*/
+/*// <weight>: Use a value from 400 to 900*/
+
+.playfair-display-heading-f {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.lato-bold {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lato-black {
+  font-family: "Lato", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Lato", sans-serif;
+}
+p, a{
+    font-family: "Playfair Display", serif;
+}
 #site_name_new{
     display: none;
 }
@@ -33,11 +59,11 @@ body{
     background-attachment: fixed;
 }
 .main-heading{
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     color: #98FB98;
 }
 #main-para{
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #D3D3D3;
 }
 .sub-heading{
@@ -139,6 +165,7 @@ footer{
 table{
     background-color: #D3D3D3;
     border-radius: 0.8em;
+    overflow: auto;
 }
 tbody{
     background-color: #D3D3D3;
@@ -147,6 +174,7 @@ tbody{
 td{
     background-color: #D3D3D3;
     border-radius: 0.5em 0 0.5em 0;
+    overflow: visible;
 }
 .table-hover tbody tr:hover td{
     background-color: #D3D3D3;
@@ -163,14 +191,14 @@ td{
     justify-content: center;
 }
 
-@media (max-width: 992px){
-    .nav-hero{
-        background-image:url('/static/images/hero-s.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-        display: flex;
-        flex-direction: column;
-    }
+/*@media (max-width: 992px){*/
+/*    .nav-hero{*/
+/*        background-image:url('/static/images/hero-s.png');*/
+/*        background-size: cover;*/
+/*        background-repeat: no-repeat;*/
+/*        display: flex;*/
+/*        flex-direction: column;*/
+/*    }*/
 /*    .burger{*/
 /*        display: block;*/
 /*        height: 2.5em;*/
@@ -182,4 +210,4 @@ td{
 /*    .nav-lists{*/
 /*        display: none;*/
 /*    }*/
-}
+/*}*/

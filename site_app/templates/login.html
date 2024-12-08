@@ -7,11 +7,13 @@
             <h2 class="text-center sub-heading">Login Here</h2><br>
             <form action="{% url 'login' %}" method="post" enctype="multipart/form-data" target="_self">
                 {% csrf_token %}
-                {% if error_message %}
-{#                        {% for message in error_message %}#}
-                            <p style="color: red">{{ error_message }}</p>
+                {% if messages %}
+                        {% for message in messages %}
+                            <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
+                                {{ message }}
+                            </p>
                             <h2 style="font-size: 0.5em; color: #0a3622">Login Here</h2>
-{#                        {% endfor %}#}
+                        {% endfor %}
                 {% endif %}
                 <input type="email" class="form-control mt-2" placeholder="Email Address" name="email" required>
                 <input type="password" class="form-control  mt-2" placeholder="Enter Your Password" name="password" required>

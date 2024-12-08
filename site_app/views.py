@@ -47,11 +47,11 @@ def sign_up(request):
         conf_pass = request.POST.get("confirm_password")
         # error message displays
         if User.objects.filter(email=email).exists():
-            error_message='A user with this email already exists'
-            # messages.error(request, 'A user with this email already exists')
+            # error_message='A user with this email already exists'
+            messages.error(request, 'A user with this email already exists')
             return render(request, "login.html", {"error_message": error_message})
         if password != conf_pass:
-            error_message='Passwords do not match'
+            # error_message='Passwords do not match'
             messages.error(request, 'Passwords do not match')
             return render(request, "signup.html",{"error_message": error_message})
         # print(username,password)
@@ -68,7 +68,7 @@ def log_in(request):
             login(request, myuser)
             return redirect("dash")
         else:
-            print("Invalid email or password")
+            # print("Invalid email or password")
             messages.error(request, "Invalid username or password")
             return redirect('login')
     return render(request, 'login.html')
@@ -314,7 +314,8 @@ def pay(request):
             "PartyB": LipanaMpesaPassword.Business_short_code,
             "PhoneNumber": phone,
             # where to get this below
-            "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+            "CallBackURL":"https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
+            # "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
             "AccountReference": "Mercy Saline",
             "TransactionDesc": "Site Report Charges"
         }

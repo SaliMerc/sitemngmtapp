@@ -32,9 +32,9 @@
             <td class="text-center">{{ activity.date }}</td>
             <td class="text-center">{{ activity.site_open_time }}</td>
             <td class="text-center">{{ activity.site_close_time }}</td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.work_completed|slice:":2" }}</pre></td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.equipment_used|slice:":2" }}</pre></td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.materials_used|slice:":2" }}</pre></td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.work_completed|slice:":50" }}</pre></td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.equipment_used|slice:":50" }}</pre></td>
+            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.materials_used|slice:":50" }}</pre></td>
             <td class="text-center">
                 {% for photo in activity.progress_photos.all|slice:":1" %}
                     <img src="{{ photo.image.url }}" alt="Progress Photo" width="50" height="50">
