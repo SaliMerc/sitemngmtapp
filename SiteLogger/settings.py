@@ -25,8 +25,14 @@ SECRET_KEY = 'django-insecure-*@#xrccg5(2b&fjog^)eh-kpxrex3vlqlza*)=f1xij4t6n7&w
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+CSRF_TRUSTED_ORIGINS = [
+    'https://95cb-102-209-136-66.ngrok-free.app',
+]
+ALLOWED_HOSTS = [
+    '95cb-102-209-136-66.ngrok-free.app',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -38,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'site_app',
     'crispy_forms',
     'crispy_bootstrap4',
@@ -146,3 +153,10 @@ MEDIA_URL ='/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ]
+}

@@ -18,10 +18,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <title>SiteLogger</title>
 </head>
-<body style="background-color: #D3D3D3">
-<nav class="navbar b-dash-nav">
+<body style="background-image: url({% static 'images/back.jpg' %}); background-repeat: repeat; background-size: cover;">
+<nav class="navbar b-dash-nav" style="min-height: 4.5rem">
     <div class="col-ms-6">
-        <h2><a href="{% url 'dash' %}" class="nav-link nav-link-n"><i class="fa-solid fa-helmet-safety"></i>Dashboard</a></h2>
+        <h5><a href="{% url 'dash' %}" class="nav-link nav-link-n"><i class="fa-solid fa-helmet-safety"></i> Welcome, {{ last_name }}</a></h5>
     </div>
     <div class="col-ms-6">
     <ul class="nav">

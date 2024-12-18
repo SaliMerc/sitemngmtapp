@@ -22,6 +22,7 @@ urlpatterns= [
     path('stk/', views.stk, name='stk'),
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('callback/', views.callback, name='callback')
     # path('issuereportdownload/<int:id>/', views.issue_report_download, name='issuereportdownload'),
     # path('activityreportdownload/<int:id>/', views.activities_report_download, name='activityreportdownload'),
     # path('reportpdf/', views.report_display, name='reportpdf')

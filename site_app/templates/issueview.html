@@ -3,7 +3,7 @@
     <div class="min-vh-100">
     <h2 class="text-center text-capitalize mt-4"><i class="fa-solid fa-clock"></i> Logged Issues</h2>
     <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-hover">
         <tr>
             <th class="text-center">Site Name</th>
             <th class="text-center">Issue Date</th>
@@ -13,6 +13,7 @@
             <th class="text-center">Issue Status</th>
             <th class="text-center">Issue Images</th>
         </tr>
+    {% if issues %}
         {% for issue in issues %}
         <tr>
             <td class="text-center">{{ issue.site_name }}</td>
@@ -28,6 +29,9 @@
             </td>
         </tr>
         {% endfor %}
+      {% else %}
+    <h6 class="text-center mt-4">You have no issues logged yet</h6>
+    {% endif %}
     </table>
     </div>
     </div>

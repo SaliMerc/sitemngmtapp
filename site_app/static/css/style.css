@@ -20,6 +20,7 @@
 }
 h1,h2,h3,h4,h5,h6 {
     font-family: "Lato", sans-serif;
+    font-weight: 900;
 }
 p, a{
     font-family: "Playfair Display", serif;
@@ -32,6 +33,9 @@ p, a{
 }
 html{
     height: 100%;
+}
+.navbar {
+    transition: background-color 0.5s ease;
 }
 body{
     background-color: #c7dbd2;
@@ -82,6 +86,8 @@ body{
 .form-control{
     border-radius: 1.2em 0 1.2em 0;
     height: 40px !important;
+    background-color: #b2cfb2;
+    border: none;
 }
 .btn{
      border-radius: 0 1em 0 1em;

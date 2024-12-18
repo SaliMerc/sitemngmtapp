@@ -3,22 +3,24 @@ import logging
 # from wsgiref.validate import re
 
 from django.contrib.sites import requests
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 # from .models import ....
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from SiteLogger import settings
-from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport
+from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions
 from django.utils.timezone import now
 from datetime import date
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from requests.auth import HTTPBasicAuth
 import json
-from . credentials import MpesaAccessToken, LipanaMpesaPassword
+from . credentials import MpesaAccessToken, LipanaMpesaPassword,MpesaC2bCredential
 import requests
 # for emails
 from django.contrib.auth.tokens import default_token_generator as token_generator
@@ -31,6 +33,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
+
 # from django.template.loader import render_to_string
 # from weasyprint import HTML
 # Create your views here.
@@ -126,6 +129,11 @@ def dashpublic(request):
 def index(request):
     return render(request, 'index.html')
 @login_required
+def basedash(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
+    return render(request, 'basedash.html', {'last_name': last_name})
+@login_required
 def dash(request):
     if request.user.is_authenticated:
         last_name=request.user.last_name
@@ -137,6 +145,8 @@ def dash(request):
         return redirect('login')
 @login_required
 def activitylog(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     if request.method == "POST":
         date=request.POST.get("date", now())
         site_open_time=request.POST.get("open-time", None)
@@ -162,17 +172,23 @@ def activitylog(request):
         return redirect("activityview")
     # existing_sites=DailyActivity.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
     existing_sites = DailyActivity.objects.filter(user=request.user).values_list("site_name", flat=True).distinct().order_by("site_name")
-    return render(request, 'activitylog.html', {"existing_sites":existing_sites})
+    return render(request, 'activitylog.html', {"existing_sites":existing_sites, "last_name":last_name})
 @login_required
 def activityview(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     activities=DailyActivity.objects.filter(user=request.user)
-    return render(request, 'activityview.html',{'activities':activities})
+    return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
 @login_required
 def activity_view(request,id):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     activities=DailyActivity.objects.filter(user=request.user,id=id)
-    return render(request, 'activityview.html',{'activities':activities})
+    return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
 @login_required
 def issuelog(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     if request.method == "POST":
         issue_date=request.POST.get("issue_date", now())
         issue_time=request.POST.get("issue_time", None)
@@ -192,15 +208,25 @@ def issuelog(request):
         return redirect("issueview")
     # existing_sites = Issue.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
     existing_sites = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
-    return render(request, 'issuelog.html', {"existing_sites":existing_sites})
+    return render(request, 'issuelog.html', {"existing_sites":existing_sites, "last_name":last_name})
+@login_required
+def issue_view(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
+    issues=Issue.objects.filter(user=request.user)
+    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
 @login_required
 def issueview(request,id):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     issues=Issue.objects.filter(user=request.user, id=id)
-    return render(request, 'issueview.html', {'issues':issues})
+    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
 @login_required
 def issuelist(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     issues=Issue.objects.filter(user=request.user)
-    return render(request, 'issueview.html', {'issues':issues})
+    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
 # @login_required
 # def activityupdate(request, id):
 #     if request.method == "POST":
@@ -242,6 +268,8 @@ def issuelist(request):
 #     return render(request, 'issueupdate.html')
 @login_required
 def activity_report(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     if request.method=="POST":
         site_name2=request.POST.get("site_activity_name")
         user = request.user
@@ -249,16 +277,20 @@ def activity_report(request):
         query.save()
         return redirect("activityreportdisplay", id=query.id)
     site_names = DailyActivity.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
-    return render(request, 'activityreport.html', {'site_names':site_names})
+    return render(request, 'activityreport.html', {'site_names':site_names, "last_name":last_name})
 @login_required
 def activity_report_display(request, id):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     user = request.user
     from_report=ActivityReport.objects.get(id=id)
     site_name = from_report.site_name
     activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
-    return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name})
+    return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name, "last_name":last_name})
 @login_required
 def issue_report(request):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     if request.method=="POST":
         site_name1=request.POST.get("site_issue_name")
         user = request.user
@@ -266,7 +298,7 @@ def issue_report(request):
         query.save()
         return redirect("issuereportdisplay", id=query.id)
     site_names = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
-    return render(request, 'issue_report.html', {'site_names': site_names})
+    return render(request, 'issue_report.html', {'site_names': site_names, "last_name":last_name})
 # @login_required
 # def issue_report_display(request, id):
 #     user = request.user
@@ -276,18 +308,20 @@ def issue_report(request):
 #     return render(request, 'activity_report_display.html',{"issues":issues_new, "user": user, "site_name":site_name})
 @login_required
 def issue_display(request,id):
+    if request.user.is_authenticated:
+        last_name = request.user.last_name
     user=request.user
     site_in_report=IssueReport.objects.get(id=id)
     site_name=site_in_report.site_name
     issue_new=Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
-    return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new})
+    return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new, "last_name":last_name})
 
 # api integration starts here
 @login_required
 def token(request):
-    consumer_key = 'U7MzaVlmhJYNt5GfHAJmwWkiw4MdaB4UDiI8eRvNGBWNbXcy'
-    consumer_secret = 'gFA82oxUstdmHTLyXvC9Uwna5POUrYcN7BMBSXTRidTvyiB9kWla9fUQ282LrPHj'
-    api_URL = 'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
+    consumer_key = MpesaC2bCredential.consumer_key
+    consumer_secret = MpesaC2bCredential.consumer_secret
+    api_URL = MpesaC2bCredential.api_URL
 
     r = requests.get(api_URL, auth=HTTPBasicAuth(
         consumer_key, consumer_secret))
@@ -304,7 +338,7 @@ def pay(request):
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
-        request = {
+        request_data = {
             "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
             "Password": LipanaMpesaPassword.decode_password,
             "Timestamp": LipanaMpesaPassword.lipa_time,
@@ -313,17 +347,47 @@ def pay(request):
             "PartyA": phone,
             "PartyB": LipanaMpesaPassword.Business_short_code,
             "PhoneNumber": phone,
-            # where to get this below
-            "CallBackURL":"https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
-            # "CallBackURL": "https://sandbox.safaricom.co.ke/mpesa/",
+            # this should be a public url maybe from the hosted site or ngrok etc
+            "CallBackURL":MpesaC2bCredential.callback_url,
             "AccountReference": "Mercy Saline",
             "TransactionDesc": "Site Report Charges"
         }
-        response = requests.post(api_url, json=request, headers=headers)
+        # response = requests.post(api_url, json=request, headers=headers)
+        response = requests.post(api_url, json=request_data, headers=headers)
+        print(response)
     return HttpResponse("Payment Successfull")
+
 @login_required
 def stk(request):
     return render(request, 'pay.html')
+
+@csrf_exempt
+def callback(request):
+    if request.method != "POST":
+        return HttpResponse("Invalid Request")
+    try:
+        callback_data = json.loads(request.body)
+        print(callback_data)
+
+        user = request.user
+        result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
+        if result_code != "0":
+            error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
+            return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+
+        # merchant_id = callback_data["Body"]["stkCallback"]["MerchantRequestID"]
+        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
+        body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
+
+        amount = next(item["Value"] for item in body if item["Name"] == "Amount")
+        mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
+        phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
+
+        Transactions.objects.create(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
+                                    checkout_id=checkout_id, status="Success")
+        return JsonResponse("success", safe=False)
+    except (json.decoder.JSONDecodeError, KeyError) as e:
+        return HttpResponse(f"Invalid Request: {str(e)}")
 # @login_required
 # def issue_report_download(request, id):
 #     user = request.user
