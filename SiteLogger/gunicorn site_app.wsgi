@@ -1,1 +1,1 @@
-web: gunicorn SiteLogger.wsgi:application
+gunicorn site_app.wsgi
