@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     '95cb-102-209-136-66.ngrok-free.app',
     'localhost',
     '127.0.0.1',
+    'sitemngmtapp-3.onrender.com'
 ]
 
 
