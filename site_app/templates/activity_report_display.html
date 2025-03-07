@@ -50,10 +50,9 @@
                 {% endif %}
             {% endfor %}
         </div>
-{#        <form action="{% url 'pay' %}" method="get" enctype="multipart/form-data">#}
+{#        <form action="" method="get" enctype="multipart/form-data">#}
 {#        {% csrf_token %}#}
-{#            <input type="hidden" name="site_names" value="{{ site_names|join:',' }}">#}
-            <button class="btn btn-success mt-2"><a href="{% url 'stk' %}" class="nav-link">Download PDF Report</a></button>
+            <button class="btn btn-success mt-2"><a href="{% url 'activityreportdownload' %}">Download PDF Report</a></button>
 {#        </form>#}
         {% endif %}
     </div>

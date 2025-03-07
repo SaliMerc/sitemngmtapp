@@ -3,14 +3,14 @@ import json
 from requests.auth import HTTPBasicAuth
 from datetime import datetime
 import base64
+from django.conf import settings
 
 
 class MpesaC2bCredential:
-    consumer_key = 'U7MzaVlmhJYNt5GfHAJmwWkiw4MdaB4UDiI8eRvNGBWNbXcy'
-    consumer_secret = 'gFA82oxUstdmHTLyXvC9Uwna5POUrYcN7BMBSXTRidTvyiB9kWla9fUQ282LrPHj'
-    api_URL = 'https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'
-    # callback_url="https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-    callback_url="https://95cb-102-209-136-66.ngrok-free.app/callback/"
+    consumer_key=settings.MPESA_CONSUMER_KEY
+    consumer_secret=settings.MPESA_CONSUMER_SECRET
+    api_URL=settings.MPESA_API_URL
+    callback_url=settings.MPESA_CALLBACK_URL
 
 
 class MpesaAccessToken:

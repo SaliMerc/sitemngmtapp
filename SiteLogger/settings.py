@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
+MPESA_CONSUMER_KEY = config('CONSUMER_KEY')
+MPESA_CONSUMER_SECRET = config('CONSUMER_SECRET')
+MPESA_API_URL = config('API_URL')
+MPESA_CALLBACK_URL = config('CALLBACK_URL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,9 +56,14 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap4',
 ]
+
+TIME_ZONE = 'Africa/Nairobi'
+USE_TZ = True
+
 LOGIN_URL = '/login/'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 LOGIN_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -61,6 +72,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sitelogger10@gmail.com'
 EMAIL_HOST_PASSWORD = 'Sitelogger#@10'
 DEFAULT_FROM_EMAIL = 'sitelogger10@gmail.com'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -94,22 +106,22 @@ WSGI_APPLICATION = 'SiteLogger.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'logdb',
-        'USER':'root',
-        'PASSWORD':'',
-        'HOST':'localhost',
-        'PORT':'3306'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'logdb',
+#         'USER':'root',
+#         'PASSWORD':'',
+#         'HOST':'localhost',
+#         'PORT':'3306'
+#     }
+# }
 
 
 # Password validation

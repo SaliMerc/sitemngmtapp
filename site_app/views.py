@@ -11,12 +11,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+import pytz
 
 from SiteLogger import settings
 from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions
 from django.utils.timezone import now
 from datetime import date
-from xhtml2pdf import pisa
 from django.template.loader import get_template
 from requests.auth import HTTPBasicAuth
 import json
@@ -34,8 +35,13 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 
-# from django.template.loader import render_to_string
-# from weasyprint import HTML
+# for pdf generation
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.templatetags.static import static
+# end
+
 # Create your views here.
 logger = logging.getLogger(__name__)
 
@@ -283,10 +289,12 @@ def activity_report_display(request, id):
     if request.user.is_authenticated:
         last_name = request.user.last_name
     user = request.user
+    nairobi_tz = pytz.timezone('Africa/Nairobi')
+    current_time = timezone.localtime(timezone.now(), nairobi_tz)
     from_report=ActivityReport.objects.get(id=id)
     site_name = from_report.site_name
     activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
-    return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name, "last_name":last_name})
+    return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name, "last_name":last_name,"current_time":current_time})
 @login_required
 def issue_report(request):
     if request.user.is_authenticated:
@@ -365,10 +373,10 @@ def stk(request):
 def callback(request):
     if request.method != "POST":
         return HttpResponse("Invalid Request")
+    # else:
     try:
         callback_data = json.loads(request.body)
         print(callback_data)
-
         user = request.user
         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
         if result_code != "0":
@@ -383,33 +391,50 @@ def callback(request):
         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
 
-        Transactions.objects.create(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
+        trans=Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
                                     checkout_id=checkout_id, status="Success")
-        return JsonResponse("success", safe=False)
-    except (json.decoder.JSONDecodeError, KeyError) as e:
+        trans.save()
+        response_data = {"message": "success",
+                         "trans": {
+                             "user": str(trans.user),
+                             "amount": trans.amount,
+                             "mpesa_code": trans.mpesa_code,
+                             "phone_number": trans.phone_number,
+                             "checkout_id": trans.checkout_id,
+                             "status": trans.status}}
+        return JsonResponse(response_data, safe=False)
+    except (json.JSONDecodeError, KeyError) as e:
         return HttpResponse(f"Invalid Request: {str(e)}")
-# @login_required
-# def issue_report_download(request, id):
-#     user = request.user
-#     site_in_report = IssueReport.objects.get(id=id)
-#     site_name = site_in_report.site_name
-#     issue_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
-#     html_string = render_to_string('issue_report_download.html',{'user': user, 'site_name': site_name, 'issues_new': issue_new})
-#     html = HTML(string=html_string)
-#     pdf = html.write_pdf()
-#     response = HttpResponse(pdf, content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="IssuesReport.pdf"'
-#     return response
-#
-# @login_required
-# def activities_report_download(request, id):
-#     user = request.user
-#     activity_in_report = ActivityReport.objects.get(id=id)
-#     site_name = activity_in_report.site_name
-#     activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
-#     html_string = render_to_string('activity_report_download.html', { 'user': user, 'site_name': site_name, 'activities': activities })
-#     html = HTML(string=html_string)
-#     pdf = html.write_pdf()
-#     response = HttpResponse(pdf, content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="ActivitiesReport.pdf"'
-#     return response
+
+@login_required
+def issue_report_download(request):
+    # user = request.user
+    # site_in_report = IssueReport.objects.get(id=id)
+    # site_name = site_in_report.site_name
+    # issue_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+    html_string = render_to_string('issue_report_display.html')
+    html = HTML(string=html_string).write_pdf()
+    response = HttpResponse(html, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="IssuesReport.pdf"'
+    return response
+
+@login_required
+def activities_report_download(request):
+    # user = request.user
+    # # activity_in_report = ActivityReport.objects.get(id=id)
+    # # site_name = activity_in_report.site_name
+    # # activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
+    # base_url = request.build_absolute_uri('/static/')
+    # if request.user.is_authenticated:
+    #     last_name = request.user.last_name
+    # user = request.user
+    # site_in_report = ActivityReport.objects.get(id=id)
+    # site_name = site_in_report.site_name
+    # issue_new = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+    # context={"user": user, "site_name": site_name, "issue_new": issue_new, "last_name": last_name}
+
+    html_string = render_to_string('activity_report_display.html')
+    html = HTML(string=html_string).write_pdf()
+    response = HttpResponse(html, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="ActivitiesReport.pdf"'
+    return response
