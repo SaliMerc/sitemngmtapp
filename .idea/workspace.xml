@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/credentials.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/credentials.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/static/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/static/js/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activity_report_display.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activity_report_display.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activitylog.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activitylog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/basedash.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/basedash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/basepublic.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/basepublic.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issue_report_display.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issue_report_display.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issuelog.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issuelog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,20 +100,12 @@
       <workItem from="1740382112323" duration="8378000" />
       <workItem from="1740400468755" duration="643000" />
       <workItem from="1741345003802" duration="1300000" />
+      <workItem from="1741346322954" duration="1408000" />
+      <workItem from="1741359566362" duration="13000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/site_app/views.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
