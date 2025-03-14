@@ -1,0 +1,218 @@
+
+
+.playfair-display-heading-f {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+.lato-bold {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lato-black {
+  font-family: "Lato", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Lato", sans-serif;
+    font-weight: 900;
+}
+p, a{
+    font-family: "Playfair Display", serif;
+}
+#site_name_new{
+    display: none;
+}
+#site_name_exist{
+    display: none;
+}
+html{
+    height: 100%;
+}
+.navbar {
+    transition: background-color 0.5s ease;
+}
+body{
+    background-color: #c7dbd2;
+    height: 100%;
+}
+/*.nav-lists{*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*}*/
+.nav-link-n{
+    color: #D3D3D3;
+}
+.nav-link-n:hover{
+    text-decoration: underline;
+    color: #B0B0B0;
+}
+/*.burger{*/
+/*    display: none;*/
+/*}*/
+/*.close{*/
+/*    display: none;*/
+/*}*/
+.nav-hero{
+    background-color: #435a42;
+    background-attachment: fixed;
+}
+.main-heading{
+    font-size: 2.8rem;
+    color: #98FB98;
+}
+#main-para{
+    font-size: 1.2rem;
+    color: #D3D3D3;
+}
+.sub-heading{
+    color: #98FB98;
+}
+.btn-success{
+    background-color: #568956;
+    border: none;
+    color: #000000;
+}
+.btn-success:hover{
+    background-color: #444945;
+    border: none;
+    color: #B0B0B0;
+}
+.form-control{
+    border-radius: 1.2em 0 1.2em 0;
+    height: 40px !important;
+    background-color: #b2cfb2;
+    border: none;
+}
+.btn{
+     border-radius: 0 1em 0 1em;
+
+}
+.feat{
+    margin-top: 2rem;
+    background-color: #435a42;
+    height: 24rem !important;
+}
+.feat:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.element:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.element1:hover{
+    transform: scaleX(1.1);
+    transition-duration: 2s;
+}
+.anim {
+  animation: scaleXAnimation 2s ease-in-out infinite;
+}
+
+/* Define the animation */
+@keyframes scaleXAnimation {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.1) translateX(-5%) translateX(5%) translateY(5%);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.feat-head{
+    color: #9ed39e;
+    font-size: 1.8rem;
+    text-align: center;
+    padding-top: 1rem;
+}
+.feat-head:hover{
+    color: #B0B0B0;
+}
+.feat-para{
+    color: #D3D3D3;
+    font-size: 1.1rem;
+    text-align: center;
+    padding-top: 2rem;
+}
+.element{
+    border-radius: 3em 3em 0 0;
+    margin-right: 2em;
+}
+.element1{
+    border-radius: 0 0 3em 3em;
+}
+.about-us{
+}
+.abt{
+    background-color: #435a42;
+    height: 24rem !important;
+    margin-top: 2rem;
+}
+.abt-1{
+    margin-right: 2em;
+}
+footer{
+    background-color: #435a42;
+}
+.dash-footer{
+    background-color: #435a42;
+    position: sticky;
+    /*bottom: 0;*/
+    width: 100%;
+}
+table{
+    background-color: #D3D3D3;
+    border-radius: 0.8em;
+    overflow: auto;
+}
+tbody{
+    background-color: #D3D3D3;
+    border-radius: 0.5em 0 0.5em 0;
+}
+td{
+    background-color: #D3D3D3;
+    border-radius: 0.5em 0 0.5em 0;
+    overflow: visible;
+}
+.table-hover tbody tr:hover td{
+    background-color: #D3D3D3;
+    color: #435a42;
+}
+.b-dash-nav{
+    background-color: #5b7659;
+}
+#wcomplete, #equipused, #matused, #res-steps, #description{
+    min-height: 6rem;
+}
+.major{
+    align-items: center;
+    justify-content: center;
+}
+
+/*@media (max-width: 992px){*/
+/*    .nav-hero{*/
+/*        background-image:url('/static/images/hero-s.png');*/
+/*        background-size: cover;*/
+/*        background-repeat: no-repeat;*/
+/*        display: flex;*/
+/*        flex-direction: column;*/
+/*    }*/
+/*    .burger{*/
+/*        display: block;*/
+/*        height: 2.5em;*/
+/*}*/
+/*    .close{*/
+/*        display: none;*/
+/*        height: 2.5em;*/
+/*}*/
+/*    .nav-lists{*/
+/*        display: none;*/
+/*    }*/
+/*}*/
