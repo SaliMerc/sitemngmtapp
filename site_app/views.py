@@ -1,7 +1,4 @@
 from datetime import datetime
-import logging
-# from wsgiref.validate import re
-
 from django.contrib.sites import requests
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
@@ -35,15 +32,6 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 
-# for pdf generation
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from weasyprint import HTML
-from django.templatetags.static import static
-# end
-
-# Create your views here.
-logger = logging.getLogger(__name__)
 
 def sign_up(request):
     error_message = None
@@ -307,13 +295,6 @@ def issue_report(request):
         return redirect("issuereportdisplay", id=query.id)
     site_names = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
     return render(request, 'issue_report.html', {'site_names': site_names, "last_name":last_name})
-# @login_required
-# def issue_report_display(request, id):
-#     user = request.user
-#     issue_new_report=IssueReport.objects.get(id=id)
-#     site_name = issue_new_report.site_name
-#     issues_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
-#     return render(request, 'activity_report_display.html',{"issues":issues_new, "user": user, "site_name":site_name})
 @login_required
 def issue_display(request,id):
     if request.user.is_authenticated:
@@ -406,35 +387,4 @@ def callback(request):
     except (json.JSONDecodeError, KeyError) as e:
         return HttpResponse(f"Invalid Request: {str(e)}")
 
-@login_required
-def issue_report_download(request):
-    # user = request.user
-    # site_in_report = IssueReport.objects.get(id=id)
-    # site_name = site_in_report.site_name
-    # issue_new = Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
-    html_string = render_to_string('issue_report_display.html')
-    html = HTML(string=html_string).write_pdf()
-    response = HttpResponse(html, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="IssuesReport.pdf"'
-    return response
 
-@login_required
-def activities_report_download(request):
-    # user = request.user
-    # # activity_in_report = ActivityReport.objects.get(id=id)
-    # # site_name = activity_in_report.site_name
-    # # activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
-    # base_url = request.build_absolute_uri('/static/')
-    # if request.user.is_authenticated:
-    #     last_name = request.user.last_name
-    # user = request.user
-    # site_in_report = ActivityReport.objects.get(id=id)
-    # site_name = site_in_report.site_name
-    # issue_new = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("issue_date")
-    # context={"user": user, "site_name": site_name, "issue_new": issue_new, "last_name": last_name}
-
-    html_string = render_to_string('activity_report_display.html')
-    html = HTML(string=html_string).write_pdf()
-    response = HttpResponse(html, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="ActivitiesReport.pdf"'
-    return response
