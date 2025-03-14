@@ -33,12 +33,13 @@ SECRET_KEY = 'django-insecure-*@#xrccg5(2b&fjog^)eh-kpxrex3vlqlza*)=f1xij4t6n7&w
 DEBUG = False
 CSRF_TRUSTED_ORIGINS = [
     'https://95cb-102-209-136-66.ngrok-free.app',
+    'https://sitemngmtapp-4.onrender.com/',
 ]
 ALLOWED_HOSTS = [
     '95cb-102-209-136-66.ngrok-free.app',
     'localhost',
     '127.0.0.1',
-    'sitemngmtapp-3.onrender.com'
+    'https://sitemngmtapp-4.onrender.com/',
 ]
 
 
