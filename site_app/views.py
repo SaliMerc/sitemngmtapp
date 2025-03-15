@@ -34,11 +34,9 @@ from django.conf import settings
 
 
 def sign_up(request):
-    error_message = None
     if request.method == "POST":
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
-        # full_name= f"{first_name} {last_name}"
         email = request.POST.get("email")
         password = request.POST.get("password")
         conf_pass = request.POST.get("confirm_password")
@@ -48,7 +46,6 @@ def sign_up(request):
             messages.error(request, 'A user with this email already exists')
             return render(request, "login.html", {"error_message": error_message})
         if password != conf_pass:
-            # error_message='Passwords do not match'
             messages.error(request, 'Passwords do not match')
             return render(request, "signup.html",{"error_message": error_message})
         # print(username,password)

@@ -22,13 +22,9 @@ class DailyActivity(models.Model):
     materials_used=models.TextField()
     progress_photos = models.ManyToManyField(Image, related_name='progress_photos', blank=True)
     relevant_documents = models.ManyToManyField(Document, related_name='relevant_documents', blank=True)
-
     def __str__(self):
         return self.work_completed
-# class Activity(models.Model):
-#     all_activity=models.ForeignKey(DailyActivity, on_delete=models.CASCADE)
-#     def __str__(self):
-#         return self.all_activity
+
 class IssuePhoto(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     image = models.ImageField(upload_to='siteissue')
