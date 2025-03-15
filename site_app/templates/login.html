@@ -5,21 +5,25 @@
     <div class="col-md-7"></div>
     <div class="col-md-5">
             <h2 class="text-center sub-heading">Login Here</h2><br>
-            <form action="{% url 'login' %}" method="post" enctype="multipart/form-data" target="_self">
-                {% csrf_token %}
+    <!-- Display messages -->
                 {% if messages %}
                         {% for message in messages %}
                             <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %};">
                                 {{ message }}
                             </p>
-                            <h2 style="font-size: 0.5em; color: #0a3622">Login Here</h2>
                         {% endfor %}
                 {% endif %}
+            <form action="{% url 'login' %}" method="post" enctype="multipart/form-data" target="_self">
+                {% csrf_token %}
                 <input type="email" class="form-control mt-2" placeholder="Email Address" name="email" required>
                 <input type="password" class="form-control  mt-2" placeholder="Enter Your Password" name="password" required>
                 <div class="d-flex flex-column align-items-center">
-                   <a href="{% url 'forgot_password' %}" class=" nav-item nav nav-link nav-link-n">Forgot Password?</a>
                 <button class="btn btn-success mt-2" type="submit">Login</button>
+                    <a href="{% url 'forgot_password' %}" class=" nav-item nav nav-link nav-link-n">Forgot Password?</a>
+                    <div class="row">
+                        <p class=" nav-item nav nav-link nav-link-n col-md-8">Don't have an account?</p>
+                        <a href="{% url 'signup' %}" class=" nav-item nav nav-link nav-link-n col-md-3" style="color: #98FB98">SignUp Here</a>
+                    </div>
                 </div>
             </form>
         </div>

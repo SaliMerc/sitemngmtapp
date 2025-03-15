@@ -84,7 +84,7 @@ body{
 }
 .form-control{
     border-radius: 1.2em 0 1.2em 0;
-    height: 40px !important;
+    height: 2.5rem !important;
     background-color: #b2cfb2;
     border: none;
 }
@@ -95,7 +95,7 @@ body{
 .feat{
     margin-top: 2rem;
     background-color: #435a42;
-    height: 24rem !important;
+    height: 18rem !important;
 }
 .feat:hover{
     transform: scaleX(1.1);
@@ -152,7 +152,7 @@ body{
 }
 .abt{
     background-color: #435a42;
-    height: 24rem !important;
+    height: 18rem !important;
     margin-top: 2rem;
 }
 .abt-1{

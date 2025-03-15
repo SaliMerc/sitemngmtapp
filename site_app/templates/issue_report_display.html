@@ -41,7 +41,7 @@
                 {% endif %}
             {% endfor %}
         </div>
-         <form action="{% url 'issuereportdownload' %}" method="get" enctype="multipart/form-data">
+         <form action="" method="get" enctype="multipart/form-data">
             {% csrf_token %}
             <button class="btn btn-success mt-2">Download PDF Report</button>
         </form>

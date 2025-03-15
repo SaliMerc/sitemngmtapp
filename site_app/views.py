@@ -40,19 +40,17 @@ def sign_up(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         conf_pass = request.POST.get("confirm_password")
-        # error message displays
         if User.objects.filter(email=email).exists():
-            # error_message='A user with this email already exists'
             messages.error(request, 'A user with this email already exists')
-            return render(request, "login.html", {"error_message": error_message})
+            return render(request, "login.html")
         if password != conf_pass:
             messages.error(request, 'Passwords do not match')
-            return render(request, "signup.html",{"error_message": error_message})
+            return render(request, "signup.html")
         # print(username,password)
         myuser = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
         myuser.save()
         return redirect('login')
-    return render(request, 'signup.html', {"error_message":error_message})
+    return render(request, 'signup.html')
 def log_in(request):
     if request.method == "POST":
         email = request.POST.get("email")
