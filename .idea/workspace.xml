@@ -7,13 +7,6 @@
     <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activity_report_display.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activity_report_display.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issue_report_display.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issue_report_display.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,21 +117,11 @@
       <workItem from="1741982812159" duration="5570000" />
       <workItem from="1742034517627" duration="2071000" />
       <workItem from="1742036613742" duration="11464000" />
-      <workItem from="1742067552256" duration="720000" />
+      <workItem from="1742067552256" duration="1719000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/site_app/models.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
