@@ -24,7 +24,7 @@
 {#  <span class="visually-hidden">Loading...</span>#}
 {#</div>#}
 <div class="wrapper">
-<div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat">
+<div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat" id="heroSection">
 <nav class="navbar">
     <div class="col-ms-7">
         <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a>
@@ -62,5 +62,20 @@
 </div>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
+
+<script>
+  // Function to update the background based on screen width
+  function updateBackground() {
+    const heroSection = document.getElementById('heroSection');
+    if (window.innerWidth <= 768) {
+      heroSection.style.backgroundImage = 'none';
+      heroSection.style.backgroundColor = '#435a42';
+    }
+  }
+
+  updateBackground();
+
+  window.addEventListener('resize', updateBackground);
+</script>
 </body>
 </html>
