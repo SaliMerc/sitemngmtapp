@@ -1,38 +1,65 @@
 {% extends 'basedash.html' %}
+{% load static %}
 {% block content %}
-    <div class="min-vh-100">
-    <h2 class="text-center text-capitalize mt-4"><i class="fa-solid fa-clock"></i> Logged Issues</h2>
-    <div class="table-responsive">
-    <table class="table table-striped table-hover">
-        <tr>
-            <th class="text-center">Site Name</th>
-            <th class="text-center">Issue Date</th>
-            <th class="text-center">Issue Time</th>
-            <th class="text-center">Issue Description</th>
-            <th class="text-center">Issue Resolution Steps</th>
-            <th class="text-center">Issue Status</th>
-            <th class="text-center">Issue Images</th>
-        </tr>
-    {% if issues %}
+    <div class=" col-md-12 container log-form min-vh-100">
+     <div class="mt-4 log-text"><img src="{% static 'images/view-issues.svg' %}" alt="add activity"><h2>Logged Issues</h2></div><br>
+     <div class="individual-activity row ms-2 me-2 mt-3 mb-1">
+           <div class="col-md-1 border-end border-black">
+             <p class="lato-bold">Site Name</p>
+         </div>
+          <div class="col-md-1">
+              <p class="lato-bold">Issue Date</p>
+         </div>
+          <div class="col-md-1 border-end border-black">
+              <p class="lato-bold"> Issue Occurrence Time</p>
+         </div>
+          <div class="col-md-3">
+             <p class="lato-bold">Issue Description</p>
+         </div>
+        <div class="col-md-3">
+             <p class="lato-bold">Issue Resolution Steps</p>
+         </div>
+      <div class="col-md-1 border-end border-black">
+               <p class="lato-bold">Issue Status</p>
+         </div>
+      <div class="col-md-1 ">
+          <p class="lato-bold">Issue Images</p>
+         </div>
+      </div>
         {% for issue in issues %}
-        <tr>
-            <td class="text-center">{{ issue.site_name }}</td>
-            <td class="text-center">{{ issue.issue_date }}</td>
-            <td class="text-center">{{ issue.issue_time}}</td>
-            <td class="text-center">{{ issue.issue_description }}</td>
-            <td class="text-center">{{ issue.resolution_steps }}</td>
-            <td class="text-center">{{ issue.issue_status }}</td>
-            <td class="text-center">
-                {% for photo in issue.issue_photos.all %}
-                    <img src="{{ photo.image.url }}" alt="Issue Image" width="50" height="50">
+      <a href="" style="text-decoration: none;">
+      <div class="individual-activity row ms-2 me-2 mt-3 mb-3">
+           <div class="col-md-1 border-end border-black">
+             <p>{{ issue.site_name|capfirst }}</p>
+         </div>
+          <div class="col-md-1">
+              <p>{{ issue.issue_date|date:"d/m/Y" }}</p>
+         </div>
+          <div class="col-md-1 border-end border-black">
+              <p>{{ issue.issue_time }}</p>
+         </div>
+          <div class="col-md-3">
+             {% autoescape off %}
+              <p>{{ issue.issue_description|capfirst|linebreaks }}</p>
+             {% endautoescape %}
+         </div>
+        <div class="col-md-3">
+               {% autoescape off %}
+              <p>{{ issue.resolution_steps|capfirst|linebreaks }}</p>
+               {% endautoescape %}
+         </div>
+      <div class="col-md-1 border-end border-black">
+               {% autoescape off %}
+               <p>{{ issue.issue_status|capfirst }}</p>
+               {% endautoescape %}
+         </div>
+      <div class="col-md-1">
+               {% for photo in issue.issue_photos.all %}
+                    <img src="{{ photo.image.url }}" alt="Progress Photo" width="50" height="50">
                 {% endfor %}
-            </td>
-        </tr>
-        {% endfor %}
-      {% else %}
-    <h6 class="text-center mt-4">You have no issues logged yet</h6>
-    {% endif %}
-    </table>
-    </div>
+         </div>
+      </div>
+      </a>
+         {% endfor %}
     </div>
 {% endblock %}

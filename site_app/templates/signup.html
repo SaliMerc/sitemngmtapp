@@ -15,16 +15,21 @@
                 {% endif %}
      <form action="{% url 'signup' %}" method="post" enctype="multipart/form-data" target="_self">
          {% csrf_token %}
+                    <label for="site_name1">First Name</label>
                     <input type="text" class="form-control" placeholder="First Name" name="first_name" required>
+                    <label for="site_name1">Last Name</label>
                     <input type="text" class="form-control mt-2" placeholder="Last Name" name="last_name" required>
+                    <label for="site_name1">Email</label>
                     <input type="email" class="form-control  mt-2" placeholder="Email Address" name="email" minlength="8" required>
+                    <label for="site_name1">Password</label>
                     <input type="password" class="form-control  mt-2" placeholder="Password" name="password" minlength="8" required>
+                    <label for="site_name1">Confirm Password</label>
                     <input type="password" class="form-control  mt-2" placeholder="Confirm Password" name="confirm_password" required>
                     <div class="d-flex flex-column align-items-center">
                     <button class="btn btn-success mt-2" type="submit">Sign Up</button>
                         <div class="row">
                         <p class=" nav-item nav nav-link nav-link-n col-md-8">Already have an account?</p>
-                        <a href="{% url 'signup' %}" class=" nav-item nav nav-link nav-link-n col-md-3" style="color: #98FB98">Login Here</a>
+                        <a href="{% url 'login' %}" class=" nav-item nav nav-link nav-link-n col-md-3" style="color: #98FB98">Login Here</a>
                     </div>
                     </div>
      </form>

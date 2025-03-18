@@ -125,15 +125,26 @@ def basedash(request):
 @login_required
 def dash(request):
     if request.user.is_authenticated:
-        last_name=request.user.last_name
-        issues = Issue.objects.filter(user=request.user)
-        activities = DailyActivity.objects.filter(user=request.user)
-        print(f"Last Name: {last_name}")
-        return render(request, 'dash.html', {'last_name':last_name, "issues":issues, "activities":activities})
+        user=request.user
+        sites = DailyActivity.objects.filter(user=user).exclude(construction_stage='handover').values('site_name').distinct()
+        count=sites.count()
+        sites_in_progress = DailyActivity.objects.filter(user=user).exclude(construction_stage='handover').values('site_name').distinct()[:6]
+        return render(request, 'dash.html', {'user':user, "sites_in_progress":sites_in_progress,"count":count})
     else:
         return redirect('login')
+
+@login_required
+def site_in_progress_view(request):
+    if request.user.is_authenticated:
+        user=request.user
+        sites = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover')
+        count=sites.count()
+        sites_in_progress = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover')[:6]
+        return render(request, 'sites-in-progress.html', {'user':user, "sites_in_progress":sites_in_progress,"count":count})
+
 @login_required
 def activitylog(request):
+    construction_stage=DailyActivity.STAGE_CHOICES
     if request.user.is_authenticated:
         last_name = request.user.last_name
     if request.method == "POST":
@@ -145,10 +156,11 @@ def activitylog(request):
         materials_used=request.POST.get("material-used")
         site_type=request.POST.get("site-type")
         site_name=request.POST.get("site_name")
+        construction_stage = request.POST.get("construction_stage")
         images=request.FILES.getlist("images")
         documents=request.FILES.getlist("docs")
         user = request.user
-        activity=DailyActivity(date=date, site_open_time=site_open_time, site_close_time=site_close_time, work_completed=work_completed, equipment_used=equipment_used, materials_used=materials_used,site_name=site_name,site_type=site_type,user=user)
+        activity=DailyActivity(date=date, site_open_time=site_open_time, site_close_time=site_close_time, work_completed=work_completed, equipment_used=equipment_used, materials_used=materials_used,site_name=site_name,site_type=site_type,user=user,construction_stage=construction_stage)
         activity.save()
         for image in images:
             img = Image.objects.create(image=image, user=user)
@@ -159,23 +171,17 @@ def activitylog(request):
             activity.relevant_documents.add(doc)
         activity.save()
         return redirect("activityview")
-    # existing_sites=DailyActivity.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
     existing_sites = DailyActivity.objects.filter(user=request.user).values_list("site_name", flat=True).distinct().order_by("site_name")
-    return render(request, 'activitylog.html', {"existing_sites":existing_sites, "last_name":last_name})
+    return render(request, 'activitylog.html', {"existing_sites":existing_sites, "last_name":last_name,"construction_stage":construction_stage})
 @login_required
 def activityview(request):
     if request.user.is_authenticated:
         last_name = request.user.last_name
-    activities=DailyActivity.objects.filter(user=request.user)
-    return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
-@login_required
-def activity_view(request,id):
-    if request.user.is_authenticated:
-        last_name = request.user.last_name
-    activities=DailyActivity.objects.filter(user=request.user,id=id)
+    activities=DailyActivity.objects.filter(user=request.user, in_trash=False).order_by("-date")
     return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
 @login_required
 def issuelog(request):
+    issue_status=Issue.STATUS_CHOICES
     if request.user.is_authenticated:
         last_name = request.user.last_name
     if request.method == "POST":
@@ -195,26 +201,13 @@ def issuelog(request):
             all_issues.issue_photos.add(img)
         all_issues.save()
         return redirect("issueview")
-    # existing_sites = Issue.objects.values_list("site_name", flat=True).distinct().order_by("site_name")
     existing_sites = Issue.objects.filter(user=request.user).values_list("site_name",flat=True).distinct().order_by("site_name")
-    return render(request, 'issuelog.html', {"existing_sites":existing_sites, "last_name":last_name})
+    return render(request, 'issuelog.html', {"existing_sites":existing_sites, "last_name":last_name,"issue_status":issue_status})
 @login_required
-def issue_view(request):
+def issueview(request):
     if request.user.is_authenticated:
         last_name = request.user.last_name
-    issues=Issue.objects.filter(user=request.user)
-    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
-@login_required
-def issueview(request,id):
-    if request.user.is_authenticated:
-        last_name = request.user.last_name
-    issues=Issue.objects.filter(user=request.user, id=id)
-    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
-@login_required
-def issuelist(request):
-    if request.user.is_authenticated:
-        last_name = request.user.last_name
-    issues=Issue.objects.filter(user=request.user)
+    issues=Issue.objects.filter(user=request.user,in_trash=False).order_by('-issue_date')
     return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
 # @login_required
 # def activityupdate(request, id):
@@ -276,7 +269,7 @@ def activity_report_display(request, id):
     current_time = timezone.localtime(timezone.now(), nairobi_tz)
     from_report=ActivityReport.objects.get(id=id)
     site_name = from_report.site_name
-    activities = DailyActivity.objects.filter(user=user, site_name=site_name).order_by("date")
+    activities = DailyActivity.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("date")
     return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name, "last_name":last_name,"current_time":current_time})
 @login_required
 def issue_report(request):
@@ -297,7 +290,7 @@ def issue_display(request,id):
     user=request.user
     site_in_report=IssueReport.objects.get(id=id)
     site_name=site_in_report.site_name
-    issue_new=Issue.objects.filter(user=user, site_name=site_name).order_by("issue_date")
+    issue_new=Issue.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("issue_date")
     return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new, "last_name":last_name})
 
 # api integration starts here

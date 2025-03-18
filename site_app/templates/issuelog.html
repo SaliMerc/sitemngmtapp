@@ -2,8 +2,8 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-    <div class="col-md-8 container-fluid">
-        <h2 class="text-center mt-4"><i class="fa-solid fa-check-double"></i>Add Issue</h2><br>
+    <div class="col-md-11 container log-form">
+         <div class="mt-4 log-text"><img src="{% static 'images/log.svg' %}" alt="add activity"><h2>Add Issue</h2></div><br>
         <form action="{% url 'issuelog' %}" method="post" enctype="multipart/form-data" target="_self">
             {% csrf_token %}
             <label for="site_type">Site Type</label>
@@ -37,12 +37,13 @@
             <textarea name="resolution_steps" rows="2" cols="40" class="form-control main-t-area" placeholder="Describe the Resolution Steps Taken" id="res-steps"></textarea>
             <label for="status">Issue Status</label>
             <select name="issue_status" id="status" class="form-control mt-2" type="text">
-                <option selected disabled>Resolution Status</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
+                 <option selected disabled>Resolution Status</option>
+                {% for status in issue_status %}
+                 <option value="{{ status.0 }}">{{ status.1 }}</option>
+                {% endfor %}
             </select><br>
         <div class="d-flex align-items-center justify-content-center">
-            <button class="btn btn-success mt-2 " type="submit">Log Issue</button>
+            <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem; width: 8rem" type="submit">Log Issue</button>
        </div>
         </form>
 </div>

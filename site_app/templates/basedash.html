@@ -18,30 +18,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <title>SiteLogger</title>
 </head>
-<body style="background-image: url({% static 'images/back.jpg' %}); background-repeat: repeat; background-size: cover;">
-<nav class="navbar b-dash-nav" style="min-height: 4.5rem">
+<body style="background-color: #C7DBD2">
+<nav class="navbar b-dash-nav" style="min-height: 4rem; background-color: #435a42">
     <div class="col-ms-6">
-        <h5><a href="{% url 'dash' %}" class="nav-link nav-link-n"><i class="fa-solid fa-helmet-safety"></i> Welcome, {{ last_name }}</a></h5>
+        <h5><a href="{% url 'dash' %}" class="nav-link nav-link-n"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a></h5>
     </div>
     <div class="col-ms-6">
     <ul class="nav">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">My Profile</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'activitylog' %}">View Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'issuelog' %}">Update Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'issuelog' %}">Change Password</a></li>
+            </ul>
+          </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Log</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'activitylog' %}">Activities</a></li>
               <li><a class="dropdown-item" href="{% url 'issuelog' %}">Issues</a></li>
-{#              <li><a class="dropdown-item" href="#">Activities and Issues</a></li>#}
             </ul>
           </li>
-{#        <!-- <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Log Daily Activities</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">Log Daily Issues</a></li>#}
-{#        <li class="nav-item"><a href="{% url 'index' %}" class="nav-link">View</a></li> -->#}
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">View</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'activityview' %}">Activities</a></li>
               <li><a class="dropdown-item" href="{% url 'issueview' %}">Issues</a></li>
-{#              <li><a class="dropdown-item" href="#">Activities and Issues</a></li>#}
             </ul>
           </li>
         <li class="nav-item dropdown">
@@ -49,10 +52,8 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'activityrep' %}">Activity Report</a></li>
               <li><a class="dropdown-item" href="{% url 'issuerep' %}">Issue Report</a></li>
-{#              <li><a class="dropdown-item" href="#">Activities and Issues</a></li>#}
             </ul>
           </li>
-{#        <li class="nav-item"><a href="{% url 'reportview' %}" class="nav-link">Generate Report</a></li>#}
         <li class="nav-item"><a href="{% url 'index' %}" class="nav-link nav-link-n">Logout</a></li>
     </ul>
     </div>

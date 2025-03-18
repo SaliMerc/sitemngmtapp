@@ -3,6 +3,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
+class ItemManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(in_trash=False)
+
 # class MyUser(AbstractBaseUser,PermissionsMixin):
 #     first_name = models.CharField(max_length=30)
 #     last_name = models.CharField(max_length=30)
@@ -23,6 +27,16 @@ class Document(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     document = models.FileField(upload_to='sitefile')
 class DailyActivity(models.Model):
+    STAGE_CHOICES = [
+        ('project-planning', 'Project Planning Stage'),
+        ('site-investigation', 'Site Preparation (Site Investigation, etc.)'),
+        ('foundation-work', 'Foundation Work'),
+        ('structural-work', 'Structural Work (RCs and Masonry Work)'),
+        ('system-installation', 'System Installation (Electrical and Plumbing Works)'),
+        ('finishing', 'Finishing (Plastering, Painting, Flooring, Fixtures)'),
+        ('handover', 'Handover (To the Client)'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     date=models.DateField(default=now)
     site_open_time=models.TimeField(null=True, blank=True)
@@ -32,8 +46,18 @@ class DailyActivity(models.Model):
     work_completed=models.TextField()
     equipment_used=models.TextField()
     materials_used=models.TextField()
+    construction_stage=models.CharField(max_length=100,null=True, blank=True, choices=STAGE_CHOICES, default='planning')
     progress_photos = models.ManyToManyField(Image, related_name='progress_photos', blank=True)
     relevant_documents = models.ManyToManyField(Document, related_name='relevant_documents', blank=True)
+    in_trash = models.BooleanField(default=False)
+
+    objects = ItemManager()
+    all_objects = models.Manager()
+
+    def delete(self, *args, **kwargs):
+        self.in_trash = True
+        self.save()
+
     def __str__(self):
         return self.work_completed
 
@@ -42,6 +66,11 @@ class IssuePhoto(models.Model):
     image = models.ImageField(upload_to='siteissue')
 
 class Issue(models.Model):
+    STATUS_CHOICES = [
+        ('in-progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     site_type = models.CharField(max_length=100,null=True)
     site_name = models.CharField(max_length=100, null=True)
@@ -51,7 +80,16 @@ class Issue(models.Model):
     # the related name should be the same as that of the variable for it to work seamlessly
     issue_photos = models.ManyToManyField(IssuePhoto, related_name='issue_photos', blank=True)
     resolution_steps=models.TextField()
-    issue_status=models.CharField(max_length=200)
+    issue_status=models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='in-progress')
+    in_trash = models.BooleanField(default=False)
+
+    objects = ItemManager()
+    all_objects = models.Manager()
+
+    def delete(self, *args, **kwargs):
+        self.in_trash = True
+        self.save()
+
     def __str__(self):
         return self.issue_description
 class ActivityReport(models.Model):

@@ -1,12 +1,11 @@
 {% extends 'basedash.html' %}
 {% load static %}
 {% block content %}
-<div class="container-fluid" style="min-height: 100vh">
+<div class="col-md-11 container log-form mt-4" style="min-height: 100vh">
     <div class="col-md-8 container d-flex-column justify-content-center align-items-center centered-container">
-        <div class="text-center mb-4">
-            <p class="mt-4"><strong>Hello</strong> {{ user.get_full_name.upper }}</p>
-             <h2> Generate Activity Report For Your Site Here</h2>
-            <p><img src="{% static 'images/LOGO.png' %}" alt="Company Logo" class="img-fluid" style="max-height: 100px;"></p>
+        <div class="text-center mb-5">
+            <img src="{% static 'images/LOGO.png' %}" alt="Company Logo" class="img-fluid mt-5" style="max-height: 100px;">
+             <h2> Generate Activity Report</h2>
         </div>
         <form action="{% url 'activityrep' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -17,7 +16,7 @@
                      <option value="{{ site }}">{{ site }}</option>
                  {% endfor %}
             </select>
-            <button type="submit" class="btn btn-success mt-2">Generate Report</button>
+            <button type="submit" class="btn btn-success mt-4" style="color: #D3D3D3">Generate Report</button>
         </form>
     </div>
 </div>

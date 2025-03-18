@@ -1,0 +1,23 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+    <div class=" container min-vh-100">
+    <div class="mt-5">
+        <div class="site-in-progress mb-5">
+            <div class="profile-text mt-5 pt-4 pb-4">
+                <h5 class="text-center h5">Sites in Progress <span class="sites-count">({{ count|default:0 }})</span></h5>
+            </div>
+            {% for site in sites_in_progress %}
+            <div class="site-title-div mt-3 ms-3 me-3">
+                <p>{{ site.site_name }}</p>
+            </div>
+                {% empty %}
+                <div class="site-title-div mt-3">
+                <p>No sites are in progress at the moment</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+{% endblock %}
+

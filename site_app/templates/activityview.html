@@ -1,52 +1,79 @@
 {% extends 'basedash.html' %}
 {% load static %}
 {% block content %}
-    <div class="min-vh-100">
-    <h2 class="text-center mt-4"><i class="fa-solid fa-person-digging"></i> Logged Activities</h2>
-    <div class="table-responsive">
-    <table class="table table-hover">
-        <tr>
-            <th class="text-center">Site Name</th>
-            <th class="text-center">Date</th>
-            <th class="text-center">Site Open Time</th>
-            <th class="text-center">Site Close Time</th>
-            <th class="text-center">Work Completed</th>
-            <th class="text-center">Equipment Used</th>
-            <th class="text-center">Materials Used</th>
-            <th class="text-center">Images</th>
-            <th class="text-center">Documents</th>
-{#            <th class="text-center">Update</th>#}
-{#            <th class="text-center">Delete</th>#}
-            
-        </tr>
-    {% if activities %}
+    <div class=" col-md-12 container log-form min-vh-100">
+     <div class="mt-4 log-text"><img src="{% static 'images/view-activiies.svg' %}" alt="add activity"><h2>Logged Activities</h2></div><br>
+     <div class="individual-activity row ms-2 me-2 mt-3 mb-1">
+           <div class="col-md-1 border-end border-black">
+             <p class="lato-bold">Site Name</p>
+         </div>
+          <div class="col-md-1">
+              <p class="lato-bold">Date</p>
+         </div>
+          <div class="col-md-1">
+              <p class="lato-bold">Site Open Time</p>
+         </div>
+          <div class="col-md-1 border-end border-black">
+              <p class="lato-bold">Site Close Time</p>
+         </div>
+          <div class="col-md-2">
+             <p class="lato-bold">Work Completed</p>
+         </div>
+        <div class="col-md-2">
+             <p class="lato-bold">Equipment Used</p>
+         </div>
+      <div class="col-md-1 border-end border-black">
+               <p class="lato-bold">Materials Used</p>
+         </div>
+      <div class="col-md-1 ">
+          <p class="lato-bold">Progress Images</p>
+         </div>
+       <div class="col-md-1">
+            <p class="lato-bold">Documents Used</p>
+         </div>
+      </div>
         {% for activity in activities %}
-        <tr>
-            <td class="text-center">{{ activity.site_name }}</td>
-            <td class="text-center">{{ activity.date }}</td>
-            <td class="text-center">{{ activity.site_open_time }}</td>
-            <td class="text-center">{{ activity.site_close_time }}</td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.work_completed }}</pre></td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.equipment_used }}</pre></td>
-            <td class=""><pre style="white-space: pre-wrap; font-family: inherit; justify-content: left">{{ activity.materials_used }}</pre></td>
-            <td class="text-center">
-                {% for photo in activity.progress_photos.all %}
+      <a href="" style="text-decoration: none;">
+      <div class="individual-activity row ms-2 me-2 mt-3 mb-3">
+           <div class="col-md-1 border-end border-black">
+             <p>{{ activity.site_name|capfirst }}</p>
+         </div>
+          <div class="col-md-1">
+              <p>{{ activity.date|date:"d/m/Y" }}</p>
+         </div>
+          <div class="col-md-1">
+              <p>{{ activity.site_open_time }}</p>
+         </div>
+          <div class="col-md-1 border-end border-black">
+              <p>{{ activity.site_close_time }}</p>
+         </div>
+          <div class="col-md-2">
+             {% autoescape off %}
+              <p>{{ activity.work_completed|capfirst|linebreaks }}</p>
+             {% endautoescape %}
+         </div>
+        <div class="col-md-2">
+               {% autoescape off %}
+              <p>{{ activity.equipment_used|capfirst|linebreaks }}</p>
+               {% endautoescape %}
+         </div>
+      <div class="col-md-1 border-end border-black">
+               {% autoescape off %}
+               <p>{{ activity.materials_used|capfirst|linebreaks }}</p>
+               {% endautoescape %}
+         </div>
+      <div class="col-md-1">
+               {% for photo in activity.progress_photos.all %}
                     <img src="{{ photo.image.url }}" alt="Progress Photo" width="50" height="50">
                 {% endfor %}
-            </td>
-            <td class="text-center">
-                {% for document in activity.relevant_documents.all %}
-                    <a href="{{ document.document.url }}" style="color: black">Document Used</a><br>
+         </div>
+       <div class="col-md-1">
+               {% for document in activity.relevant_documents.all %}
+                    <p>Doc Used</p>
                 {% endfor %}
-            </td>
-{#            <td><a href="{%url 'activityupdate' activity.id %}" type="button" class="btn btn-outline-warning">Update</a></td>#}
-{#            <td><a href="/" type="button" class="btn btn-outline-danger">Delete</a></td>#}
-        </tr>
-        {% endfor %}
-       {% else %}
-    <h6 class="text-center mt-4">You have no activities logged yet</h6>
-    {% endif %}
-    </table>
-    </div>
+         </div>
+      </div>
+      </a>
+         {% endfor %}
     </div>
 {% endblock %}

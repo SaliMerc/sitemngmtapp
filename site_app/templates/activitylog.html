@@ -2,16 +2,20 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-    <div class="col-md-8 container-fluid">
-        <h2 class="text-center mt-4"><i class="fa-solid fa-check-double"></i>Add Activity</h2><br>
+    <div class="col-md-11 container log-form">
+        <div class="mt-4 log-text"><img src="{% static 'images/log.svg' %}" alt="add activity"><h2>Add Activity</h2></div><br>
         <form action="{% url 'activitylog' %}" method="post" enctype="multipart/form-data" target="_self">
             {% csrf_token %}
+            <div class=" row form-group">
+            <div class="col-md-6 form-sub-group">
             <label for="site_type">Site Type</label>
             <select name="site_type" id="site_type" class="form-control mt-2" required>
                  <option selected disabled>Select Site Type</option>
                  <option value="new_site">New Site</option>
                  <option value="existing_site">Existing Site</option>
             </select>
+            </div>
+            <div class="form-sub-group col-md-6">
             <div class="site_name_new" id="site_name_new">
                 <label for="site_name1">Site Name</label>
                 <input type="text" id="site_name1" placeholder="Enter Site Name" name="site_name" class="form-control mt-2">
@@ -25,18 +29,35 @@
                     {% endfor %}
                 </select>
             </div>
-            
-            <label for="date">Date</label>
-            <input type="date" id="date" class="form-control mt-2" placeholder="Enter the Date" name="date" required>
+            </div>
+            </div>
+            <div class=" row form-group">
+            <div class="form-sub-group col-md-6">
             <label for="otime">Site Open Time</label>
             <input type="time" id="otime" class="form-control mt-2" placeholder="Site Opened At" name="open-time" required>
+            </div>
+            <div class="form-sub-group col-md-6">
             <label for="ctime">Site Close Time</label>
             <input type="time" id="ctime" class="form-control mt-2" placeholder="Site Closed At" name="close-time" required>
-{#            <div id="wcompleted"> #}
+            </div>
+            </div>
+            <div class=" row form-group">
+            <div class="form-sub-group col-md-6">
+            <label for="date">Date</label>
+            <input type="date" id="date" class="form-control mt-2" placeholder="Enter the Date" name="date" required>
+            </div>
+            <div class="form-sub-group col-md-6">
+            <label for="site_name1">Construction Stage</label>
+            <select name="construction_stage" id="site_name1" class="form-control mt-2" >
+                 <option selected disabled>Select stage</option>
+                {% for stage in construction_stage %}
+                 <option value="{{ stage.0 }}">{{ stage.1 }}</option>
+                {% endfor %}
+            </select>
+            </div>
+            </div>
             <label for="wcomplete">Work Completed</label> 
             <textarea name="work-completed" rows="2" cols="40" class="form-control" placeholder="Work Completed" id="wcomplete"></textarea>
-{#                <button type="button" onclick="addTextarea()" class="form-control mt-2 btn btn-success"  id="addwork">Add More Activities</button>#}
-{#            </div>#}
             <label for="equipused">Equipment Used</label> 
             <textarea name="equipment-used" rows="2" cols="40" class="form-control" placeholder="Equipment Used" id="equipused"></textarea>
                 <!-- <button type="button" onclick="addEquipment()" class="form-control mt-2 btn btn-success"  id="addequipment">Add More Equipment</button> -->
@@ -47,7 +68,7 @@
             <label for="docs">Documents (Select All)</label> 
             <input type="file" id="docs" name="docs" class="form-control mt-2" multiple>
              <div class="d-flex align-items-center justify-content-center">
-            <button class="btn btn-success mt-2" type="submit">Log Activity</button>
+            <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem; width: 8rem" type="submit">Log Activity</button>
         </div>
         </form>
 </div>
