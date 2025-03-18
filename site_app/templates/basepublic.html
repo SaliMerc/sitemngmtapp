@@ -30,17 +30,16 @@
         <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a>
     </div>
     <div class="col-md-5" id="navbarNav">
-    <ul class="nav nav-lists">
+        <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="height: 2rem; width: 2rem; display: none" id="open-btn">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="height: 2rem; width: 2rem; display: none" id="close-btn">
+    <ul class="nav nav-lists" id="nav-lists">
         <li class="nav-item"><a href="{% url 'index' %}" class=" nav-link nav-link-n">Home</a></li>
         <li class="nav-item"><a href="{% url 'index' %}#features" class="nav-link nav-link-n">Features</a></li>
         <li class="nav-item"><a href="{% url 'index' %}#why-us" class="nav-link nav-link-n">Why Us</a></li>
         <li class="nav-item"><a href="{% url 'index' %}#contact" class="nav-link nav-link-n">Contact Us</a></li>
         <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link nav-link-n">Register</a></li>
         <li class="nav-item"><a href="{% url 'login' %}" class="nav-link nav-link-n">Log In</a></li>
-    </ul>
-        
-{#        <img src="{% static 'images/burger.png' %}" alt="more" class="burger">#}
-{#        <img src="{% static 'images/remove.png' %}" alt="close" class="close">#}
+          </ul>
     </div>
 </nav>
 {% block hero %}
@@ -65,17 +64,35 @@
 
 <script>
   // Function to update the background based on screen width
+  const open=document.getElementById('open-btn');
+  const close=document.getElementById('close-btn');
+  const nav_list=document.getElementById('nav-lists');
   function updateBackground() {
     const heroSection = document.getElementById('heroSection');
     if (window.innerWidth <= 768) {
       heroSection.style.backgroundImage = 'none';
       heroSection.style.backgroundColor = '#435a42';
+      open.style.display='block';
+      nav_list.style.display='none'
     }
   }
 
   updateBackground();
 
   window.addEventListener('resize', updateBackground);
+
+open.addEventListener("click", () => {
+  nav_list.style.display = 'block';
+  close.style.display='block';
+  open.style.display='none';
+});
+
+close.addEventListener("click", () => {
+  nav_list.style.display = 'none';
+  open.style.display='block';
+  close.style.display='none';
+});
+
 </script>
 </body>
 </html>
