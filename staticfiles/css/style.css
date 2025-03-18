@@ -211,27 +211,18 @@ td{
     align-items: center;
     justify-content: center;
 }
+.burger{
+    display: none;
+    height:1em !important;
+    width: 1rem !important;
+}
+.close{
+    display: none;
+    height:1em !important;
+    width: 1rem !important;
+}
+@media (max-width: 992px){
 
-/*@media (max-width: 992px){*/
-/*    .nav-hero{*/
-/*        background-image:url('/static/images/hero-s.png');*/
-/*        background-size: cover;*/
-/*        background-repeat: no-repeat;*/
-/*        display: flex;*/
-/*        flex-direction: column;*/
-/*    }*/
-/*    .burger{*/
-/*        display: block;*/
-/*        height: 2.5em;*/
-/*}*/
-/*    .close{*/
-/*        display: none;*/
-/*        height: 2.5em;*/
-/*}*/
-/*    .nav-lists{*/
-/*        display: none;*/
-/*    }*/
-/*}*/
 
 /*dashboard styling*/
 .site-in-progress{
