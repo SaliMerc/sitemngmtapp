@@ -19,12 +19,14 @@
     <title>SiteLogger</title>
 </head>
 <body style="background-color: #C7DBD2">
-<nav class="navbar b-dash-nav" style="min-height: 4rem; background-color: #435a42">
+<nav class="navbar b-dash-nav pe-2 ps-2" style="min-height: 4rem; background-color: #435a42" id="navigation">
     <div class="col-ms-6">
         <h5><a href="{% url 'dash' %}" class="nav-link nav-link-n"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a></h5>
     </div>
     <div class="col-ms-6">
-    <ul class="nav">
+        <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="height: 2rem; width: 2rem; display: none" id="open-btn">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="height: 2rem; width: 2rem; display: none" id="close-btn">
+    <ul class="nav" id="nav-lists">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">My Profile</a>
             <ul class="dropdown-menu">
@@ -73,5 +75,35 @@
 {% block scripts %}
 {#    other scripts go here #}
 {% endblock %}
+<script>
+  // Function to update the background based on screen width
+  const open=document.getElementById('open-btn');
+  const close=document.getElementById('close-btn');
+  const nav_list=document.getElementById('nav-lists');
+  function updateBackground() {
+   document.getElementById('navigation');
+    if (window.innerWidth <= 768) {
+      open.style.display='block';
+      nav_list.style.display='none'
+    }
+  }
+
+  updateBackground();
+
+  window.addEventListener('resize', updateBackground);
+
+open.addEventListener("click", () => {
+  nav_list.style.display = 'block';
+  close.style.display='block';
+  open.style.display='none';
+});
+
+close.addEventListener("click", () => {
+  nav_list.style.display = 'none';
+  open.style.display='block';
+  close.style.display='none';
+});
+
+</script>
 </body>
 </html>
