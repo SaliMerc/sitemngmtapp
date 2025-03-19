@@ -24,8 +24,8 @@
         <h5><a href="{% url 'dash' %}" class="nav-link nav-link-n"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a></h5>
     </div>
     <div class="col-ms-6">
-        <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="height: 2rem; width: 2rem; display: none" id="open-btn">
-        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="height: 2rem; width: 2rem; display: none" id="close-btn">
+        <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="display: none" id="open-btn">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="display: none" id="close-btn">
     <ul class="nav" id="nav-lists">
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">My Profile</a>
@@ -80,6 +80,7 @@
   const open=document.getElementById('open-btn');
   const close=document.getElementById('close-btn');
   const nav_list=document.getElementById('nav-lists');
+
   function updateBackground() {
    document.getElementById('navigation');
     if (window.innerWidth <= 768) {

@@ -221,8 +221,9 @@ td{
     height:1em !important;
     width: 1rem !important;
 }
-@media (max-width: 992px){}
-
+#feat2{
+    margin-right: 2em;
+}
 
 /*dashboard styling*/
 .site-in-progress{
@@ -361,4 +362,40 @@ select option:focus{
 .modal-form{
     background-color: #435a42;
     border-radius: 1.2rem 0 1.2em 0;
+}
+/*for mobile phone screen*/
+@media (max-width: 768px){
+    .feat{
+        margin-top: 2rem;
+        background-color: #435a42;
+        height: 16rem !important;
+        width: 80%;
+        margin-right: 0;
+        margin-left: 0;
+}
+    #feat2{
+        margin-right: 0 !important;
+}
+    .abt{
+        height: 13rem !important;
+        margin-top: 2rem;
+        width: 80%;
+}
+    .abt-1{
+        margin-right: 0;
+}
+    .site-in-progress{
+        min-height: 50vh !important;
+        width: 90%;
+        border-radius: 1.2rem 0 1.2em 0;
+        position: relative;
+        margin-left: 1rem;
+}
+    .dashboard-element{
+        width: 80%;
+        margin-left: 2rem;
+}
+    .page-title{
+        margin-left: 2rem;
+    }
 }
