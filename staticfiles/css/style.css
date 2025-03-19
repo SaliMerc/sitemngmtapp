@@ -398,4 +398,8 @@ select option:focus{
     .page-title{
         margin-left: 2rem;
     }
+    .feat-para{
+        text-align: center;
+        padding-top: 0.5rem;
+}
 }
