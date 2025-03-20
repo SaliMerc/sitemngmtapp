@@ -30,7 +30,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">My Profile</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'activitylog' %}">View Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'view-profile' %}">View Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'issuelog' %}">Update Profile</a></li>
               <li><a class="dropdown-item" href="{% url 'issuelog' %}">Change Password</a></li>
             </ul>
@@ -72,9 +72,6 @@
 
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
-{% block scripts %}
-{#    other scripts go here #}
-{% endblock %}
 <script>
   // Function to update the background based on screen width
   const open=document.getElementById('open-btn');
@@ -106,5 +103,8 @@ close.addEventListener("click", () => {
 });
 
 </script>
+{% block scripts %}
+{#    other scripts go here #}
+{% endblock %}
 </body>
 </html>

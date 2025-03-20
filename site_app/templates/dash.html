@@ -3,13 +3,13 @@
 {% block content %}
     <div class=" container min-vh-100">
     <div class="row mt-5">
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="">
             <h4 class="page-title">Hello {{user.first_name|capfirst}} {{user.last_name|capfirst}}!</h4>
             </div>
             <div class="row mt-5">
                 <div class="col-md-6 dashboard-element first-element mt-3">
-                    <a href="" class="dashboard-links">
+                    <a href="{% url 'view-profile' %}" class="dashboard-links">
                         <img src="{% static 'images/view-profile.svg' %}" alt="view profile">
                         <div class="profile-text">
                             <h5>View Profile</h5>
@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 site-in-progress mb-5">
+        <div class="col-md-5 site-in-progress mb-5">
             <div class="profile-text mt-3">
                 <h5 class="text-center h5">Sites in Progress <span class="sites-count">({{ count|default:0 }})</span></h5>
             </div>

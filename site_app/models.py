@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.contrib.auth.models import User
@@ -115,3 +117,46 @@ class Transactions(models.Model):
     timestamp=models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.phone_number
+
+class SubscriptionAmount(models.Model):
+    monthly_subscription_amount = models.IntegerField(default=0)
+    yearly_subscription_amount = models.IntegerField(default=0)
+
+    def __int__(self):
+        return self.monthly_subscription_amount
+
+class Subscription(models.Model):
+    SUBSCRIPTION_CHOICES = [
+        ('monthly', 'Monthly'),
+        ('yearly', 'Yearly'),
+    ]
+
+    user=models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
+    start_date=models.ForeignKey(Transactions, on_delete=models.CASCADE, null=True, blank=True)
+    end_date=models.DateField()
+    is_active=models.BooleanField(default=False)
+
+    def calculate_end_date(self):
+        if self.start_date:
+            start_date = self.start_date.timestamp.date()
+            if self.subscription_type == 'monthly':
+                self.end_date = start_date + timedelta(days=30)
+            elif self.subscription_type == 'yearly':
+                self.end_date = start_date + timedelta(days=365)
+        else:
+            self.end_date = None
+
+    def check_active_status(self):
+        if self.end_date:
+            self.is_active = date.today() <= self.end_date
+        else:
+            self.is_active = False
+
+    def save(self, *args, **kwargs):
+        self.calculate_end_date()
+        self.check_active_status()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.first_name} - {self.subscription_type}"

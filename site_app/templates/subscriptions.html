@@ -1,0 +1,45 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+ <div class="container min-vh-100 profile-modal col-md-9">
+    <div class="profile-text mt-4 pt-4 pb-1">
+           <div class="row justify-content-between ms-3 me-3">
+               <div class="d-flex flex-column col-md-6">
+                   <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem;" type="button" id="monthly-btn">Monthly</button>
+                   <div class="site-title-div mt-3 d-flex flex-column align-items-start" id="monthly-data">
+                    <p class="ps-5 mb-4 pb-5">
+                        <strong>Amount: Ksh {{ subscription_amount.monthly_subscription_amount }}</strong>
+                    </p>
+                   <p class="ps-5">
+                        Features: Download All Reports Seamlessly for the whole <br>month
+                    </p>
+                       <div class="site-title-div mt-3 d-flex flex-column align-items-start ms-5">
+                        <a href="{% url 'stk' %}">
+                        <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem; width: 8rem" type="submit">Subscribe</button>
+                        </a>
+                    </div>
+                 </div>
+               </div>
+                <div class="d-flex flex-column col-md-6">
+               <button class="btn btn-success mt-4 mb-4" style="color: #435a42; height: 3rem; background-color: #c4efdc" type="button" id="yearly-btn">Yearly</button>
+                <div class="site-title-div mt-3 d-flex flex-column align-items-start" id="yearly-data">
+                <p class="ps-5 mb-4 pb-5">
+                     <strong>Amount: Ksh {{ subscription_amount.yearly_subscription_amount }}</strong>
+                </p>
+               <p class="ps-5">
+                    Features: Download All Reports Seamlessly for the whole <br>year
+                </p>
+                    <div class="site-title-div mt-3 d-flex flex-column align-items-start ms-5">
+                        <a href="">
+                        <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem; width: 8rem" type="submit">Subscribe</button>
+                        </a>
+                    </div>
+             </div>
+                </div>
+            </div>
+    </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

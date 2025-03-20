@@ -355,9 +355,17 @@ select option:focus{
     background-color: #c7dbd2;
     border: none;
 }
+#yearly-btn:hover{
+    background-color: #444945 !important;
+    color: #B0B0B0 !important;
+}
 .modal-main-background{
     background-color: #c7dbd2 !important;
     border-radius: 1.2rem 0 1.2em 0;
+}
+.profile-modal{
+     background-color: #435a42 !important;
+     border-radius: 1.2rem 0 1.2em 0;
 }
 .modal-form{
     background-color: #435a42;

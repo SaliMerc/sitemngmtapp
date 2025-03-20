@@ -1,0 +1,68 @@
+{% extends 'basedash.html' %}
+{% load static %}
+{% block content %}
+    <div class=" container min-vh-100">
+    <div class="mt-5">
+        <div class="site-in-progress mb-5">
+            <div class="profile-text mt-4 pt-4 pb-1">
+                <h5 class="h5 ms-3">Personal Information</h5>
+            </div>
+            <div class="site-title-div mt-3 ms-3 me-3">
+                <p class="ps-5">Full Name: {{ user.first_name }} {{ user.first_name }}</p>
+            </div>
+             <div class="site-title-div mt-3 ms-3 me-3">
+                <p class="ps-5">Email: {{ user.email }}</p>
+            </div>
+            <div class="profile-text mt-4 pt-4 pb-1">
+                <h5 class="h5 ms-3">Subscription Details</h5>
+            </div>
+            <div class="row ms-3 me-3 justify-content-between">
+                 <div class="site-title-div mt-3 col-md-5">
+                    <p class="ps-5">Current Plan:
+                         {% if subscription.is_active == True %}
+                            {{ subscription.subscription_type }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                 </div>
+                 <div class="site-title-div mt-3  col-md-5">
+                    <p class="ps-5">Status:
+                        {% if subscription.is_active == True %}
+                            Active
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                 </div>
+            </div>
+            <div class="row ms-3 me-3 justify-content-between">
+                 <div class="site-title-div mt-3 col-md-5">
+                    <p class="ps-5">Payment Method:
+                    {% if subscription.is_active == True %}
+                            MPESA
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                 </div>
+                 <div class="site-title-div mt-3  col-md-5">
+                    <p class="ps-5">Subscription End Date:
+                        {% if subscription.end_date %}
+                            {{ subscription.end_date }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </p>
+                 </div>
+            </div>
+          <div class="d-flex justify-content-left ms-3">
+              <a href="{% url 'subscriptions' %}">
+            <button class="btn btn-success mt-4 mb-4" style="color: #D3D3D3; height: 3rem; width: 15rem" type="button">View Subscription Types</button>
+       </a>
+          </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

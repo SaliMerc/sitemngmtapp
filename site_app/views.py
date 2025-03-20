@@ -12,7 +12,7 @@ from django.utils import timezone
 import pytz
 
 from SiteLogger import settings
-from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions
+from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions, Subscription,SubscriptionAmount
 from django.utils.timezone import now
 from datetime import date
 from django.template.loader import get_template
@@ -137,10 +137,24 @@ def dash(request):
 def site_in_progress_view(request):
     if request.user.is_authenticated:
         user=request.user
-        sites = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover')
+        sites = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover').values('site_name').distinct()
         count=sites.count()
-        sites_in_progress = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover')[:6]
+        sites_in_progress = DailyActivity.objects.filter(user=user,in_trash=False).exclude(construction_stage='handover').values('site_name').distinct()[:6]
         return render(request, 'sites-in-progress.html', {'user':user, "sites_in_progress":sites_in_progress,"count":count})
+
+@login_required
+def user_profile_view(request):
+    if request.user.is_authenticated:
+        user = request.user
+        subscription=Subscription.objects.filter(user=user)
+        subscription_amount=SubscriptionAmount.objects.first()
+        return render(request, 'view-user-profile.html', {'user':user, "subscription":subscription, "subscription_amount":subscription_amount})
+@login_required
+def subscription_view(request):
+    if request.user.is_authenticated:
+        subscription_amount=SubscriptionAmount.objects.first()
+        return render(request, 'subscriptions.html', {"subscription_amount":subscription_amount})
+
 
 @login_required
 def activitylog(request):
@@ -332,11 +346,12 @@ def pay(request):
         # response = requests.post(api_url, json=request, headers=headers)
         response = requests.post(api_url, json=request_data, headers=headers)
         print(response)
-    return HttpResponse("Payment Successfull")
+    return HttpResponse("Check your phone for a payment popup")
 
 @login_required
 def stk(request):
-    return render(request, 'pay.html')
+    subscription_amount = SubscriptionAmount.objects.first()
+    return render(request, 'pay.html', {'subscription_amount':subscription_amount})
 
 @csrf_exempt
 def callback(request):

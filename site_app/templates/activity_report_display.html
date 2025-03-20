@@ -81,43 +81,25 @@
             <hr class="h-line-r">
             {% for activity in activities %}
                 {% if activity.site_name == site_name %}
-                    <div class="row">
-                    <div class="col-md-3">
                 <p><strong>Date:</strong> {{ activity.date }}</p>
-                    </div>
-                    <div class="col-md-3">
                 <p><strong>Site Open Time:</strong> {{ activity.site_open_time }}</p>
-                    </div>
-                    <div class="col-md-3">
                 <p><strong>Site Close Time:</strong> {{ activity.site_close_time }}</p>
-                    </div>
-                    <div class="col-md-3">
                 <p><strong>Construction Stage:</strong> {{ activity.construction_stage|capfirst }}</p>
-                    </div>
-                    </div>
-                    <div class="row mt-5 mb-4 pt-4">
-                    <div class="col-md-5">
                 <p><strong>Work Completed:</strong>
                  {% autoescape off %}
                     {{ activity.work_completed|capfirst|linebreaks  }}
                 {% endautoescape %}
                 </p>
-                    </div>
-                    <div class="col-md-5">
                     <p><strong>Equipment Used:</strong>
                       {% autoescape off %}
                         {{ activity.equipment_used|capfirst|linebreaks }}
                        {% endautoescape %}
                     </p>
-                    </div>
-                    <div class="col-md-2">
                 <p><strong>Materials Used:</strong>
                     {% autoescape off %}
                     {{ activity.materials_used|capfirst|linebreaks  }}
                 {% endautoescape %}
                 </p>
-                    </div>
-                    </div>
                 <div class="row">
                  <p class="mt-4"><strong>Progress Photos:</strong></p>
                     {% for photo in activity.progress_photos.all %}
