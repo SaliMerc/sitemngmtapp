@@ -345,7 +345,7 @@ def pay(request):
         }
         # response = requests.post(api_url, json=request, headers=headers)
         response = requests.post(api_url, json=request_data, headers=headers)
-        print(response)
+        print(request_data)
     return HttpResponse("Check your phone for a payment popup")
 
 @login_required
@@ -355,11 +355,20 @@ def stk(request):
 
 @csrf_exempt
 def callback(request):
-    if request.method != "POST":
-        return HttpResponse("Invalid Request")
-    # else:
     try:
-        callback_data = json.loads(request.body)
+        print("Raw request body:", request.body)
+        print("Headers:", request.headers)
+
+        # Handle text/plain content type
+        content_type = request.headers.get('Content-Type', '')
+        if 'application/json' not in content_type:
+            # If content type is not JSON, assume it's text/plain and parse it as JSON
+            callback_data = json.loads(request.body.decode('utf-8'))
+        else:
+            # If content type is JSON, parse it directly
+            callback_data = json.loads(request.body.decode('utf-8'))
+
+        # callback_data = json.loads(request.body)
         print(callback_data)
         user = request.user
         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
