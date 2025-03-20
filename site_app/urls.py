@@ -26,11 +26,10 @@ urlpatterns= [
     path('dashboard/issuereportdisplay/<int:id>/', views.issue_display, name='issuereportdisplay'),
 
     path('token/', views.token, name='token'),
-    # path('pay/', views.pay, name='pay'),
-    path('callback/', views.pay, name='pay'),
+    path('pay/', views.pay, name='pay'),
     path('stk/', views.stk, name='stk'),
 
     path('forgot_password/', views.forgot_password, name='forgot_password'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
-    # path('callback/', views.callback, name='callback'),
+    path('callback/', views.callback, name='callback'),
 ]

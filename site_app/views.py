@@ -345,102 +345,60 @@ def pay(request):
         }
         # response = requests.post(api_url, json=request, headers=headers)
         response = requests.post(api_url, json=request_data, headers=headers)
-
-        try:
-            print("Raw request body:", request.body)
-            print("Headers:", request.headers)
-
-            # Handle text/plain content type
-            content_type = request.headers.get('Content-Type', '')
-            if 'application/json' not in content_type:
-                # If content type is not JSON, assume it's text/plain and parse it as JSON
-                callback_data = json.loads(request.body.decode('utf-8'))
-            else:
-                # If content type is JSON, parse it directly
-                callback_data = json.loads(request.body.decode('utf-8'))
-
-            # callback_data = json.loads(request.body)
-            print(callback_data)
-            user = request.user
-            result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
-            if result_code != "0":
-                error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
-                return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
-
-            # merchant_id = callback_data["Body"]["stkCallback"]["MerchantRequestID"]
-            checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
-            body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
-
-            amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-            mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
-            phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
-
-            trans = Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
-                                 checkout_id=checkout_id, status="Success")
-            trans.save()
-            response_data = {"message": "success",
-                             "trans": {
-                                 "user": str(trans.user),
-                                 "amount": trans.amount,
-                                 "mpesa_code": trans.mpesa_code,
-                                 "phone_number": trans.phone_number,
-                                 "checkout_id": trans.checkout_id,
-                                 "status": trans.status}}
-            return JsonResponse(response_data, safe=False)
-        except (json.JSONDecodeError, KeyError) as e:
-            return HttpResponse(f"Invalid Request: {str(e)}")
-
-    return HttpResponse("Payment successfull")
+        print(request_data)
+    return HttpResponse("Check your phone for a payment popup")
 
 @login_required
 def stk(request):
     subscription_amount = SubscriptionAmount.objects.first()
     return render(request, 'pay.html', {'subscription_amount':subscription_amount})
 
-# @csrf_exempt
-# def callback(request):
-#     try:
-#         print("Raw request body:", request.body)
-#         print("Headers:", request.headers)
-#
-#         # Handle text/plain content type
-#         content_type = request.headers.get('Content-Type', '')
-#         if 'application/json' not in content_type:
-#             # If content type is not JSON, assume it's text/plain and parse it as JSON
-#             callback_data = json.loads(request.body.decode('utf-8'))
-#         else:
-#             # If content type is JSON, parse it directly
-#             callback_data = json.loads(request.body.decode('utf-8'))
-#
-#         # callback_data = json.loads(request.body)
-#         print(callback_data)
-#         user = request.user
-#         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
-#         if result_code != "0":
-#             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
-#             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
-#
-#         # merchant_id = callback_data["Body"]["stkCallback"]["MerchantRequestID"]
-#         checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
-#         body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
-#
-#         amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-#         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
-#         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
-#
-#         trans=Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
-#                                     checkout_id=checkout_id, status="Success")
-#         trans.save()
-#         response_data = {"message": "success",
-#                          "trans": {
-#                              "user": str(trans.user),
-#                              "amount": trans.amount,
-#                              "mpesa_code": trans.mpesa_code,
-#                              "phone_number": trans.phone_number,
-#                              "checkout_id": trans.checkout_id,
-#                              "status": trans.status}}
-#         return JsonResponse(response_data, safe=False)
-#     except (json.JSONDecodeError, KeyError) as e:
-#         return HttpResponse(f"Invalid Request: {str(e)}")
+@csrf_exempt
+def callback(request):
+    try:
+        print("Raw request body:", request.body)
+        print("Headers:", request.headers)
+
+        # Handle text/plain content type
+        content_type = request.headers.get('Content-Type', '')
+        if 'application/json' not in content_type:
+            # If content type is not JSON, assume it's text/plain and parse it as JSON
+            callback_data = json.loads(request.body.decode('utf-8'))
+        else:
+            # If content type is JSON, parse it directly
+            callback_data = json.loads(request.body.decode('utf-8'))
+        # callback_data = json.loads(request.body)
+        print(callback_data)
+        user = request.user
+        result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
+        if result_code != "0":
+            error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
+            return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+
+        print(result_code)
+        # merchant_id = callback_data["Body"]["stkCallback"]["MerchantRequestID"]
+        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
+        body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
+
+        amount = next(item["Value"] for item in body if item["Name"] == "Amount")
+        mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
+        phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
+
+        print(amount, mpesa_code, phone_number)
+        trans=Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
+                                    checkout_id=checkout_id, status="Success")
+        trans.save()
+        response_data = {"message": "success",
+                         "trans": {
+                             "user": str(trans.user),
+                             "amount": trans.amount,
+                             "mpesa_code": trans.mpesa_code,
+                             "phone_number": trans.phone_number,
+                             "checkout_id": trans.checkout_id,
+                             "status": trans.status}}
+        print(response_data)
+        return JsonResponse(response_data, safe=False)
+    except (json.JSONDecodeError, KeyError) as e:
+        return HttpResponse(f"Invalid Request: {str(e)}")
 
 
