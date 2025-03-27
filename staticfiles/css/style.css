@@ -24,6 +24,7 @@ h1,h2,h3,h4,h5,h6 {
 p, a{
     font-family: "Playfair Display", serif;
 }
+
 #site_name_new{
     display: none;
 }
@@ -371,6 +372,8 @@ select option:focus{
     background-color: #435a42;
     border-radius: 1.2rem 0 1.2em 0;
 }
+
+
 /*for mobile phone screen*/
 @media (max-width: 768px){
     .feat{

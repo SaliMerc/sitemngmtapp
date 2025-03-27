@@ -116,7 +116,7 @@ class Transactions(models.Model):
     status=models.CharField(max_length=50)
     timestamp=models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return self.phone_number
+        return self.mpesa_code
 
 class SubscriptionAmount(models.Model):
     monthly_subscription_amount = models.IntegerField(default=0)

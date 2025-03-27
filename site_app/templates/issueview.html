@@ -3,7 +3,14 @@
 {% block content %}
     <div class=" col-md-12 container log-form min-vh-100">
      <div class="mt-4 log-text"><img src="{% static 'images/view-issues.svg' %}" alt="add activity"><h2>Logged Issues</h2></div><br>
-     <div class="individual-activity row ms-2 me-2 mt-3 mb-1">
+     <div class="form-and-export row justify-content-start ms-2 mb-5">
+            <form action="" enctype="multipart/form-data" method="get" class="report-search-form col-md-8">
+                <button class="form-contol"><i class="fa-solid fa-magnifying-glass" style="color: #435a42"></i></button>
+                <input type="text" name="search" class="form-control" placeholder="search by issue description and issue resolution steps">
+            </form>
+        </div>
+
+        <div class="individual-activity row ms-2 me-2 mt-3 mb-1">
            <div class="col-md-1 border-end border-black">
              <p class="lato-bold">Site Name</p>
          </div>
@@ -27,7 +34,7 @@
          </div>
       </div>
         {% for issue in issues %}
-      <a href="" style="text-decoration: none;">
+      <a href="{% url 'issueupdate' issue.id %}" style="text-decoration: none;">
       <div class="individual-activity row ms-2 me-2 mt-3 mb-3">
            <div class="col-md-1 border-end border-black">
              <p>{{ issue.site_name|capfirst }}</p>

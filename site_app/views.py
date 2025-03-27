@@ -4,6 +4,9 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import update_session_auth_hash
+
 # from .models import ....
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -187,6 +190,8 @@ def activitylog(request):
         return redirect("activityview")
     existing_sites = DailyActivity.objects.filter(user=request.user).values_list("site_name", flat=True).distinct().order_by("site_name")
     return render(request, 'activitylog.html', {"existing_sites":existing_sites, "last_name":last_name,"construction_stage":construction_stage})
+
+
 @login_required
 def activityview(request):
     if request.user.is_authenticated:
@@ -223,45 +228,68 @@ def issueview(request):
         last_name = request.user.last_name
     issues=Issue.objects.filter(user=request.user,in_trash=False).order_by('-issue_date')
     return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
-# @login_required
-# def activityupdate(request, id):
-#     if request.method == "POST":
-#         date = request.POST.get("date", now())
-#         site_open_time = request.POST.get("open-time", None)
-#         site_close_time = request.POST.get("close-time", None)
-#         work_completed = request.POST.get("work-completed")
-#         equipment_used = request.POST.get("equipment-used")
-#         materials_used = request.POST.get("material-used")
-#         site_type = request.POST.get("site-type")
-#         site_name = request.POST.get("site_name")
-#         images = request.FILES.getlist("images")
-#         documents = request.FILES.getlist("docs")
-#         user = request.user
-#         activity=DailyActivity.objects.get(id=id, user=user)
-#         activity.date = date
-#         activity.site_open_time = site_open_time
-#         activity.site_close_time = site_close_time
-#         activity.work_completed = work_completed
-#         activity.equipment_used = equipment_used
-#         activity.materials_used = materials_used
-#         activity.site_name = site_name
-#         activity.site_type = site_type
-#
-#         for image in images:
-#             img = Image.objects.create(image=image, user=user)
-#             activity.progress_photos.add(img)
-#
-#         for document in documents:
-#             doc = Document.objects.create(document=document, user=user)
-#             activity.relevant_documents.add(doc)
-#         activity.save()
-#         return redirect("activityupdate")
-#     activity = get_object_or_404(DailyActivity, id=id, user=request.user)
-#     existing_sites = DailyActivity.objects.values_list("site_name", flat=True).distinct()
-#     # d = DailyActivity.objects.get(id=id, user=request.user)
-#     return render(request, 'activityupdate.html', {"existing_sites": existing_sites, "activity":activity})
-# def issueupdate(request, id):
-#     return render(request, 'issueupdate.html')
+
+@login_required
+def issueupdate(request,id):
+    my_issue=get_object_or_404(Issue,id=id)
+    issue_status = Issue.STATUS_CHOICES
+    if request.method == "POST":
+        try:
+            my_issue.issue_date = request.POST.get("issue_date")
+            my_issue.issue_time = request.POST.get("issue_time")
+            my_issue.issue_description = request.POST.get("issue_description")
+            my_issue.resolution_steps = request.POST.get("resolution_steps")
+            my_issue.issue_status = request.POST.get("issue_status")
+            my_issue.site_name = request.POST.get("site_name")
+
+            my_issue.save()
+            messages.error(request, "Issue updated successfully")
+        except Exception as e:
+            print(e)
+            messages.error(request, "Issue update failed")
+
+    existing_sites = Issue.objects.filter(user=request.user).values_list("site_name", flat=True).distinct().order_by(
+        "site_name")
+    return render(request, 'issueupdate.html',
+                  {"existing_sites": existing_sites, "issue_status": issue_status,"my_issue": my_issue})
+
+@login_required()
+def delete_issue(request, id):
+    issue=get_object_or_404(Issue, id=id)
+    issue.delete()
+    return redirect("issueview")
+
+@login_required
+def activityupdate(request, id):
+    construction_stage = DailyActivity.STAGE_CHOICES
+    my_activity=get_object_or_404(DailyActivity, id=id)
+    if request.method == "POST":
+        try:
+            my_activity.date = request.POST.get("date")
+            my_activity.site_open_time = request.POST.get("open-time")
+            my_activity.site_close_time = request.POST.get("close-time")
+            my_activity.work_completed = request.POST.get("work-completed")
+            my_activity.equipment_used = request.POST.get("equipment-used")
+            my_activity.materials_used = request.POST.get("material-used")
+            my_activity.site_name = request.POST.get("site_name")
+            my_activity.construction_stage = request.POST.get("construction_stage")
+
+            my_activity.save()
+            messages.success(request, "Activity updated successfully")
+        except Exception as e:
+            print(e)
+            messages.error(request, "Activity update failed")
+
+    existing_sites = DailyActivity.objects.filter(user=request.user).values_list("site_name",
+                                                                                 flat=True).distinct().order_by("site_name")
+    return render(request, 'activityupdate.html',
+                  {"existing_sites": existing_sites, "construction_stage": construction_stage,"my_activity": my_activity})
+@login_required()
+def delete_activity(request, id):
+    activity=get_object_or_404(DailyActivity, id=id)
+    activity.delete()
+    return redirect("activityview")
+
 @login_required
 def activity_report(request):
     if request.user.is_authenticated:
@@ -306,6 +334,46 @@ def issue_display(request,id):
     site_name=site_in_report.site_name
     issue_new=Issue.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("issue_date")
     return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new, "last_name":last_name})
+
+@login_required
+def edit_user_profile(request):
+    user=request.user
+    if request.method=='POST':
+        try:
+            user.first_name=request.POST.get("fname").strip()
+            user.last_name=request.POST.get("lname").strip()
+            user.email=request.POST.get("email").strip()
+
+            user.save()
+            messages.success(request, "Profile Updated Successfully")
+        except Exception as e:
+            print(f"The exception is {e}")
+            messages.error(request, "Profile Update Failed")
+    return render(request, 'edit-profile.html', {"user":user})
+
+@login_required
+def edit_password(request):
+    user=request.user
+    if request.method=='POST':
+        try:
+            old_password=request.POST.get("o-password")
+            new_password = request.POST.get("n-password")
+            confirm_password = request.POST.get("confirm-n-password")
+
+            if not check_password(old_password, user.password):
+                messages.error(request, "Old password is incorrect")
+            elif new_password != confirm_password:
+                messages.error(request, "New passwords don't match")
+            else:
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password changed successfully!")
+        except Exception as e:
+            print(f"The exception is {e}")
+            messages.error(request, "Profile Update Failed")
+    return render(request, 'change-password.html', {"user":user})
+
 
 # api integration starts here
 @login_required
@@ -388,16 +456,16 @@ def callback(request):
         trans=Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
                                     checkout_id=checkout_id, status="Success")
         trans.save()
-        response_data = {"message": "success",
-                         "trans": {
-                             "user": str(trans.user),
-                             "amount": trans.amount,
-                             "mpesa_code": trans.mpesa_code,
-                             "phone_number": trans.phone_number,
-                             "checkout_id": trans.checkout_id,
-                             "status": trans.status}}
-        print(response_data)
-        return JsonResponse(response_data, safe=False)
+        # response_data = {"message": "success",
+        #                  "trans": {
+        #                      "user": str(trans.user),
+        #                      "amount": trans.amount,
+        #                      "mpesa_code": trans.mpesa_code,
+        #                      "phone_number": trans.phone_number,
+        #                      "checkout_id": trans.checkout_id,
+        #                      "status": trans.status}}
+        # print(response_data)
+        # return JsonResponse(response_data, safe=False)
     except (json.JSONDecodeError, KeyError) as e:
         return HttpResponse(f"Invalid Request: {str(e)}")
 

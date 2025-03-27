@@ -3,9 +3,14 @@
 {% block content %}
     
     <div class="col-md-8 container-fluid min-vh-100 mt-4 log-form">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
         <form action="{% url 'pay' %}" method="post" enctype="multipart/form-data" target="_self">
             {% csrf_token %}
-            <label for="site_type">Subscription Type</label>
+            <label for="site_type" class="mt-5">Subscription Type</label>
             <select name="site_type" id="site_type" class="form-control mt-2" required>
                  <option selected disabled>Select Subscription</option>
                  <option value="monthly" data-amount="{{ subscription_amount.monthly_subscription_amount }}">Monthly</option>

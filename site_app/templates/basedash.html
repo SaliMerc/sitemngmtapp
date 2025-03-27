@@ -31,11 +31,11 @@
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">My Profile</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'view-profile' %}">View Profile</a></li>
-              <li><a class="dropdown-item" href="{% url 'issuelog' %}">Update Profile</a></li>
-              <li><a class="dropdown-item" href="{% url 'issuelog' %}">Change Password</a></li>
+              <li><a class="dropdown-item" href="{% url 'edit-user-profile' %}">Update Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'change-password' %}">Change Password</a></li>
             </ul>
           </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown my-menu">
             <a class="nav-link dropdown-toggle nav-link-n" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Log</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'activitylog' %}">Activities</a></li>
