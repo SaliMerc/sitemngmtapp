@@ -9,7 +9,6 @@ urlpatterns= [
     path('edit-profile/', views.edit_user_profile, name='edit-user-profile'),
     path('edit-password/', views.edit_password, name='change-password'),
 
-    path('delete/<int:id>/', views.deleteData, name="deleteData"),
     path('dashboard/', views.dash, name='dash'),
 
     path('dashboard/sites-in-progress/', views.site_in_progress_view, name='sites-in-progress'),
@@ -38,5 +37,6 @@ urlpatterns= [
     path('callback/', views.callback, name='callback'),
 
     path('forgot_password/', views.forgot_password, name='forgot_password'),
+    path('redirected_page/', views.redirected_page, name='redirected_page'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
 ]

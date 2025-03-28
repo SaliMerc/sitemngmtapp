@@ -23,17 +23,23 @@ from requests.auth import HTTPBasicAuth
 import json
 from . credentials import MpesaAccessToken, LipanaMpesaPassword,MpesaC2bCredential
 import requests
+
 # for emails
-from django.contrib.auth.tokens import default_token_generator as token_generator
+from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
+from django.contrib.staticfiles.storage import staticfiles_storage
+import os
+from django.conf import settings
+
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.conf import settings
 
 from django.db.models import Count, Q
 
@@ -70,54 +76,79 @@ def log_in(request):
             return redirect('login')
     return render(request, 'login.html')
 
-# reset password starts here
 
 def forgot_password(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        if User.objects.filter(email=email).exists():
+        email = request.POST.get('email')
+        try:
             user = User.objects.get(email=email)
-            token = token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            reset_link = request.build_absolute_uri(reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token}))
-            message = render_to_string('password_reset_email.html', {'reset_link': reset_link})
-            send_mail(
-                'Password Reset Request',
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False, )
-            messages.success(request, 'A password reset link has been sent to your email.')
+        except User.DoesNotExist:
+            messages.error(request, "User account does not exist")
+            return redirect('forgot_password')
         else:
-            messages.error(request, 'Email address not found.')
-        return redirect('forgot_password')
-    return render(request, 'forgot_password.html')
+            # for sending the password reset link
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-# confirm password reset
+            reset_link = f"{request.scheme}://{request.get_host()}/reset/{uid}/{token}/"
+            subject = 'Password Reset Link'
+
+            html_content = render_to_string('password-reset-email.html', {
+                'user': user,
+                'reset_link': reset_link,
+            })
+
+            text_content = strip_tags(html_content)
+
+            email = EmailMultiAlternatives(subject, text_content, to=[user.email])
+            email.attach_alternative(html_content, "text/html")
+
+            email.send()
+
+            messages.info(request, "A reset link has been sent to your email")
+            return redirect('forgot_password')
+    else:
+        return render(request, 'forgot_password.html')
+
+
 def password_reset_confirm(request, uidb64, token):
-    if request.method == "POST":
+    try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-        if token_generator.check_token(user, token):
-            password = request.POST.get("password")
-            conf_pass = request.POST.get("confirm_password")
-            if password == conf_pass:
-                user.set_password(password)
-                user.save()
-                messages.success(request, 'Your password has been reset successfully.')
-                return redirect('login')
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    # Validating the token
+    if not user or not default_token_generator.check_token(user, token):
+        messages.error(request, "Invalid or expired link. Please request a new link")
+        return redirect("forgot_password")
+
+    if request.method == "POST":
+        try:
+            new_password = request.POST.get("n-password")
+            confirm_password = request.POST.get("confirm-n-password")
+
+            if new_password != confirm_password:
+                messages.error(request, "New passwords don't match")
+
+            elif check_password(new_password, user.password):
+                messages.error(request, "New password cannot be same as the old password")
+
             else:
-                messages.error(request, 'Passwords do not match.')
-    return render(request, 'password_reset_confirm.html')
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, "Your password has been changed successfully!, Login")
+                return redirect("login")
+        except Exception as e:
+            messages.error(request, "Password Reset Failed")
+            print(e)
 
+    return render(request, 'password-reset-page.html', { 'uid': uidb64,
+        'token': token})
 
-def deleteData(request, id):
-    actdel = DailyActivity.objects.get(id=id)
-    issuedel= Issue.objects.get(id=id)
-    actdel.delete()
-    issuedel.delete()
-    messages.success(request, 'Deleted successfully')
-    return redirect("dash")
+def redirected_page(request):
+    return render(request, "password-reset-page.html")
+
 def dashpublic(request):
     return render(request, 'basepublic.html')
 def index(request):
