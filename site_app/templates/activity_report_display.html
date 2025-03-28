@@ -5,7 +5,7 @@
     <div class="col-md-12 min-vh-100 container log-form ps-4 pe-4">
         <div class="text-center mb-4 mt-4">
              <img src="{% static 'images/LOGO.png' %}" alt="Company Logo" class="img-fluid" style="max-height: 110px;">
-            <div class="row header-style">
+            <div class="row header-style heading-elements">
             <div class="col-md-6">
             <h2 class="report-title"><strong>Activities Report For:</strong><br> {{ site_name|capfirst}}</h2>
             </div>
@@ -27,9 +27,14 @@
                     <div class="modal-content modal-main-background">
                         <button type="button" class="btn-close ms-5 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
                          <div class="modal-body">
-                          <form action="" method="get" class="modal-form">
+                              {% if messages %}
+                                    {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
+                                    {% endfor %}
+                              {% endif %}
+                              <form action="" method="get" class="modal-form">
                                 <label for="report-type">Report Range</label>
-                                <select name="report_type" id="report-type" class="form-control mt-2" required>
+                                <select name="report_type" id="report-type" class="form-control mt-2">
                                      <option selected disabled>Select Range</option>
                                      <option value="one-day">Single Day</option>
                                      <option value="multiple-days">Multiple Days</option>
@@ -53,9 +58,9 @@
 {#            modal ends#}
         </div>
         <div class="col-md-3">
-            <a href="">
-            <img src="{% static 'images/export.svg' %}" alt="export">
-            </a>
+{#            <a href="">#}
+            <img src="{% static 'images/export.svg' %}" alt="export" id="print-button">
+{#            </a>#}
         </div>
         </div>
         <hr class="h-line">
@@ -71,7 +76,7 @@
         <div class="row">
             <div class="col-md-4"> <h4><strong>PREPARED BY:</strong></h4><h4>{{ user.get_full_name.upper }}</h4></div>
             <div class="col-md-4"><h4><strong>DATE: </strong></h4><h4> {% now "d-m-Y" %}</h4></div>
-            <div class="col-md-4"><h4><strong>TIME: </strong></h4><h4>{% now "H:i:s" %}</h4></div>
+            <div class="col-md-4"><h4><strong>TIME: </strong></h4><h4 id="user-time">{% now "H:i:s" %}</h4></div>
         </div>
             <hr class="h-line-r">
             <hr class="h-line-r">
@@ -117,6 +122,22 @@
                 {% endif %}
             {% endfor %}
         </div>
+            {% else %}
+               {% if filter_type == 'multiple-days' and start_date and end_date %}
+                {% if start_date >= end_date %}
+                    <div class="alert alert-danger">
+                        Start date must be <strong>earlier</strong> than the end date.
+                    </div>
+                {% else %}
+                    <div class="">
+                        <p>No records found between {{ start_date|date:"Y-m-d" }} and {{ end_date|date:"Y-m-d" }}.</p>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="">
+                    <p>No records found for this date.</p>
+                </div>
+            {% endif %}
         {% endif %}
         </div>
     </div>
@@ -139,6 +160,24 @@
             multiple_dates.style.display='none'
         }
     })
+
+    document.getElementById('print-button').addEventListener('click', () => {
+    window.print();
+});
+        // Update every second
+    updateUserTime();
+    setInterval(updateUserTime, 1000);
+    function formatTime(date) {
+     let hours = date.getHours();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert 0 (midnight) to 12
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes} ${ampm}`;
+}
+function updateUserTime() {
+    const now = new Date();
+    document.getElementById('user-time').textContent = `${formatTime(now)}`;
+}
 </script>
 
 {% endblock %}

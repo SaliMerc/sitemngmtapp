@@ -35,6 +35,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.conf import settings
 
+from django.db.models import Count, Q
+
 
 def sign_up(request):
     if request.method == "POST":
@@ -196,7 +198,10 @@ def activitylog(request):
 def activityview(request):
     if request.user.is_authenticated:
         last_name = request.user.last_name
+    query=request.GET.get("search",'').strip()
     activities=DailyActivity.objects.filter(user=request.user, in_trash=False).order_by("-date")
+    if query:
+        activities=DailyActivity.objects.filter(Q(site_name__icontains=query)|Q(work_completed__icontains=query)|Q(equipment_used__icontains=query)|Q(materials_used__icontains=query)|Q(construction_stage__icontains=query)|Q(date__icontains=query),user=request.user, in_trash=False).order_by("-date")
     return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
 @login_required
 def issuelog(request):
@@ -226,7 +231,14 @@ def issuelog(request):
 def issueview(request):
     if request.user.is_authenticated:
         last_name = request.user.last_name
+
+    query = request.GET.get("search", '').strip()
     issues=Issue.objects.filter(user=request.user,in_trash=False).order_by('-issue_date')
+    if query:
+        issues = Issue.objects.filter(
+            Q(site_name__icontains=query) | Q(issue_description__icontains=query) | Q(resolution_steps__icontains=query) | Q(
+                issue_status__icontains=query)| Q(issue_date__icontains=query),
+            user=request.user, in_trash=False).order_by("-issue_date")
     return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
 
 @login_required
@@ -243,6 +255,7 @@ def issueupdate(request,id):
             my_issue.site_name = request.POST.get("site_name")
 
             my_issue.save()
+            return redirect('issueview')
             messages.error(request, "Issue updated successfully")
         except Exception as e:
             print(e)
@@ -275,6 +288,7 @@ def activityupdate(request, id):
             my_activity.construction_stage = request.POST.get("construction_stage")
 
             my_activity.save()
+            return redirect('activityview')
             messages.success(request, "Activity updated successfully")
         except Exception as e:
             print(e)
@@ -311,7 +325,24 @@ def activity_report_display(request, id):
     current_time = timezone.localtime(timezone.now(), nairobi_tz)
     from_report=ActivityReport.objects.get(id=id)
     site_name = from_report.site_name
-    activities = DailyActivity.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("date")
+    activities = DailyActivity.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("-date")
+
+    filter_type = request.GET.get("report_type")
+    one_day_query=request.GET.get("a-date")
+    start_day = request.GET.get("start-date")
+    end_day = request.GET.get("end-date")
+
+    if filter_type=='one-day':
+        activities = DailyActivity.objects.filter(date__icontains=one_day_query,user=user, site_name=site_name, in_trash=False).order_by("-date")
+    elif filter_type=='multiple-days':
+        start_date = datetime.strptime(start_day, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_day, '%Y-%m-%d').date()
+        if start_date <= end_date:
+            activities = DailyActivity.objects.filter(date__range=[start_date, end_date], user=user, site_name=site_name,in_trash=False).order_by("-date")
+        else:
+            activities=None
+            messages.error(request, "Start Day should be earlier than the End Day")
+
     return render(request, 'activity_report_display.html',{"activities":activities, "user": user, "site_name":site_name, "last_name":last_name,"current_time":current_time})
 @login_required
 def issue_report(request):
@@ -333,6 +364,23 @@ def issue_display(request,id):
     site_in_report=IssueReport.objects.get(id=id)
     site_name=site_in_report.site_name
     issue_new=Issue.objects.filter(user=user, site_name=site_name,in_trash=False).order_by("issue_date")
+
+    filter_type = request.GET.get("report_type")
+    one_day_query=request.GET.get("a-date")
+    start_day = request.GET.get("start-date")
+    end_day = request.GET.get("end-date")
+
+    if filter_type=='one-day':
+        issue_new = Issue.objects.filter(issue_date__icontains=one_day_query,user=user, site_name=site_name, in_trash=False).order_by("-issue_date")
+    elif filter_type=='multiple-days':
+        start_date = datetime.strptime(start_day, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_day, '%Y-%m-%d').date()
+        if start_date <= end_date:
+            issue_new = Issue.objects.filter(issue_date__range=[start_date, end_date], user=user, site_name=site_name,in_trash=False).order_by("-issue_date")
+        else:
+            issue_new=None
+            messages.error(request, "Start Day should be earlier than the End Day")
+
     return render(request, 'issue_report_display.html', {"user":user, "site_name":site_name, "issue_new":issue_new, "last_name":last_name})
 
 @login_required
@@ -468,5 +516,6 @@ def callback(request):
         # return JsonResponse(response_data, safe=False)
     except (json.JSONDecodeError, KeyError) as e:
         return HttpResponse(f"Invalid Request: {str(e)}")
+
 
 

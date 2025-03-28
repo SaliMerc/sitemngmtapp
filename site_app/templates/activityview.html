@@ -4,9 +4,9 @@
     <div class=" col-md-12 container log-form min-vh-100">
      <div class="mt-4 log-text"><img src="{% static 'images/view-activiies.svg' %}" alt="add activity"><h2>Logged Activities</h2></div><br>
          <div class="form-and-export row justify-content-start ms-2 mb-5">
-            <form action="" enctype="multipart/form-data" method="get" class="report-search-form col-md-8">
+            <form action="" enctype="multipart/form-data" method="get" class="report-search-form col-md-9">
                 <button class="form-contol"><i class="fa-solid fa-magnifying-glass" style="color: #435a42"></i></button>
-                <input type="text" name="search" class="form-control" placeholder="search to report by work completed, equipment used, or materials used ">
+                <input type="text" name="search" class="form-control" placeholder="search to report by site name, work completed, equipment used, construction stage, activity date, or materials used ">
             </form>
         </div>
         <div class="individual-activity row ms-2 me-2 mt-3 mb-1">
@@ -80,6 +80,12 @@
          </div>
       </div>
       </a>
+            {% empty %}
+            {% if query %}
+                 <p class="ms-2 mt-3 text-white">No activities found for {{ query }}</p>
+            {% else %}
+                 <p class="ms-2 mt-3 text-white">No activities have been logged yet</p>
+            {% endif %}
          {% endfor %}
     </div>
 {% endblock %}

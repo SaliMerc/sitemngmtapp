@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="col-md-11 container log-form">
-         <div class="mt-4 log-text"><img src="{% static 'images/log.svg' %}" alt="add activity"><h2>Add Issue</h2></div><br>
+         <div class="mt-4 log-text"><h2>Update Issue</h2></div><br>
         {% if messages %}
             {% for message in messages %}
                 <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>

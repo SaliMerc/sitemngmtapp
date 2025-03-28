@@ -373,7 +373,11 @@ select option:focus{
     border-radius: 1.2rem 0 1.2em 0;
 }
 
-
+@media print {
+    nav, footer, .form-and-export, .heading-elements, .h-line{
+        display: none !important;
+    }
+}
 /*for mobile phone screen*/
 @media (max-width: 768px){
     .feat{
