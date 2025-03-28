@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid
 from django.contrib.sites import requests
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
@@ -15,7 +16,7 @@ from django.utils import timezone
 import pytz
 
 from SiteLogger import settings
-from site_app.models import DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions, Subscription,SubscriptionAmount
+from site_app.models import OTP, DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions, Subscription,SubscriptionAmount
 from django.utils.timezone import now
 from datetime import date
 from django.template.loader import get_template
@@ -46,22 +47,143 @@ from django.db.models import Count, Q
 
 def sign_up(request):
     if request.method == "POST":
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        conf_pass = request.POST.get("confirm_password")
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'A user with this email already exists')
-            return render(request, "login.html")
-        if password != conf_pass:
-            messages.error(request, 'Passwords do not match')
-            return render(request, "signup.html")
-        # print(username,password)
-        myuser = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
-        myuser.save()
-        return redirect('login')
+        try:
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            email = request.POST.get("email")
+            password = request.POST.get("password")
+            conf_pass = request.POST.get("confirm_password")
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'A user with this email already exists')
+                return render(request, "login.html")
+            if password != conf_pass:
+                messages.error(request, 'Passwords do not match')
+                return render(request, "signup.html")
+            # print(username,password)
+
+            # otp verification begins here
+            registration_data = {
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                    'password': password,
+                }
+
+            my_session_id = str(uuid.uuid4())
+            request.session['id'] = my_session_id
+            request.session['registration_info'] = registration_data
+            request.session.set_expiry(900)
+
+            otp = OTP.objects.create(session_id=my_session_id)
+            otp.save()
+            otp.generate_otp()
+
+            subject = 'Email Verification'
+                
+            html_content = render_to_string('otp-verification-email.html', {
+                'name': first_name,
+                'otp': otp.code,
+                })
+            
+            text_content = strip_tags(html_content)
+            registration_email = EmailMultiAlternatives(subject, text_content, to=[email])
+            registration_email.attach_alternative(html_content, "text/html")
+            
+            registration_email.send()
+
+            messages.info(request, f'Enter the OTP code sent to {email} to activate your account') 
+
+            # myuser = User.objects.create_user(username=email, email=email, password=password, first_name=first_name, last_name=last_name)
+            # myuser.save()
+            initial_url = reverse('verification')
+            next_url = f"{initial_url}?next={reverse('login')}"
+            return redirect(next_url)
+
+            return redirect('login')
+        except Exception as e:
+            print(e)
     return render(request, 'signup.html')
+
+def otp_verification(request):
+    try:
+        registration_user = request.session['registration_info']
+    except KeyError:
+        # if the session has expired
+        messages.error(request, "Session ended, please register")
+        return redirect('signup')
+    
+    if request.method == 'POST':
+        try:
+            code=request.POST.get("otp")
+            otp = OTP.objects.get(session_id=request.session['id'])
+            if not otp or not otp.is_valid:
+                if otp:
+                    # if otp has expired
+                    otp.delete()
+                new_otp = OTP.objects.create(session_id=request.session['id'])
+                new_otp.save()
+                new_otp.generate_otp()
+
+                subject = 'Email Verification'
+                
+                html_content = render_to_string('otp-verification-email.html', {
+                    'name': registration_user['first_name'],
+                    'otp': new_otp.code,
+                    })
+                
+                text_content = strip_tags(html_content)
+                
+                email = EmailMultiAlternatives(subject, text_content, to=[registration_user['email']])
+                email.attach_alternative(html_content, "text/html")
+                
+                email.send()
+
+                messages.info(request, f"Enter the OTP code sent to {registration_user['email']} to activate your account")
+                return redirect('verify')
+            if otp and otp.code == code:
+                myuser = User.objects.create_user(
+                    username=registration_user['email'], 
+                    email=registration_user['email'], 
+                    first_name=registration_user['first_name'], 
+                    last_name=registration_user['last_name']
+                    )
+                
+                myuser.set_password(registration_user['password'])
+                myuser.save()
+                otp.delete()
+
+                request.session['id'] = None
+                request.session['registration_info'] = None
+
+                messages.success(request, 'OTP verification successfull')
+
+                next_url = request.GET.get('next')
+                if next_url:
+                    return redirect(next_url)
+                return redirect('login')
+
+                # letting the user know that their email has been verified successfully
+                # subject = 'Verification Confirmation'
+                
+                # html_content = render_to_string('otp-confirmation-email.html', {
+                #     'name': registration_user['first_name'],
+                #     'otp': new_otp.code,
+                #     })
+                
+                # text_content = strip_tags(html_content)
+                
+                # email = EmailMultiAlternatives(subject, text_content, to=[registration_user['email']])
+                # email.attach_alternative(html_content, "text/html")
+                
+                # email.send()
+            
+        except Exception as e:
+            print(e)
+            messages.error(request, 'An error was encountered while submitting the code, try again')
+            return redirect('verification')
+
+    return render(request, 'otp-verification-page.html')
+
 def log_in(request):
     if request.method == "POST":
         email = request.POST.get("email")

@@ -57,7 +57,7 @@
                 text-align: left;
                 "
             >
-            Hi {{ user.last_name }},
+            Hi {{ name }},
             </p>
 
             <p
@@ -70,14 +70,13 @@
               text-align: left;
               "
             >
-             To reset your account password, please follow the link below:
+             To verify your account, please enter the code below:
             </p>
             <p
-                style="text-align: left; font-size: 15px;  color: #c7dbd2; margin-top: 15px; font-weight: 600;"
+                style="text-align: left; font-size: 40px;  color: #c7dbd2; margin-top: 15px; font-weight: 600;"
             >
-                <a href="{{ reset_link }}">{{ reset_link }}</a>
+            {{ otp }}
             </p>
-
             <p
             style="
             margin: 0;

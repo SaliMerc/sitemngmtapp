@@ -1,9 +1,14 @@
-from datetime import timedelta, date
+from datetime import datetime, timedelta, date
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+
+import pytz
+import random
+import string
+import uuid
 
 class ItemManager(models.Manager):
     def get_queryset(self):
@@ -22,6 +27,26 @@ class ItemManager(models.Manager):
 
 
 # Create your models here.
+
+# otp for email verification during signup
+class OTP(models.Model):
+    session_id = models.UUIDField(unique=True, primary_key=True)
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_valid(self):
+        # otp expires after 10 minutes
+        now = datetime.now(pytz.utc)
+        time_difference = now - self.created_at
+        if time_difference.total_seconds() < 600:
+            return True
+        return False
+    
+    def generate_otp(self):
+        self.code = ''.join(random.choices(string.digits, k=6))
+        self.save()
+
 class Image(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     image = models.ImageField(upload_to='siteprogress')
