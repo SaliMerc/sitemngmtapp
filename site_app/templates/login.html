@@ -20,12 +20,16 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" class="form-control  mt-2" placeholder="Enter Your Password" name="password" required>
                 <div class="d-flex flex-column align-items-center">
-                <button class="btn btn-success mt-2" type="submit">Login</button>
+                <button class="btn btn-success mt-4" type="submit">Login</button>
+                    <div class="d-flex flex-column mt-3">
+                        <div class="row">
                     <a href="{% url 'forgot_password' %}" class=" nav-item nav nav-link nav-link-n">Forgot Password?</a>
+                            </div>
                     <div class="row">
                         <p class=" nav-item nav nav-link nav-link-n col-md-8">Don't have an account?</p>
                         <a href="{% url 'signup' %}" class=" nav-item nav nav-link nav-link-n col-md-3" style="color: #98FB98">SignUp Here</a>
                     </div>
+                        </div>
                 </div>
             </form>
         </div>

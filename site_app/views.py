@@ -157,25 +157,24 @@ def otp_verification(request):
 
                 messages.success(request, 'OTP verification successfull')
 
+                # letting the user know that their email has been verified successfully
+                subject = 'Welcome to SiteLogger'
+                
+                html_content = render_to_string('otp-confirmation-email.html', {
+                    'name': myuser.last_name,
+                    })
+                
+                text_content = strip_tags(html_content)
+                
+                email = EmailMultiAlternatives(subject, text_content, to=[registration_user['email']])
+                email.attach_alternative(html_content, "text/html")
+                
+                email.send()
+
                 next_url = request.GET.get('next')
                 if next_url:
                     return redirect(next_url)
                 return redirect('login')
-
-                # letting the user know that their email has been verified successfully
-                # subject = 'Verification Confirmation'
-                
-                # html_content = render_to_string('otp-confirmation-email.html', {
-                #     'name': registration_user['first_name'],
-                #     'otp': new_otp.code,
-                #     })
-                
-                # text_content = strip_tags(html_content)
-                
-                # email = EmailMultiAlternatives(subject, text_content, to=[registration_user['email']])
-                # email.attach_alternative(html_content, "text/html")
-                
-                # email.send()
             
         except Exception as e:
             print(e)

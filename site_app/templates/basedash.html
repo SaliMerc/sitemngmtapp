@@ -9,6 +9,7 @@
     <link rel="shortcut icon" href="{% static 'images/LOGO.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,6 +73,17 @@
 
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      AOS.init({
+        duration: 800,       // Animation duration (ms)
+        easing: 'ease-in-out', // Easing type
+        once: false,         // Only animate once
+        mirror: true,        // Animate when scrolling up too
+      });
+    });
+  </script>
 <script>
   // Function to update the background based on screen width
   const open=document.getElementById('open-btn');

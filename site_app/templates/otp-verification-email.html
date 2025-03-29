@@ -23,7 +23,7 @@
         padding: 45px 30px 60px;
         background: #ffffff;
         font-size: 14px;
-        color: #ffffff;
+        color: #c7dbd2;
       "
     >
       <header>
@@ -37,13 +37,11 @@
 
       <main>
         <div
-          style="
-            margin: 0;
-            margin-top: 10px;
-            padding: 92px 30px 115px;
+        style="
+            padding: 50px 50px 50px 50px;
             background: #435a42;
             border-radius: 30px 0 30px 0;
-            box-shadow: 0 0 2px #435a42;
+            box-shadow: 0  10px 10px 50px #5b8059;
           "
         >
           <div style="width: 100%; max-width: 1000px; margin: 0 auto;">
@@ -55,9 +53,12 @@
                 letter-spacing: 0.56px;
                 color: #c7dbd2;
                 text-align: left;
+                font-size: 18px;
                 "
             >
+                <strong>
             Hi {{ name }},
+                    </strong>
             </p>
 
             <p
@@ -68,20 +69,35 @@
               letter-spacing: 0.56px;
               color: #c7dbd2;
               text-align: left;
+              font-size: 18px;
               "
             >
              To verify your account, please enter the code below:
             </p>
             <p
-                style="text-align: left; font-size: 40px;  color: #c7dbd2; margin-top: 15px; font-weight: 600;"
+                style="text-align: left; font-size: 40px;  color: #771818; margin-top: 15px; font-weight: 600; letter-spacing: 3px;"
             >
+                <strong>
             {{ otp }}
+                    </strong>
             </p>
+                    <p
+            style="
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.56px;
+            color: #d5deef;
+            text-align: left;
+            "
+          >
+           This OTP expires after 10 minutes.
+          </p>
             <p
             style="
             margin: 0;
             margin-top: 17px;
             font-weight: 500;
+            font-size: 16px;
             letter-spacing: 0.56px;
             color: #d5deef;
             text-align: left;
@@ -91,7 +107,7 @@
           </p>
 
 
-            <p style="color: #c9eef4; font-weight: 400; font-size: 12px;">This is an automated message, do not reply. For support reach out to the <a href="mailto:site.logger.verify@gmail.com" target="_blank" style="color: #771818;">support team</a></p>
+            <p style="color: #c9eef4; font-weight: 400; font-size: 16px;">This is an automated message, do not reply. For support reach out to the <a href="mailto:site.logger.verify@gmail.com" target="_blank" style="color: #771818;">support team</a></p>
           </div>
         </div>
       </main>

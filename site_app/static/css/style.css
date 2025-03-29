@@ -80,6 +80,7 @@ body{
 }
 .btn-success{
     background-color: #568956;
+    padding: 0.5rem 2.5rem 0.5rem 2.5rem;
     border: none;
     color: #000000;
 }
@@ -125,22 +126,6 @@ form{
 .element1:hover{
     transform: scaleX(1.1);
     transition-duration: 2s;
-}
-.anim {
-  animation: scaleXAnimation 2s ease-in-out infinite;
-}
-
-/* Define the animation */
-@keyframes scaleXAnimation {
-  0% {
-    transform: scaleX(1);
-  }
-  50% {
-    transform: scaleX(1.1) translateX(-5%) translateX(5%) translateY(5%);
-  }
-  100% {
-    transform: scaleX(1);
-  }
 }
 
 .feat-head{
