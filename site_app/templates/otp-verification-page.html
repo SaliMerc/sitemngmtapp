@@ -3,17 +3,19 @@
 {% block hero %}
     <div class="row">
     <div class="col-md-7"></div>
-    <div class="col-md-5">
-            <h2 class="text-center sub-heading">Verify your Email</h2><br>
-             {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} text-center">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
+    <div class="col-md-5" data-aos="fade-left" data-aos-duration="1000" data-aos-easing="ease-in">
+            <h2 class="text-center sub-heading" data-aos="fade-down">Verify your Email</h2><br>
+               {% if messages %}
+                        {% for message in messages %}
+                            <p style="color: {% if message.tags == 'error' %}#d14d4d{% else %}#435a42{% endif %}; background-color: #c7dbd2;" class="mx-5 p-3" id="alert-items">
+                                {{ message }}
+                            </p>
+                        {% endfor %}
+                {% endif %}
             <form action="{% url 'verification' %}" method="post" enctype="multipart/form-data" target="_self">
                 {% csrf_token %}
                 <label for="password">OTP</label>
-                <input type="number" class="form-control mt-2" placeholder="OTP" name="otp" id='password' required>
+                <input type="text" inputmode="numeric"   pattern="[0-9]*"  maxlength="6"  autocomplete="one-time-code" class="form-control mt-2" placeholder="OTP" name="otp" id='password' required>
                 <div class="d-flex flex-column align-items-center">
                 <button class="btn btn-success mt-2" type="submit">Verify Email</button>
                 </div>

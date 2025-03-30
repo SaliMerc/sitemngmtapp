@@ -170,24 +170,6 @@ footer{
     /*bottom: 0;*/
     width: 100%;
 }
-table{
-    background-color: #D3D3D3;
-    border-radius: 0.8em;
-    overflow: auto;
-}
-tbody{
-    background-color: #D3D3D3;
-    border-radius: 0.5em 0 0.5em 0;
-}
-td{
-    background-color: #D3D3D3;
-    border-radius: 0.5em 0 0.5em 0;
-    overflow: visible;
-}
-.table-hover tbody tr:hover td{
-    background-color: #D3D3D3;
-    color: #435a42;
-}
 .b-dash-nav{
     background-color: #5b7659;
 }
@@ -373,6 +355,9 @@ select option:focus{
         width: 80%;
         margin-right: 0;
         margin-left: 0;
+}
+    .log-form{
+        margin: 3rem !important;
 }
     #feat2{
         margin-right: 0 !important;

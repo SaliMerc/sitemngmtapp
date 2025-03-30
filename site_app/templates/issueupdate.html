@@ -32,9 +32,9 @@
                  <option value="{{ status.0 }}">{{ status.1 }}</option>
                 {% endfor %}
             </select><br>
-           <div class="row align-items-center justify-content-center">
-                <button class="btn btn-success mt-4 mb-4 col-md-4 me-5" style="color: #D3D3D3; height: 3rem; width: 8rem; font-weight: bold" type="submit">Update</button>
-               <a href="{% url 'delete-issue' my_issue.id %}" class="btn btn-success mt-4 mb-4 col-md-4" style="color: #D3D3D3; height: 3rem; width: 8rem; padding-top: 0.6rem; background-color: #d14d4d; font-weight: bold" type="submit">Delete</a>
+           <div class="row align-items-center justify-content-between me-5 ms-5">
+                <button class="btn btn-success mt-4 mb-4 col-md-4" style="color: #D3D3D3; height: 3rem; min-width: 8rem; font-weight: bold" type="submit">Update</button>
+               <a href="{% url 'delete-issue' my_issue.id %}" class="btn btn-success mt-4 mb-4 col-md-4" style="color: #D3D3D3; height: 3rem; min-width: 8rem; padding-top: 0.6rem; background-color: #d14d4d; font-weight: bold" type="submit">Delete</a>
         </div>
         </form>
 </div>

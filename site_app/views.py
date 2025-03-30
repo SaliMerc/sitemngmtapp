@@ -175,6 +175,8 @@ def otp_verification(request):
                 if next_url:
                     return redirect(next_url)
                 return redirect('login')
+            else:
+                messages.success(request, 'Incorrect OTP, Try again')
             
         except Exception as e:
             print(e)
@@ -204,8 +206,8 @@ def forgot_password(request):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            messages.error(request, "User account does not exist")
-            return redirect('forgot_password')
+            messages.error(request, "User account does not exist, create one")
+            return redirect('signup')
         else:
             # for sending the password reset link
             token = default_token_generator.make_token(user)
