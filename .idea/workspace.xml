@@ -6,24 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/static/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/static/js/script.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activitylog.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activitylog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activityupdate.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activityupdate.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/basepublic.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/basepublic.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/change-password.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/change-password.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/dash.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/dash.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/edit-profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/edit-profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/forgot_password.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/forgot_password.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issuelog.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issuelog.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issueupdate.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issueupdate.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/otp-verification-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/otp-verification-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/password-reset-page.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/password-reset-page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SiteLogger/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,6 +159,8 @@
       <workItem from="1743270198046" duration="440000" />
       <workItem from="1743270651487" duration="1724000" />
       <workItem from="1743323754484" duration="9126000" />
+      <workItem from="1743349709647" duration="871000" />
+      <workItem from="1743358182186" duration="2577000" />
     </task>
     <servers />
   </component>
