@@ -599,6 +599,7 @@ def stk(request):
 @login_required
 def pay(request):
     if request.method == "POST":
+        subscription_type = request.POST['subscription-type']
         phone = request.POST['phone']
         amount = request.POST['amount']
         access_token = MpesaAccessToken.validated_mpesa_access_token
@@ -634,6 +635,16 @@ def pay(request):
                 checkout_id=checkout_id,
                 status="pending"
             )
+
+            Subscription.objects.create(
+                user=request.user,
+                subscription_type=subscription_type,
+                phone_number=phone,
+                amount=amount,
+                mpesa_code="pending",  # Placeholder until the callback updates it
+                checkout_id=checkout_id,
+                status="pending"
+            )
             return HttpResponse("Check your phone for a payment popup.")
         else:
             return HttpResponse("Payment initiation failed. Try again.")
@@ -659,6 +670,7 @@ def callback(request):
         if result_code != 0:
             # Updating transaction as failed if it fails
             Transactions.objects.filter(checkout_id=checkout_id).update(status="failed")
+            Subscription.objects.filter(checkout_id=checkout_id).update(status="failed")
             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
 
@@ -669,6 +681,12 @@ def callback(request):
         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
 
         Transactions.objects.filter(checkout_id=checkout_id).update(
+            amount=amount,
+            mpesa_code=mpesa_code,
+            phone_number=phone_number,
+            status="completed"
+        )
+        Subscription.objects.filter(checkout_id=checkout_id).update(
             amount=amount,
             mpesa_code=mpesa_code,
             phone_number=phone_number,
