@@ -599,14 +599,9 @@ def stk(request):
 @login_required
 def pay(request):
     if request.method == "POST":
-        subscription_type = request.POST['subscription-type']
+        # subscription_type = request.POST['subscription-type']
         phone = request.POST['phone']
         amount = request.POST['amount']
-
-        Subscription.objects.create(
-            user=request.user,
-            subscription_type=subscription_type
-        )
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
