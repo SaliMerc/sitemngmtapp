@@ -596,121 +596,16 @@ def stk(request):
     subscription_amount = SubscriptionAmount.objects.first()
     return render(request, 'pay.html', {'subscription_amount':subscription_amount})
 
-# @login_required
-# def pay(request):
-#     if request.method == "POST":
-#         subscription_type = request.POST.get('subscription_type')
-#         # subscription_type = request.POST['subscription-type']
-#         phone = request.POST['phone']
-#         amount = request.POST['amount']
-#         access_token = MpesaAccessToken.validated_mpesa_access_token
-#         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-#         headers = {"Authorization": "Bearer %s" % access_token}
-#         request_data = {
-#             "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
-#             "Password": LipanaMpesaPassword.decode_password,
-#             "Timestamp": LipanaMpesaPassword.lipa_time,
-#             "TransactionType": "CustomerPayBillOnline",
-#             "Amount": amount,
-#             "PartyA": phone,
-#             "PartyB": LipanaMpesaPassword.Business_short_code,
-#             "PhoneNumber": phone,
-#             # this should be a public url maybe from the hosted site or ngrok
-#             "CallBackURL":MpesaC2bCredential.callback_url,
-#             "AccountReference": "Mercy Saline",
-#             "TransactionDesc": "Site Report Charges"
-#         }
-#         response = requests.post(api_url, json=request_data, headers=headers)
-#         response_data = response.json()
-#
-#         # Checking if the request was successful
-#         if response_data.get("ResponseCode") == "0":
-#             checkout_id = response_data.get("CheckoutRequestID")
-#
-#             # Save transaction with 'pending' status
-#             # Transactions.objects.create(
-#             #     user=request.user,
-#             #     phone_number=phone,
-#             #     amount=amount,
-#             #     mpesa_code="pending",  # Placeholder until the callback updates it
-#             #     checkout_id=checkout_id,
-#             #     status="pending"
-#             # )
-#
-#             Subscription.objects.create(
-#                 user=request.user,
-#                 subscription_type=subscription_type,
-#                 phone_number=phone,
-#                 amount=amount,
-#                 mpesa_code="pending",  # Placeholder until the callback updates it
-#                 checkout_id=checkout_id,
-#                 status="pending"
-#             )
-#             return HttpResponse("Check your phone for a payment popup.")
-#         else:
-#             return HttpResponse("Payment initiation failed. Try again.")
-#
-#     return HttpResponse("Invalid request method.")
-#
-# @csrf_exempt
-# def callback(request):
-#     try:
-#         # Handling text/plain content type
-#         content_type = request.headers.get('Content-Type', '')
-#         if 'application/json' not in content_type:
-#             # If content type is not JSON, assume it's text/plain and parse it as JSON
-#             callback_data = json.loads(request.body.decode('utf-8'))
-#         else:
-#             # If content type is JSON, parse it directly
-#             callback_data = json.loads(request.body.decode('utf-8'))
-#         print(callback_data)
-#
-#         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
-#         checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
-#
-#         if result_code != 0:
-#             # Updating transaction as failed if it fails
-#             # Transactions.objects.filter(checkout_id=checkout_id).update(status="failed")
-#             Subscription.objects.filter(checkout_id=checkout_id).update(status="failed")
-#             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
-#             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
-#
-#         body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
-#
-#         amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-#         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
-#         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
-#
-#         # Transactions.objects.filter(checkout_id=checkout_id).update(
-#         #     amount=amount,
-#         #     mpesa_code=mpesa_code,
-#         #     phone_number=phone_number,
-#         #     status="completed"
-#         # )
-#         Subscription.objects.filter(checkout_id=checkout_id).update(
-#             amount=amount,
-#             mpesa_code=mpesa_code,
-#             phone_number=phone_number,
-#             status="completed"
-#         )
-#
-#         return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
-#
-#     except (json.JSONDecodeError, KeyError) as e:
-#         return HttpResponse(f"Invalid Request: {str(e)}")
-
-# In your payment initiation view
 @login_required
 def pay(request):
     if request.method == "POST":
-        phone = request.POST.get('phone')
-        amount = request.POST.get('amount')
-        subscription_type = request.POST.get('subscription_type')  # Get from form
-
+        # subscription_type = request.POST.get('subscription_type')
+        subscription_type = request.POST['subscription-type']
+        phone = request.POST['phone']
+        amount = request.POST['amount']
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-        headers = {"Authorization": f"Bearer {access_token}"}
-
+        headers = {"Authorization": "Bearer %s" % access_token}
         request_data = {
             "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
             "Password": LipanaMpesaPassword.decode_password,
@@ -720,85 +615,90 @@ def pay(request):
             "PartyA": phone,
             "PartyB": LipanaMpesaPassword.Business_short_code,
             "PhoneNumber": phone,
-            "CallBackURL": MpesaC2bCredential.callback_url,
-            "AccountReference": "SiteLogger Payment",
-            "TransactionDesc": "Subscription Payment"
+            # this should be a public url maybe from the hosted site or ngrok
+            "CallBackURL":MpesaC2bCredential.callback_url,
+            "AccountReference": "Mercy Saline",
+            "TransactionDesc": "Site Report Charges"
         }
+        response = requests.post(api_url, json=request_data, headers=headers)
+        response_data = response.json()
 
-        try:
-            response = requests.post(api_url, json=request_data, headers=headers)
-            response_data = response.json()
+        # Checking if the request was successful
+        if response_data.get("ResponseCode") == "0":
+            checkout_id = response_data.get("CheckoutRequestID")
 
-            if response_data.get("ResponseCode") == "0":
-                checkout_id = response_data.get("CheckoutRequestID")
+            # Save transaction with 'pending' status
+            Transactions.objects.create(
+                user=request.user,
+                phone_number=phone,
+                amount=amount,
+                mpesa_code="pending",  # Placeholder until the callback updates it
+                checkout_id=checkout_id,
+                status="pending"
+            )
 
-                Subscription.objects.create(
-                    user=request.user,
-                    phone_number=phone,
-                    subscription_type=subscription_type,
-                    amount=amount,
-                    checkout_id=checkout_id,
-                    status='pending'
-                )
-                return HttpResponse("Check your phone for a payment popup.")
-            else:
-                error_msg = response_data.get("ResponseDescription", "Payment initiation failed")
-                return HttpResponse(f"Error: {error_msg}")
-
-        except Exception as e:
-            return HttpResponse(f"An error occurred: {str(e)}")
+            # Subscription.objects.create(
+            #     user=request.user,
+            #     subscription_type=subscription_type,
+            #     phone_number=phone,
+            #     amount=amount,
+            #     mpesa_code="pending",  # Placeholder until the callback updates it
+            #     checkout_id=checkout_id,
+            #     status="pending"
+            # )
+            return HttpResponse("Check your phone for a payment popup.")
+        else:
+            return HttpResponse("Payment initiation failed. Try again.")
 
     return HttpResponse("Invalid request method.")
 
-# In your callback
 @csrf_exempt
 def callback(request):
     try:
-        # Handle different content types
-        try:
+        # Handling text/plain content type
+        content_type = request.headers.get('Content-Type', '')
+        if 'application/json' not in content_type:
+            # If content type is not JSON, assume it's text/plain and parse it as JSON
             callback_data = json.loads(request.body.decode('utf-8'))
-        except json.JSONDecodeError:
-            return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
-
-        callback_body = callback_data.get('Body', {})
-        stk_callback = callback_body.get('stkCallback', {})
-        result_code = stk_callback.get('ResultCode', 1)  # Default to failure
-
-        checkout_id = stk_callback.get('CheckoutRequestID')
-        if not checkout_id:
-            return JsonResponse({"status": "error", "message": "Missing CheckoutRequestID"}, status=400)
-
-        try:
-            subscription = Subscription.objects.get(checkout_id=checkout_id)
-        except Subscription.DoesNotExist:
-            return JsonResponse({"status": "error", "message": "Subscription not found"}, status=404)
-
-        if result_code == 0:
-            # Successful payment
-            callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
-            metadata = {item['Name']: item.get('Value') for item in callback_metadata}
-
-            subscription.mpesa_code = metadata.get('MpesaReceiptNumber', '')
-            subscription.phone_number = metadata.get('PhoneNumber', subscription.phone_number)
-            subscription.amount = metadata.get('Amount', subscription.amount)
-            subscription.status = 'completed'
-            subscription.save()
-
-            # Calculate end date based on subscription type
-            subscription.calculate_end_date()
-            subscription.check_active_status()
-            subscription.save()
-
-            return JsonResponse({"status": "success"})
         else:
-            # Failed payment
-            subscription.status = 'failed'
-            subscription.save()
-            error_msg = stk_callback.get('ResultDesc', 'Payment failed')
-            return JsonResponse({"status": "failed", "message": error_msg})
+            # If content type is JSON, parse it directly
+            callback_data = json.loads(request.body.decode('utf-8'))
+        print(callback_data)
 
-    except Exception as e:
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+        result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
+        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
+
+        if result_code != 0:
+            # Updating transaction as failed if it fails
+            Transactions.objects.filter(checkout_id=checkout_id).update(status="failed")
+            # Subscription.objects.filter(checkout_id=checkout_id).update(status="failed")
+            error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
+            return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+
+        body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
+
+        amount = next(item["Value"] for item in body if item["Name"] == "Amount")
+        mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
+        phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
+
+        Transactions.objects.filter(checkout_id=checkout_id).update(
+            amount=amount,
+            mpesa_code=mpesa_code,
+            phone_number=phone_number,
+            status="completed"
+        )
+        # Subscription.objects.filter(checkout_id=checkout_id).update(
+        #     amount=amount,
+        #     mpesa_code=mpesa_code,
+        #     phone_number=phone_number,
+        #     status="completed"
+        # )
+
+        return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
+
+    except (json.JSONDecodeError, KeyError) as e:
+        return HttpResponse(f"Invalid Request: {str(e)}")
+
 
 
 
