@@ -305,7 +305,7 @@ def site_in_progress_view(request):
 def user_profile_view(request):
     if request.user.is_authenticated:
         user = request.user
-        subscription=Subscription.objects.filter(user=user)
+        subscription=Transactions.objects.filter(user=user)
         subscription_amount=SubscriptionAmount.objects.first()
         return render(request, 'view-user-profile.html', {'user':user, "subscription":subscription, "subscription_amount":subscription_amount})
 @login_required
