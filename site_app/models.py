@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta, date
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+from phonenumber_field.modelfields import PhoneNumberField
 
 import pytz
 import random
@@ -14,14 +15,13 @@ class ItemManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(in_trash=False)
 
-# class MyUser(AbstractBaseUser,PermissionsMixin):
-#     first_name = models.CharField(max_length=30)
-#     last_name = models.CharField(max_length=30)
-#     username = models.CharField(max_length=30, unique=True, blank=True, null=True)
-#     email = models.EmailField()
+# I can use this model to extend the django user model without redefining the whole user model architecture
+# class MyUser(AbstractUser):
+#     phone_number=PhoneNumberField(unique=True)
 #     profile_picture = models.ImageField(upload_to='profile_pictures', blank=True, null=True)
 #
 #     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = []
 #     def __str__(self):
 #         return self.first_name
 
@@ -133,12 +133,18 @@ class IssueReport(models.Model):
 
 # mpesa verification
 class Transactions(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     phone_number=models.CharField(max_length=16)
     amount=models.DecimalField(decimal_places=2, max_digits=10)
     mpesa_code=models.CharField(max_length=50, unique=True)
     checkout_id=models.CharField(max_length=50, unique=True)
-    status=models.CharField(max_length=50)
+    status = models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='pending')
     timestamp=models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.mpesa_code

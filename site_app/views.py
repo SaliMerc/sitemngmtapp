@@ -592,6 +592,11 @@ def token(request):
     return render(request, 'token.html', {"token":validated_mpesa_access_token})
 
 @login_required
+def stk(request):
+    subscription_amount = SubscriptionAmount.objects.first()
+    return render(request, 'pay.html', {'subscription_amount':subscription_amount})
+
+@login_required
 def pay(request):
     if request.method == "POST":
         phone = request.POST['phone']
@@ -608,28 +613,37 @@ def pay(request):
             "PartyA": phone,
             "PartyB": LipanaMpesaPassword.Business_short_code,
             "PhoneNumber": phone,
-            # this should be a public url maybe from the hosted site or ngrok etc
+            # this should be a public url maybe from the hosted site or ngrok
             "CallBackURL":MpesaC2bCredential.callback_url,
             "AccountReference": "Mercy Saline",
             "TransactionDesc": "Site Report Charges"
         }
-        # response = requests.post(api_url, json=request, headers=headers)
         response = requests.post(api_url, json=request_data, headers=headers)
-        print(request_data)
-    return HttpResponse("Check your phone for a payment popup")
+        response_data = response.json()
 
-@login_required
-def stk(request):
-    subscription_amount = SubscriptionAmount.objects.first()
-    return render(request, 'pay.html', {'subscription_amount':subscription_amount})
+        # Checking if the request was successful
+        if response_data.get("ResponseCode") == "0":
+            checkout_id = response_data.get("CheckoutRequestID")
+
+            # Save transaction with 'pending' status
+            Transactions.objects.create(
+                user=request.user,
+                phone_number=phone,
+                amount=amount,
+                mpesa_code="pending",  # Placeholder until the callback updates it
+                checkout_id=checkout_id,
+                status="pending"
+            )
+            return HttpResponse("Check your phone for a payment popup.")
+        else:
+            return HttpResponse("Payment initiation failed. Try again.")
+
+    return HttpResponse("Invalid request method.")
 
 @csrf_exempt
 def callback(request):
     try:
-        print("Raw request body:", request.body)
-        print("Headers:", request.headers)
-
-        # Handle text/plain content type
+        # Handling text/plain content type
         content_type = request.headers.get('Content-Type', '')
         if 'application/json' not in content_type:
             # If content type is not JSON, assume it's text/plain and parse it as JSON
@@ -637,37 +651,32 @@ def callback(request):
         else:
             # If content type is JSON, parse it directly
             callback_data = json.loads(request.body.decode('utf-8'))
-        # callback_data = json.loads(request.body)
         print(callback_data)
-        user = request.user
+
         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
-        if result_code != "0":
+        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
+
+        if result_code != 0:
+            # Updating transaction as failed if it fails
+            Transactions.objects.filter(checkout_id=checkout_id).update(status="failed")
             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
 
-        print(result_code)
-        # merchant_id = callback_data["Body"]["stkCallback"]["MerchantRequestID"]
-        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
         body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
 
         amount = next(item["Value"] for item in body if item["Name"] == "Amount")
         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
 
-        print(amount, mpesa_code, phone_number)
-        trans=Transactions(user=user, amount=amount, mpesa_code=mpesa_code, phone_number=phone_number,
-                                    checkout_id=checkout_id, status="Success")
-        trans.save()
-        # response_data = {"message": "success",
-        #                  "trans": {
-        #                      "user": str(trans.user),
-        #                      "amount": trans.amount,
-        #                      "mpesa_code": trans.mpesa_code,
-        #                      "phone_number": trans.phone_number,
-        #                      "checkout_id": trans.checkout_id,
-        #                      "status": trans.status}}
-        # print(response_data)
-        # return JsonResponse(response_data, safe=False)
+        Transactions.objects.filter(checkout_id=checkout_id).update(
+            amount=amount,
+            mpesa_code=mpesa_code,
+            phone_number=phone_number,
+            status="completed"
+        )
+
+        return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
+
     except (json.JSONDecodeError, KeyError) as e:
         return HttpResponse(f"Invalid Request: {str(e)}")
 
