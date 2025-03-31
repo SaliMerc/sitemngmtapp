@@ -152,13 +152,13 @@ class Transactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     phone_number=models.CharField(max_length=16)
     amount=models.DecimalField(decimal_places=2, max_digits=10)
-    mpesa_code=models.CharField(max_length=50, unique=True)
-    checkout_id=models.CharField(max_length=50, unique=True)
+    mpesa_code=models.CharField(max_length=50, unique=True,null=True, blank=True)
+    checkout_id=models.CharField(max_length=50, unique=True,null=True, blank=True)
     status = models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='pending')
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
     start_date=models.DateTimeField(auto_now_add=True)
     end_date=models.DateField(null=True, blank=True)
-    is_active=models.BooleanField(default=False)
+    is_active=models.BooleanField(default=False,null=True, blank=True)
 
     def calculate_end_date(self):
             if self.start_date:

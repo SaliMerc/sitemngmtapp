@@ -632,6 +632,7 @@ def pay(request):
             Transactions.objects.create(
                 user=request.user,
                 phone_number=phone,
+                subscription_type=subscription_type,
                 amount=amount,
                 mpesa_code="pending",  # Placeholder until the callback updates it
                 checkout_id=checkout_id,
