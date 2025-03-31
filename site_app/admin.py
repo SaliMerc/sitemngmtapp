@@ -13,7 +13,7 @@ class TransactionsAdmin(admin.ModelAdmin):
 # Register the Transactions model
 @admin.register(Transactions)
 class TransactionsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'amount', 'mpesa_code', 'checkout_id', 'status', 'start_date')
+    list_display = ('user', 'phone_number', 'amount', 'mpesa_code', 'checkout_id', 'status', 'start_date','end_date','is_active')
     list_filter = ('status', 'start_date')
     search_fields = ('phone_number', 'mpesa_code', 'checkout_id')
     readonly_fields = ('start_date',)  # Make timestamp read-only

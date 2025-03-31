@@ -161,27 +161,31 @@ class Transactions(models.Model):
     is_active=models.BooleanField(default=False,null=True, blank=True)
 
     def calculate_end_date(self):
-            if self.start_date:
-                start_date = self.start_date.date()
-                if self.subscription_type == 'monthly':
-                    self.end_date = start_date + timedelta(days=30)
-                elif self.subscription_type == 'yearly':
-                    self.end_date = start_date + timedelta(days=365)
-            else:
-                self.end_date = None
+        """Calculates and sets the end date based on subscription type."""
+        if self.start_date and not self.end_date:  
+            start_date = self.start_date.date()
+            if self.subscription_type == 'monthly':
+                self.end_date = start_date + timedelta(days=30)
+            elif self.subscription_type == 'yearly':
+                self.end_date = start_date + timedelta(days=365)
 
     def check_active_status(self):
+        """Checks and updates the active status based on end date."""
         if self.end_date:
             self.is_active = date.today() <= self.end_date
         else:
             self.is_active = False
 
     def save(self, *args, **kwargs):
-        self.calculate_end_date()
-        self.check_active_status()
-        super().save(*args, **kwargs)
+        """Override save to update end_date and is_active only when status is completed."""
+        print("is save working")
+        if self.status == 'completed':
+            print('has it worked really')
+            self.calculate_end_date()
+            self.check_active_status()
+        super().save(*args, **kwargs)  # Save the updated transaction
 
     def __str__(self):
-        return self.mpesa_code
+        return self.mpesa_code or "No Mpesa Code"
 
 

@@ -627,14 +627,14 @@ def pay(request):
         # Checking if the request was successful
         if response_data.get("ResponseCode") == "0":
             checkout_id = response_data.get("CheckoutRequestID")
-
+            unique_placeholder = str(uuid.uuid4())[:8]
             # Save transaction with 'pending' status
             Transactions.objects.create(
                 user=request.user,
                 phone_number=phone,
                 subscription_type=subscription_type,
                 amount=amount,
-                mpesa_code="pending",  # Placeholder until the callback updates it
+                mpesa_code=unique_placeholder,  # Placeholder until the callback updates it
                 checkout_id=checkout_id,
                 status="pending"
             )
