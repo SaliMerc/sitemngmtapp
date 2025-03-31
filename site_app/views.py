@@ -602,6 +602,7 @@ def pay(request):
         subscription_type = request.POST['subscription-type']
         phone = request.POST['phone']
         amount = request.POST['amount']
+        print(phone, amount, subscription_type)
         access_token = MpesaAccessToken.validated_mpesa_access_token
         api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
         headers = {"Authorization": "Bearer %s" % access_token}
@@ -621,7 +622,7 @@ def pay(request):
         }
         response = requests.post(api_url, json=request_data, headers=headers)
         response_data = response.json()
-
+        print(response_data)
         # Checking if the request was successful
         if response_data.get("ResponseCode") == "0":
             checkout_id = response_data.get("CheckoutRequestID")
