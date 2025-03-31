@@ -4,7 +4,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from phonenumber_field.modelfields import PhoneNumberField
 
 import pytz
 import random
@@ -160,11 +159,6 @@ class Subscription(models.Model):
     SUBSCRIPTION_CHOICES = [
         ('monthly', 'Monthly'),
         ('yearly', 'Yearly'),
-    ]
-    STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-        ('failed', 'Failed'),
     ]
 
     user=models.ForeignKey(User, on_delete=models.CASCADE)

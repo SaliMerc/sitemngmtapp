@@ -599,7 +599,7 @@ def stk(request):
 @login_required
 def pay(request):
     if request.method == "POST":
-        # subscription_type = request.POST['subscription-type']
+        subscription_type = request.POST['subscription-type']
         phone = request.POST['phone']
         amount = request.POST['amount']
         access_token = MpesaAccessToken.validated_mpesa_access_token
