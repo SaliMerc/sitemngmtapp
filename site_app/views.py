@@ -699,106 +699,106 @@ def stk(request):
 #     except (json.JSONDecodeError, KeyError) as e:
 #         return HttpResponse(f"Invalid Request: {str(e)}")
 
-    # In your payment initiation view
-    @login_required
-    def pay(request):
-        if request.method == "POST":
-            phone = request.POST.get('phone')
-            amount = request.POST.get('amount')
-            subscription_type = request.POST.get('subscription_type')  # Get from form
+# In your payment initiation view
+@login_required
+def pay(request):
+    if request.method == "POST":
+        phone = request.POST.get('phone')
+        amount = request.POST.get('amount')
+        subscription_type = request.POST.get('subscription_type')  # Get from form
 
-            access_token = MpesaAccessToken.validated_mpesa_access_token
-            api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
-            headers = {"Authorization": f"Bearer {access_token}"}
+        access_token = MpesaAccessToken.validated_mpesa_access_token
+        api_url = "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest"
+        headers = {"Authorization": f"Bearer {access_token}"}
 
-            request_data = {
-                "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
-                "Password": LipanaMpesaPassword.decode_password,
-                "Timestamp": LipanaMpesaPassword.lipa_time,
-                "TransactionType": "CustomerPayBillOnline",
-                "Amount": amount,
-                "PartyA": phone,
-                "PartyB": LipanaMpesaPassword.Business_short_code,
-                "PhoneNumber": phone,
-                "CallBackURL": MpesaC2bCredential.callback_url,
-                "AccountReference": "SiteLogger Payment",
-                "TransactionDesc": "Subscription Payment"
-            }
+        request_data = {
+            "BusinessShortCode": LipanaMpesaPassword.Business_short_code,
+            "Password": LipanaMpesaPassword.decode_password,
+            "Timestamp": LipanaMpesaPassword.lipa_time,
+            "TransactionType": "CustomerPayBillOnline",
+            "Amount": amount,
+            "PartyA": phone,
+            "PartyB": LipanaMpesaPassword.Business_short_code,
+            "PhoneNumber": phone,
+            "CallBackURL": MpesaC2bCredential.callback_url,
+            "AccountReference": "SiteLogger Payment",
+            "TransactionDesc": "Subscription Payment"
+        }
 
-            try:
-                response = requests.post(api_url, json=request_data, headers=headers)
-                response_data = response.json()
-
-                if response_data.get("ResponseCode") == "0":
-                    checkout_id = response_data.get("CheckoutRequestID")
-
-                    Subscription.objects.create(
-                        user=request.user,
-                        phone_number=phone,
-                        subscription_type=subscription_type,
-                        amount=amount,
-                        checkout_id=checkout_id,
-                        status='pending'
-                    )
-                    return HttpResponse("Check your phone for a payment popup.")
-                else:
-                    error_msg = response_data.get("ResponseDescription", "Payment initiation failed")
-                    return HttpResponse(f"Error: {error_msg}")
-
-            except Exception as e:
-                return HttpResponse(f"An error occurred: {str(e)}")
-
-        return HttpResponse("Invalid request method.")
-
-    # In your callback
-    @csrf_exempt
-    def callback(request):
         try:
-            # Handle different content types
-            try:
-                callback_data = json.loads(request.body.decode('utf-8'))
-            except json.JSONDecodeError:
-                return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
+            response = requests.post(api_url, json=request_data, headers=headers)
+            response_data = response.json()
 
-            callback_body = callback_data.get('Body', {})
-            stk_callback = callback_body.get('stkCallback', {})
-            result_code = stk_callback.get('ResultCode', 1)  # Default to failure
+            if response_data.get("ResponseCode") == "0":
+                checkout_id = response_data.get("CheckoutRequestID")
 
-            checkout_id = stk_callback.get('CheckoutRequestID')
-            if not checkout_id:
-                return JsonResponse({"status": "error", "message": "Missing CheckoutRequestID"}, status=400)
-
-            try:
-                subscription = Subscription.objects.get(checkout_id=checkout_id)
-            except Subscription.DoesNotExist:
-                return JsonResponse({"status": "error", "message": "Subscription not found"}, status=404)
-
-            if result_code == 0:
-                # Successful payment
-                callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
-                metadata = {item['Name']: item.get('Value') for item in callback_metadata}
-
-                subscription.mpesa_code = metadata.get('MpesaReceiptNumber', '')
-                subscription.phone_number = metadata.get('PhoneNumber', subscription.phone_number)
-                subscription.amount = metadata.get('Amount', subscription.amount)
-                subscription.status = 'completed'
-                subscription.save()
-
-                # Calculate end date based on subscription type
-                subscription.calculate_end_date()
-                subscription.check_active_status()
-                subscription.save()
-
-                return JsonResponse({"status": "success"})
+                Subscription.objects.create(
+                    user=request.user,
+                    phone_number=phone,
+                    subscription_type=subscription_type,
+                    amount=amount,
+                    checkout_id=checkout_id,
+                    status='pending'
+                )
+                return HttpResponse("Check your phone for a payment popup.")
             else:
-                # Failed payment
-                subscription.status = 'failed'
-                subscription.save()
-                error_msg = stk_callback.get('ResultDesc', 'Payment failed')
-                return JsonResponse({"status": "failed", "message": error_msg})
+                error_msg = response_data.get("ResponseDescription", "Payment initiation failed")
+                return HttpResponse(f"Error: {error_msg}")
 
         except Exception as e:
-            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+            return HttpResponse(f"An error occurred: {str(e)}")
+
+    return HttpResponse("Invalid request method.")
+
+# In your callback
+@csrf_exempt
+def callback(request):
+    try:
+        # Handle different content types
+        try:
+            callback_data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
+
+        callback_body = callback_data.get('Body', {})
+        stk_callback = callback_body.get('stkCallback', {})
+        result_code = stk_callback.get('ResultCode', 1)  # Default to failure
+
+        checkout_id = stk_callback.get('CheckoutRequestID')
+        if not checkout_id:
+            return JsonResponse({"status": "error", "message": "Missing CheckoutRequestID"}, status=400)
+
+        try:
+            subscription = Subscription.objects.get(checkout_id=checkout_id)
+        except Subscription.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Subscription not found"}, status=404)
+
+        if result_code == 0:
+            # Successful payment
+            callback_metadata = stk_callback.get('CallbackMetadata', {}).get('Item', [])
+            metadata = {item['Name']: item.get('Value') for item in callback_metadata}
+
+            subscription.mpesa_code = metadata.get('MpesaReceiptNumber', '')
+            subscription.phone_number = metadata.get('PhoneNumber', subscription.phone_number)
+            subscription.amount = metadata.get('Amount', subscription.amount)
+            subscription.status = 'completed'
+            subscription.save()
+
+            # Calculate end date based on subscription type
+            subscription.calculate_end_date()
+            subscription.check_active_status()
+            subscription.save()
+
+            return JsonResponse({"status": "success"})
+        else:
+            # Failed payment
+            subscription.status = 'failed'
+            subscription.save()
+            error_msg = stk_callback.get('ResultDesc', 'Payment failed')
+            return JsonResponse({"status": "failed", "message": error_msg})
+
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
 
 
 
