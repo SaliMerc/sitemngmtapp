@@ -16,7 +16,7 @@ from django.utils import timezone
 import pytz
 
 from SiteLogger import settings
-from site_app.models import OTP, DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions, Subscription,SubscriptionAmount
+from site_app.models import OTP, DailyActivity, Issue, Image, Document, IssuePhoto, ActivityReport, IssueReport, Transactions,SubscriptionAmount
 from django.utils.timezone import now
 from datetime import date
 from django.template.loader import get_template
@@ -596,7 +596,7 @@ def stk(request):
     subscription_amount = SubscriptionAmount.objects.first()
     return render(request, 'pay.html', {'subscription_amount':subscription_amount})
 
-@login_required
+# @login_required
 def pay(request):
     if request.method == "POST":
         subscription_type = request.POST['subscription-type']
@@ -623,6 +623,7 @@ def pay(request):
         response = requests.post(api_url, json=request_data, headers=headers)
         response_data = response.json()
         print(response_data)
+        print(subscription_type)
         # Checking if the request was successful
         if response_data.get("ResponseCode") == "0":
             checkout_id = response_data.get("CheckoutRequestID")
@@ -636,6 +637,7 @@ def pay(request):
                 checkout_id=checkout_id,
                 status="pending"
             )
+            print('done sent data')
             return HttpResponse("Check your phone for a payment popup.")
         else:
             return HttpResponse("Payment initiation failed. Try again.")

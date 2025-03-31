@@ -130,12 +130,23 @@ class IssueReport(models.Model):
         return self.site_name
 
 
+class SubscriptionAmount(models.Model):
+    monthly_subscription_amount = models.IntegerField(default=0)
+    yearly_subscription_amount = models.IntegerField(default=0)
+
+    def __int__(self):
+        return self.monthly_subscription_amount
+
 # mpesa verification
 class Transactions(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('completed', 'Completed'),
         ('failed', 'Failed'),
+    ]
+    SUBSCRIPTION_CHOICES = [
+        ('monthly', 'Monthly'),
+        ('yearly', 'Yearly'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -144,39 +155,20 @@ class Transactions(models.Model):
     mpesa_code=models.CharField(max_length=50, unique=True)
     checkout_id=models.CharField(max_length=50, unique=True)
     status = models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='pending')
-    timestamp=models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return self.mpesa_code
-
-class SubscriptionAmount(models.Model):
-    monthly_subscription_amount = models.IntegerField(default=0)
-    yearly_subscription_amount = models.IntegerField(default=0)
-
-    def __int__(self):
-        return self.monthly_subscription_amount
-
-class Subscription(models.Model):
-    SUBSCRIPTION_CHOICES = [
-        ('monthly', 'Monthly'),
-        ('yearly', 'Yearly'),
-    ]
-
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
     start_date=models.DateTimeField(auto_now_add=True)
     end_date=models.DateField(null=True, blank=True)
     is_active=models.BooleanField(default=False)
-    checkout_id = models.CharField(max_length=50, unique=True)
 
     def calculate_end_date(self):
-        if self.start_date:
-            start_date = self.start_date.date()
-            if self.subscription_type == 'monthly':
-                self.end_date = start_date + timedelta(days=30)
-            elif self.subscription_type == 'yearly':
-                self.end_date = start_date + timedelta(days=365)
-        else:
-            self.end_date = None
+            if self.start_date:
+                start_date = self.start_date.date()
+                if self.subscription_type == 'monthly':
+                    self.end_date = start_date + timedelta(days=30)
+                elif self.subscription_type == 'yearly':
+                    self.end_date = start_date + timedelta(days=365)
+            else:
+                self.end_date = None
 
     def check_active_status(self):
         if self.end_date:
@@ -190,4 +182,6 @@ class Subscription(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.first_name} - {self.subscription_type}"
+        return self.mpesa_code
+
+
