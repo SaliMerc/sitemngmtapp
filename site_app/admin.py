@@ -27,7 +27,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
     readonly_fields = ('end_date', 'is_active')  # Make end_date and is_active read-only
 
     # Customize the form to calculate end_date and is_active before saving
-    # def save_model(self, request, obj, form, change):
-    #     obj.calculate_end_date()
-    #     obj.check_active_status()
-    #     super().save_model(request, obj, form, change)
+    def save_model(self, request, obj, form, change):
+        obj.calculate_end_date()
+        obj.check_active_status()
+        super().save_model(request, obj, form, change)
