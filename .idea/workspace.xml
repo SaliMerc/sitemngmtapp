@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -164,6 +160,7 @@
       <workItem from="1743413551256" duration="1240000" />
       <workItem from="1743414808021" duration="3431000" />
       <workItem from="1743426496821" duration="4454000" />
+      <workItem from="1743448394346" duration="299000" />
     </task>
     <servers />
   </component>
