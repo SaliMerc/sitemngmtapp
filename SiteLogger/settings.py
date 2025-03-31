@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'site_app',
     'crispy_forms',
     'crispy_bootstrap4',
+    'phonenumber_field',
 ]
 
 TIME_ZONE = 'Africa/Nairobi'
