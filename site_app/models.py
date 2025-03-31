@@ -168,18 +168,14 @@ class Subscription(models.Model):
     ]
 
     user=models.ForeignKey(User, on_delete=models.CASCADE)
-    phone_number = models.CharField(max_length=16)
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
-    amount=models.DecimalField(decimal_places=2, max_digits=10, null=True, blank=True)
-    mpesa_code = models.CharField(max_length=50)
-    status = models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='pending')
     start_date=models.DateTimeField(auto_now_add=True)
     end_date=models.DateField(null=True, blank=True)
     is_active=models.BooleanField(default=False)
     checkout_id = models.CharField(max_length=50, unique=True)
 
     def calculate_end_date(self):
-        if self.status == 'completed' and self.start_date:
+        if self.start_date:
             start_date = self.start_date.date()
             if self.subscription_type == 'monthly':
                 self.end_date = start_date + timedelta(days=30)

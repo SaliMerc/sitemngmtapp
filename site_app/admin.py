@@ -21,7 +21,7 @@ class TransactionsAdmin(admin.ModelAdmin):
 # Register the Subscription model
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'phone_number', 'amount', 'mpesa_code', 'checkout_id', 'status', 'subscription_type', 'start_date', 'end_date', 'is_active')
+    list_display = ('user', 'subscription_type', 'start_date', 'end_date', 'is_active')
     list_filter = ('subscription_type', 'is_active')
     search_fields = ('user__username',)  # Search by username
     readonly_fields = ('end_date', 'is_active')  # Make end_date and is_active read-only
