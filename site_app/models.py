@@ -152,11 +152,11 @@ class Transactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     phone_number=models.CharField(max_length=16)
     amount=models.DecimalField(decimal_places=2, max_digits=10)
-    mpesa_code=models.CharField(max_length=50, unique=True,null=True, blank=True)
-    checkout_id=models.CharField(max_length=50, unique=True,null=True, blank=True)
+    mpesa_code=models.CharField(max_length=50,null=True, blank=True)
+    checkout_id=models.CharField(max_length=50,null=True, blank=True)
     status = models.CharField(max_length=200, choices=STATUS_CHOICES,null=True, blank=True, default='pending')
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
-    start_date=models.DateTimeField(null=True, blank=True)
+    start_date=models.DateTimeField(auto_now_add=True, null=True, blank=True)
     result_description=models.TextField(null=True, blank=True)
 
     def __str__(self):

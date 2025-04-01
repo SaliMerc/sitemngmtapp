@@ -624,17 +624,14 @@ def pay(request):
         # Checking if the request was successful
         if response_data.get("ResponseCode") == "0":
             checkout_id = response_data.get("CheckoutRequestID")
-            result_description = response_data.get("ResultDec")
-            unique_placeholder = str(uuid.uuid4())[:8]
             # Save transaction with 'pending' status
             Transactions.objects.create(
                 user=request.user,
                 phone_number=phone,
                 subscription_type=subscription_type,
                 amount=amount,
-                mpesa_code=unique_placeholder,
                 checkout_id=checkout_id,
-                result_description=result_description,
+                result_description='Process was just initiated by the user but did not proceed',
                 status="pending"
             )
             print("process started")
@@ -669,31 +666,21 @@ def callback(request):
                 # Updating transaction as failed if it fails
                 result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
                 Transactions.objects.filter(checkout_id=checkout_id).update(status="failed", result_description=result_description,)
-                print("process moving on")
-                error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
-                return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+                return JsonResponse({"result_code": result_code})
 
             result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
             body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
             mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
             phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
             amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-            raw_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
             
-
-            try:
-                start_date = datetime.strptime(str(raw_date), '%Y%m%d%H%M%S')
-            except ValueError:
-                start_date = timezone.now()  # Fallback to current time
-            print(start_date)
 
             Transactions.objects.filter(checkout_id=checkout_id).update(
                 amount=amount,
                 mpesa_code=mpesa_code,
                 phone_number=phone_number,
                 status="completed",
-                result_description=result_description,
-                start_date =start_date 
+                result_description=result_description
             )
             print("process ended")
 
