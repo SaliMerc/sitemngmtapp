@@ -154,36 +154,10 @@ class Transactions(models.Model):
     amount=models.DecimalField(decimal_places=2, max_digits=10)
     mpesa_code=models.CharField(max_length=50, unique=True,null=True, blank=True)
     checkout_id=models.CharField(max_length=50, unique=True,null=True, blank=True)
-    status = models.CharField(max_length=200, null=True, blank=True, choices=STATUS_CHOICES, default='pending')
+    status = models.CharField(max_length=200, choices=STATUS_CHOICES,null=True, blank=True)
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
     start_date=models.DateTimeField(auto_now_add=True)
-    end_date=models.DateField(null=True, blank=True)
-    is_active=models.BooleanField(default=False,null=True, blank=True)
-
-    def calculate_end_date(self):
-        """Calculates and sets the end date based on subscription type."""
-        if self.start_date and not self.end_date:  
-            start_date = self.start_date.date()
-            if self.subscription_type == 'monthly':
-                self.end_date = start_date + timedelta(days=30)
-            elif self.subscription_type == 'yearly':
-                self.end_date = start_date + timedelta(days=365)
-
-    def check_active_status(self):
-        """Checks and updates the active status based on end date."""
-        if self.end_date:
-            self.is_active = date.today() <= self.end_date
-        else:
-            self.is_active = False
-
-    def save(self, *args, **kwargs):
-        """Override save to update end_date and is_active only when status is completed."""
-        print("is save working")
-        if self.status == 'completed':
-            print('has it worked really')
-            self.calculate_end_date()
-            self.check_active_status()
-        super().save(*args, **kwargs)  # Save the updated transaction
+    result_description=models.TextField( null=True, blank=True)
 
     def __str__(self):
         return self.mpesa_code or "No Mpesa Code"
