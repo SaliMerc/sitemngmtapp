@@ -646,53 +646,60 @@ def pay(request):
 
 @csrf_exempt
 def callback(request):
-    try:
-        # Handling text/plain content type
-        content_type = request.headers.get('Content-Type', '')
-        if 'application/json' not in content_type:
-            # If content type is not JSON, assume it's text/plain and parse it as JSON
-            callback_data = json.loads(request.body.decode('utf-8'))
-        else:
-            # If content type is JSON, parse it directly
-            callback_data = json.loads(request.body.decode('utf-8'))
-        print(callback_data)
-        print('this is the callback data')
+    if request.method != 'POST':
+        return JsonResponse({"error": "Method not allowed"}, status=405)
+    else:
+        try:
+            # Handling text/plain content type
+            content_type = request.headers.get('Content-Type', '')
+            if 'application/json' not in content_type:
+                # If content type is not JSON, assume it's text/plain and parse it as JSON
+                callback_data = json.loads(request.body.decode('utf-8'))
+            else:
+                # If content type is JSON, parse it directly
+                callback_data = json.loads(request.body.decode('utf-8'))
+            print(callback_data)
+            print('this is the callback data')
 
-        result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
-        checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
+            result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
+            checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
 
-        print(result_code, checkout_id)
-        if result_code != 0:
-            # Updating transaction as failed if it fails
+            print(result_code, checkout_id)
+            if result_code != 0:
+                # Updating transaction as failed if it fails
+                result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
+                Transactions.objects.filter(checkout_id=checkout_id).update(status="failed", result_description=result_description,)
+                print("process moving on")
+                error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
+                return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+
             result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
-            Transactions.objects.filter(checkout_id=checkout_id).update(status="failed", result_description=result_description,)
-            print("process moving on")
-            error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
-            return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
+            body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
+            mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
+            phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
+            amount = next(item["Value"] for item in body if item["Name"] == "Amount")
+            raw_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
+            
 
-        result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
-        body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
-        mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
-        phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
-        amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-        raw_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
-        
-        start_date = datetime.strptime(str(raw_date), '%Y%m%d%H%M%S')
-        print(start_date)
+            try:
+                start_date = datetime.strptime(str(raw_date), '%Y%m%d%H%M%S')
+            except ValueError:
+                start_date = timezone.now()  # Fallback to current time
+            print(start_date)
 
-        Transactions.objects.filter(checkout_id=checkout_id).update(
-            amount=amount,
-            mpesa_code=mpesa_code,
-            phone_number=phone_number,
-            status="completed",
-            result_description=result_description,
-            start_date =start_date 
-        )
-        print("process ended")
+            Transactions.objects.filter(checkout_id=checkout_id).update(
+                amount=amount,
+                mpesa_code=mpesa_code,
+                phone_number=phone_number,
+                status="completed",
+                result_description=result_description,
+                start_date =start_date 
+            )
+            print("process ended")
 
-        return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
+            return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
 
-    except (json.JSONDecodeError, KeyError) as e:
-        return HttpResponse(f"Invalid Request: {str(e)}")
+        except (json.JSONDecodeError, KeyError) as e:
+            return HttpResponse(f"Invalid Request: {str(e)}")
 
 
