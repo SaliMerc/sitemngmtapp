@@ -127,10 +127,10 @@ WSGI_APPLICATION = 'SiteLogger.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sitelogger_db',
-        'USER': 'sitelogger_db_user',
-        'PASSWORD': '7uFaIUUE9NsynPQ3IpbLQK9EvbNrJr7e',
-        'HOST': 'dpg-cvkogtd6ubrc73fs1p1g-a.oregon-postgres.render.com',
+        'NAME': 'sitelogger_db_o81m',
+        'USER': 'sitelogger_db_o81m_user',
+        'PASSWORD': 'yM1pCN4xtBN5HiIqzdLkh9Zf9OAAmiLr',
+        'HOST': 'dpg-cvlta92dbo4c73889000-a.oregon-postgres.render.com',
         'PORT': '5432',
     }
 }
