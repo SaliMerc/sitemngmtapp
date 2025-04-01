@@ -156,10 +156,10 @@ class Transactions(models.Model):
     checkout_id=models.CharField(max_length=50, unique=True,null=True, blank=True)
     status = models.CharField(max_length=200, choices=STATUS_CHOICES,null=True, blank=True)
     subscription_type=models.CharField(max_length=200, null=True, blank=True, choices=SUBSCRIPTION_CHOICES, default='monthly')
-    start_date=models.DateTimeField(auto_now_add=True)
-    result_description=models.TextField( null=True, blank=True)
+    start_date=models.DateTimeField(null=True, blank=True)
+    result_description=models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.mpesa_code or "No Mpesa Code"
+        return self.status
 
 

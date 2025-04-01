@@ -624,6 +624,7 @@ def pay(request):
         # Checking if the request was successful
         if response_data.get("ResponseCode") == "0":
             checkout_id = response_data.get("CheckoutRequestID")
+            result_description = response_data.get("ResultDec")
             unique_placeholder = str(uuid.uuid4())[:8]
             # Save transaction with 'pending' status
             Transactions(
@@ -633,8 +634,10 @@ def pay(request):
                 amount=amount,
                 mpesa_code=unique_placeholder,  # Placeholder until the callback updates it
                 checkout_id=checkout_id,
+                result_description=result_description,
                 status="pending"
             )
+            print("process started")
             return HttpResponse("Check your phone for a payment popup.")
         else:
             return HttpResponse("Payment initiation failed. Try again.")
@@ -656,26 +659,32 @@ def callback(request):
 
         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
         checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
-        result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
 
         if result_code != 0:
             # Updating transaction as failed if it fails
-            Transactions.objects.filter(checkout_id=checkout_id).update(status="failed")
+            print("process moving on")
+            result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
+            Transactions.objects.filter(checkout_id=checkout_id).update(status="failed", result_description=result_description,)
             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
 
+        result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
         body = callback_data["Body"]["stkCallback"]["CallbackMetadata"]["Item"]
         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
         amount = next(item["Value"] for item in body if item["Name"] == "Amount")
+        start_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
+        
 
         Transactions.objects.filter(checkout_id=checkout_id).update(
             amount=amount,
             mpesa_code=mpesa_code,
             phone_number=phone_number,
             status="completed",
-            result_description=result_description
+            result_description=result_description,
+            start_date =start_date 
         )
+        print("process ended")
 
         return JsonResponse({"status": "success", "mpesa_code": mpesa_code})
 
