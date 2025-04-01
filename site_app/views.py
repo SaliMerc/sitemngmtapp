@@ -627,12 +627,12 @@ def pay(request):
             result_description = response_data.get("ResultDec")
             unique_placeholder = str(uuid.uuid4())[:8]
             # Save transaction with 'pending' status
-            Transactions(
+            Transactions.objects.create(
                 user=request.user,
                 phone_number=phone,
                 subscription_type=subscription_type,
                 amount=amount,
-                mpesa_code=unique_placeholder,  # Placeholder until the callback updates it
+                mpesa_code=unique_placeholder,
                 checkout_id=checkout_id,
                 result_description=result_description,
                 status="pending"
@@ -656,15 +656,17 @@ def callback(request):
             # If content type is JSON, parse it directly
             callback_data = json.loads(request.body.decode('utf-8'))
         print(callback_data)
+        print('this is the callback data')
 
         result_code = callback_data["Body"]["stkCallback"]["ResultCode"]
         checkout_id = callback_data["Body"]["stkCallback"]["CheckoutRequestID"]
 
+        print(result_code, checkout_id)
         if result_code != 0:
             # Updating transaction as failed if it fails
-            print("process moving on")
             result_description = callback_data["Body"]["stkCallback"]["ResultDesc"]
             Transactions.objects.filter(checkout_id=checkout_id).update(status="failed", result_description=result_description,)
+            print("process moving on")
             error_message = callback_data["Body"]["stkCallback"]["ResultDesc"]
             return JsonResponse({"result_code": result_code, "ResultDesc": error_message})
 
@@ -673,8 +675,10 @@ def callback(request):
         mpesa_code = next(item["Value"] for item in body if item["Name"] == "MpesaReceiptNumber")
         phone_number = next(item["Value"] for item in body if item["Name"] == "PhoneNumber")
         amount = next(item["Value"] for item in body if item["Name"] == "Amount")
-        start_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
+        raw_date = next(item["Value"] for item in body if item["Name"] == "TransactionDate")
         
+        start_date = datetime.strptime(str(raw_date), '%Y%m%d%H%M%S')
+        print(start_date)
 
         Transactions.objects.filter(checkout_id=checkout_id).update(
             amount=amount,
