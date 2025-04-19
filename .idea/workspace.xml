@@ -6,13 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/migrations/0002_rename_timestamp_transactions_start_date_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/migrations/0003_alter_transactions_checkout_id_and_more.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_app/static/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/static/js/scriptl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_app/templates/basepublic.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/basepublic.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +167,8 @@
       <workItem from="1743448394346" duration="3298000" />
       <workItem from="1743490101251" duration="7803000" />
       <workItem from="1743500942712" duration="398000" />
+      <workItem from="1744624116692" duration="1114000" />
+      <workItem from="1745096917722" duration="2318000" />
     </task>
     <servers />
   </component>

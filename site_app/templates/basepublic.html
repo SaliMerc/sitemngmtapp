@@ -31,11 +31,15 @@
 <div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat" id="heroSection">
 <nav class="navbar">
     <div class="col-ms-7">
-        <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a>
+        <div class="menu-icon  align-items-center">
+            <div class="first-icon"> <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a></div>
+            <div class="second-icon">
+                <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="display: none; min-height:3rem; min-width: 3rem" id="open-btn">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="display: none; min-height:2.5rem; min-width: 3rem" id="close-btn">
+            </div>
+        </div>
     </div>
     <div class="col-md-5 pe-2" id="navbarNav">
-        <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="display: none" id="open-btn">
-        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="display: none" id="close-btn">
     <ul class="nav nav-lists" id="nav-lists">
         <li class="nav-item"><a href="{% url 'index' %}" class=" nav-link nav-link-n">Home</a></li>
         <li class="nav-item"><a href="{% url 'index' %}#features" class="nav-link nav-link-n">Features</a></li>
@@ -90,6 +94,8 @@
   const open=document.getElementById('open-btn');
   const close=document.getElementById('close-btn');
   const nav_list=document.getElementById('nav-lists');
+  const nav_all=document.querySelector('.menu-icon');
+  const nav_link=[document.querySelector('.nav-link-n')];
   function updateBackground() {
     const heroSection = document.getElementById('heroSection');
     if (window.innerWidth <= 768) {
@@ -97,6 +103,11 @@
       heroSection.style.backgroundColor = '#435a42';
       open.style.display='block';
       nav_list.style.display='none'
+      nav_list.style.backgroundColor='#435a42'
+      nav_list.style.width='100vw'
+      nav_list.style.boxShadow='0 2rem 1rem #98FB98'
+      nav_all.style.display='flex'
+      nav_all.style.justifyContent='space-between'
     }
   }
 
