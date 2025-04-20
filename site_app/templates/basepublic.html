@@ -28,14 +28,14 @@
 <body>
 <script src="{% static 'js/script.js' %}"></script>
 <div class="wrapper">
-<div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat" id="heroSection">
+<div class="container-fluid nav-hero" style="background-image: url({% static 'images/hero2.png' %}); min-height: 100vh; background-size: contain; background-repeat: no-repeat; position: relative" id="heroSection">
 <nav class="navbar">
     <div class="col-ms-7">
         <div class="menu-icon  align-items-center">
             <div class="first-icon"> <a href="{% url 'index' %}" class="nav-link"><img src="{% static 'images/LOGO.png' %}" alt="" class="img-fluid w-25"></a></div>
             <div class="second-icon">
                 <img src="{% static 'images/burger.png' %}" alt="more" class="burger" style="display: none; min-height:3rem; min-width: 3rem" id="open-btn">
-        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="display: none; min-height:2.5rem; min-width: 3rem" id="close-btn">
+        <img src="{% static 'images/remove.png' %}" alt="close" class="close" style="display: none; min-height:2.5rem; min-width: 3rem; position: absolute; z-index: 2; top:2.5rem" id="close-btn">
             </div>
         </div>
     </div>
@@ -81,15 +81,6 @@
       });
     });
 
-
-    window.addEventListener('load', function() {
-    const loader = document.querySelector('.page-loader');
-    loader.style.opacity = '0';
-    setTimeout(() => {
-      loader.style.display = 'none';
-    }, 1);
-  });
-
     {#for the background in small screens #}
   const open=document.getElementById('open-btn');
   const close=document.getElementById('close-btn');
@@ -104,8 +95,12 @@
       open.style.display='block';
       nav_list.style.display='none'
       nav_list.style.backgroundColor='#435a42'
+      nav_list.style.position = 'absolute'
+      nav_list.style.top = '6rem';
+      nav_list.style.left = '0';
+      nav_list.style.zIndex='1'
       nav_list.style.width='100vw'
-      nav_list.style.boxShadow='0 2rem 1rem #98FB98'
+      nav_list.style.boxShadow='0 1rem 0.2rem #989898'
       nav_all.style.display='flex'
       nav_all.style.justifyContent='space-between'
     }
