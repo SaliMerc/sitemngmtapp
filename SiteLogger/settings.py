@@ -36,12 +36,14 @@ DEBUG = False
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'https://sitemngmtapp-4.onrender.com',
+    'https://sitelogger-bjecgpcedmd6ckfb.canadacentral-01.azurewebsites.net',
 ]
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '127.0.0.1:8000',
     'sitemngmtapp-4.onrender.com',
+    'sitelogger-bjecgpcedmd6ckfb.canadacentral-01.azurewebsites.net',
 ]
 
 
