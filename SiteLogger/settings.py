@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*@#xrccg5(2b&fjog^)eh-kpxrex3vlqlza*)=f1xij4t6n7&w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'https://sitemngmtapp-4.onrender.com',
@@ -118,24 +118,24 @@ WSGI_APPLICATION = 'SiteLogger.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Dev db
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# Prod db
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sitelogger_db_o81m',
-        'USER': 'sitelogger_db_o81m_user',
-        'PASSWORD': 'yM1pCN4xtBN5HiIqzdLkh9Zf9OAAmiLr',
-        'HOST': 'dpg-cvlta92dbo4c73889000-a.oregon-postgres.render.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Prod db
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'sitelogger_db_o81m',
+#         'USER': 'sitelogger_db_o81m_user',
+#         'PASSWORD': 'yM1pCN4xtBN5HiIqzdLkh9Zf9OAAmiLr',
+#         'HOST': 'dpg-cvlta92dbo4c73889000-a.oregon-postgres.render.com',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation

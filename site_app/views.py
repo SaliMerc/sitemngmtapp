@@ -356,7 +356,7 @@ def activityview(request):
     activities=DailyActivity.objects.filter(user=request.user, in_trash=False).order_by("-date")
     if query:
         activities=DailyActivity.objects.filter(Q(site_name__icontains=query)|Q(work_completed__icontains=query)|Q(equipment_used__icontains=query)|Q(materials_used__icontains=query)|Q(construction_stage__icontains=query)|Q(date__icontains=query),user=request.user, in_trash=False).order_by("-date")
-    return render(request, 'activityview.html',{'activities':activities, "last_name":last_name})
+    return render(request, 'activityview.html',{'activities':activities, "last_name":last_name, "query":query})
 @login_required
 def issuelog(request):
     issue_status=Issue.STATUS_CHOICES
@@ -393,7 +393,7 @@ def issueview(request):
             Q(site_name__icontains=query) | Q(issue_description__icontains=query) | Q(resolution_steps__icontains=query) | Q(
                 issue_status__icontains=query)| Q(issue_date__icontains=query),
             user=request.user, in_trash=False).order_by("-issue_date")
-    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name})
+    return render(request, 'issueview.html', {'issues':issues, "last_name":last_name,"query":query})
 
 @login_required
 def issueupdate(request,id):

@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/master_sitelogger.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/master_sitelogger.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/master_sitemanagementsystem.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/master_sitemanagementsystem.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_app/templates/activityview.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activityview.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_app/templates/issueview.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issueview.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,6 +174,12 @@
       <workItem from="1743500942712" duration="398000" />
       <workItem from="1744624116692" duration="1114000" />
       <workItem from="1745096917722" duration="2995000" />
+      <workItem from="1745140268565" duration="5858000" />
+      <workItem from="1745147846132" duration="864000" />
+      <workItem from="1745430358694" duration="1940000" />
+      <workItem from="1745434542317" duration="395000" />
+      <workItem from="1745434950983" duration="233000" />
+      <workItem from="1745477952809" duration="5384000" />
     </task>
     <servers />
   </component>
