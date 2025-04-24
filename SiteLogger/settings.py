@@ -32,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*@#xrccg5(2b&fjog^)eh-kpxrex3vlqlza*)=f1xij4t6n7&w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'https://sitemngmtapp-4.onrender.com',
