@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81d2d52a-ac31-4c0a-adfa-a4410579ca3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/master_sitelogger.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/master_sitelogger.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/master_sitemanagementsystem.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/master_sitemanagementsystem.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SiteLogger/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/SiteLogger/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/activityview.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/activityview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/templates/issueview.html" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/templates/issueview.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/site_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/site_app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +58,7 @@
     &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
     &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/uer/Desktop/Classwork/WebPrograms/Programs/BackendFiles/SiteLogger/site_app/static/images&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/uer/Desktop/Classwork/WebPrograms/Programs/BackendFiles/SiteLogger&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -75,6 +69,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\uer\Desktop\Classwork\WebPrograms\Programs\BackendFiles\SiteLogger" />
       <recent name="C:\Users\uer\Desktop\Classwork\WebPrograms\Programs\BackendFiles\SiteLogger\site_app\static\images" />
       <recent name="C:\Users\uer\Desktop\Classwork\WebPrograms\Programs\BackendFiles\SiteLogger\SiteLogger" />
     </key>
@@ -180,6 +175,9 @@
       <workItem from="1745434542317" duration="395000" />
       <workItem from="1745434950983" duration="233000" />
       <workItem from="1745477952809" duration="5384000" />
+      <workItem from="1745490215725" duration="2456000" />
+      <workItem from="1745591338643" duration="635000" />
+      <workItem from="1745677359962" duration="114000" />
     </task>
     <servers />
   </component>

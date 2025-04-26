@@ -118,24 +118,24 @@ WSGI_APPLICATION = 'SiteLogger.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # Dev db
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# Prod db
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sitelogger_db_o81m',
-        'USER': 'sitelogger_db_o81m_user',
-        'PASSWORD': 'yM1pCN4xtBN5HiIqzdLkh9Zf9OAAmiLr',
-        'HOST': 'dpg-cvlta92dbo4c73889000-a.oregon-postgres.render.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Prod db
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'sitelogger_db_o81m',
+#         'USER': 'sitelogger_db_o81m_user',
+#         'PASSWORD': 'yM1pCN4xtBN5HiIqzdLkh9Zf9OAAmiLr',
+#         'HOST': 'dpg-cvlta92dbo4c73889000-a.oregon-postgres.render.com',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
